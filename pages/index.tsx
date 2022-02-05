@@ -1,31 +1,50 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
-const Home: NextPage = () => {
-  const [thbKub, setThbKub] = useState<number>();
-  const [thbUsdt, setThbUsdt] = useState<number>();
+import axios from "axios";
+import { Ticker } from "../interfaces/Ticker";
+
+type Data = {
+  THB_KUB: number;
+  THB_USDT: number;
+};
+
+const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
+  const [thbKub, setThbKub] = useState<number>(THB_KUB);
+  const [thbUsdt, setThbUsdt] = useState<number>(THB_USDT);
 
   useEffect(() => {
     document.getElementsByTagName("html")[0].dataset.theme = "light";
 
-    const wsThbKub = new WebSocket(
-      "wss://api.bitkub.com/websocket-api/market.trade.thb_kub"
+    const BASE_API_URL = "wss://api.bitkub.com/websocket-api";
+
+    const ws = new WebSocket(
+      `${BASE_API_URL}/market.ticker.thb_kub,market.ticker.thb_usdt`
     );
 
-    const wsThbUsdt = new WebSocket(
-      "wss://api.bitkub.com/websocket-api/market.trade.thb_usdt"
-    );
+    ws.onopen = () => {
+      ws.onmessage = (ev) => {
+        try {
+          const { id, last } = JSON.parse(ev.data) as Ticker;
 
-    wsThbKub.onopen = () => {
-      wsThbKub.onmessage = (ev) => {
-        setThbKub(JSON.parse(ev.data).rat);
-      };
-    };
+          switch (id) {
+            case 8:
+              setThbUsdt(last);
+              break;
 
-    wsThbUsdt.onopen = () => {
-      wsThbUsdt.onmessage = (ev) => {
-        setThbUsdt(JSON.parse(ev.data).rat);
+            case 92:
+              setThbKub(last);
+              break;
+          }
+        } catch (error) {
+          if (error instanceof SyntaxError) {
+            // Do nothing
+            return;
+          }
+
+          console.log("❗️", (error as Error).name);
+        }
       };
     };
   }, []);
@@ -119,25 +138,24 @@ const Home: NextPage = () => {
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col p-4 text-center bg-white rounded-lg shadow-lg">
             <h1 className="font-bold">THB/KUB</h1>
-            <p>{thbKub || "-"}</p>
+            <p>{thbKub}</p>
           </div>
           <div className="flex flex-col p-4 text-center bg-white rounded-lg shadow-lg">
             <h1 className="font-bold">THB/USDT</h1>
-            <p>{thbUsdt || "-"}</p>
+            <p>{thbUsdt}</p>
           </div>
         </div>
 
-        <div className="card card-bordered shadow-lg">
-          <figure>
-            <Image
-              src="/images/cabbage_example.png"
-              alt="cabbage_example.png"
-              width={760}
-              height={932}
-              objectFit="contain"
-            />
-          </figure>
-          <div className="card-body">
+        <div className="overflow-hidden bg-white rounded-lg shadow-lg">
+          <Image
+            src="/images/cabbage_example.png"
+            alt="cabbage_example.png"
+            width={760}
+            height={932}
+            objectFit="contain"
+          />
+
+          <div className=" p-4">
             <h2 className="card-title">การหาค่า</h2>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem
@@ -149,6 +167,20 @@ const Home: NextPage = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps<Data> = async (context) => {
+  const responses = await Promise.all([
+    axios.get("https://api.bitkub.com/api/market/ticker?sym=THB_KUB"),
+    axios.get("https://api.bitkub.com/api/market/ticker?sym=THB_USDT"),
+  ]);
+
+  return {
+    props: {
+      THB_KUB: responses[0].data.THB_KUB.last,
+      THB_USDT: responses[1].data.THB_USDT.last,
+    },
+  };
 };
 
 export default Home;
