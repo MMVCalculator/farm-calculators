@@ -1,6 +1,6 @@
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { Ticker } from "../interfaces/Ticker";
@@ -10,9 +10,21 @@ type Data = {
   THB_USDT: number;
 };
 
+type PlantKind = "SEED" | "STEM";
+type StemLP = "LKKUB" | "LKUSDT";
+type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
+type RewardMultiplier = 8 | 15 | 20 | 24 | 25 | 30;
+
 const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
   const [thbKub, setThbKub] = useState<number>(THB_KUB);
   const [thbUsdt, setThbUsdt] = useState<number>(THB_USDT);
+
+  const [plantKind, setPlantKind] = useState<PlantKind>("SEED");
+  const [stemLP, setStemLP] = useState<StemLP>("LKKUB");
+  const [seedKind, setSeedKind] = useState<SeedKind>("TOMATO");
+  const [rewardMultiplier, setRewardMultiplier] = useState<RewardMultiplier>(8);
+  const [seedAmount, setSeedAmount] = useState<number | null>(null);
+  const [totalLiquidity, setTotalLiquidity] = useState<number | null>(null);
 
   useEffect(() => {
     document.getElementsByTagName("html")[0].dataset.theme = "light";
@@ -55,13 +67,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
         <title>MMV EZ - Home</title>
       </Head>
 
-      <nav className="navbar sticky top-0 flex space-x-4 bg-white shadow-lg">
+      <nav className="navbar sticky top-0 flex space-x-2 bg-white shadow-lg">
         <div className="flex-1">
           <span className="text-lg font-bold select-none">MMV EZ</span>
         </div>
 
         {/* <div className="lg:flex flex-none hidden">
-          <ul className="flex items-stretch space-x-4">
+          <ul className="flex items-stretch space-x-2">
             <a className="btn btn-ghost btn-sm rounded-btn">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -136,32 +148,327 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
 
       <div className="container self-center p-4 space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col p-4 text-center bg-white rounded-lg shadow-lg">
-            <h1 className="font-bold">THB/KUB</h1>
-            <p>{thbKub}</p>
+          <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
+            <div className="bg-zinc-700 flex flex-col items-center justify-center p-2">
+              <Image src="/icons/KUB.png" alt="KUB" width={32} height={32} />
+            </div>
+            <div className="flex flex-col items-center justify-center flex-1 text-center">
+              <h1 className="font-bold">{thbKub}</h1>
+              <p className="[font-size:10px] [line-height:12px] font-medium text-stone-400">
+                THB/KUB
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col p-4 text-center bg-white rounded-lg shadow-lg">
-            <h1 className="font-bold">THB/USDT</h1>
-            <p>{thbUsdt}</p>
+          <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
+            <div className="bg-zinc-700 flex flex-col items-center justify-center p-2">
+              <Image src="/icons/USDT.png" alt="USDT" width={32} height={32} />
+            </div>
+            <div className="flex flex-col items-center justify-center flex-1 text-center">
+              <h1 className="font-bold">{thbUsdt}</h1>
+              <p className="[font-size:10px] [line-height:12px] font-medium text-stone-400">
+                THB/USDT
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className="overflow-hidden bg-white rounded-lg shadow-lg">
-          <Image
-            src="/images/cabbage_example.png"
-            alt="cabbage_example.png"
-            width={760}
-            height={932}
-            objectFit="contain"
-          />
+        <div className="card flex flex-col p-4 space-y-4 overflow-hidden bg-white shadow-lg">
+          <h1 className="text-lg font-medium text-center">คำนวนผลผลิตต่อวัน</h1>
 
-          <div className=" p-4">
-            <h2 className="card-title">การหาค่า</h2>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem
-              iure molestias eius.
-            </p>
-            <div className="card-actions">awd</div>
+          <div className="btn-group self-center">
+            <button
+              className={`btn btn-outline btn-sm${
+                plantKind === "SEED" ? " btn-active" : ""
+              }`}
+              onClick={() => {
+                setPlantKind("SEED");
+
+                switch (seedKind) {
+                  case "TOMATO" || "CORN" || "CABBAGE":
+                    setRewardMultiplier(8);
+                    break;
+                  case "CARROT":
+                    setRewardMultiplier(15);
+                    break;
+                }
+              }}
+            >
+              SEED
+            </button>
+            <button
+              className={`btn btn-outline btn-sm${
+                plantKind === "STEM" ? " btn-active" : ""
+              }`}
+              onClick={() => {
+                setPlantKind("STEM");
+
+                switch (stemLP) {
+                  case "LKKUB":
+                    switch (seedKind) {
+                      case "TOMATO" || "CORN" || "CABBAGE":
+                        setRewardMultiplier(24);
+                        break;
+                      case "CARROT":
+                        setRewardMultiplier(30);
+                        break;
+                    }
+                    break;
+                  case "LKUSDT":
+                    switch (seedKind) {
+                      case "TOMATO" || "CORN" || "CABBAGE":
+                        setRewardMultiplier(20);
+                        break;
+                      case "CARROT":
+                        setRewardMultiplier(25);
+                        break;
+                    }
+                    break;
+                }
+              }}
+            >
+              STEM
+            </button>
+          </div>
+
+          {plantKind === "STEM" && (
+            <div className="btn-group self-center">
+              <button
+                className={`btn btn-outline btn-sm${
+                  stemLP === "LKKUB" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setStemLP("LKKUB");
+
+                  switch (seedKind) {
+                    case "TOMATO" || "CORN" || "CABBAGE":
+                      setRewardMultiplier(24);
+                      break;
+                    case "CARROT":
+                      setRewardMultiplier(30);
+                      break;
+                  }
+                }}
+              >
+                LKKUB
+              </button>
+              <button
+                className={`btn btn-outline btn-sm${
+                  stemLP === "LKUSDT" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setStemLP("LKUSDT");
+
+                  switch (seedKind) {
+                    case "TOMATO" || "CORN" || "CABBAGE":
+                      setRewardMultiplier(20);
+                      break;
+                    case "CARROT":
+                      setRewardMultiplier(25);
+                      break;
+                  }
+                }}
+              >
+                LKUSDT
+              </button>
+            </div>
+          )}
+
+          <div className="btn-group self-center">
+            <button
+              className={`btn btn-outline btn-xs${
+                seedKind === "TOMATO" ? " btn-active" : ""
+              }`}
+              onClick={() => {
+                setSeedKind("TOMATO");
+
+                switch (plantKind) {
+                  case "SEED":
+                    setRewardMultiplier(8);
+                    break;
+                  case "STEM":
+                    switch (stemLP) {
+                      case "LKKUB":
+                        setRewardMultiplier(24);
+                        break;
+                      case "LKUSDT":
+                        setRewardMultiplier(20);
+                        break;
+                    }
+                    break;
+                }
+              }}
+            >
+              TOMATO
+            </button>
+            <button
+              className={`btn btn-outline btn-xs${
+                seedKind === "CORN" ? " btn-active" : ""
+              }`}
+              onClick={() => {
+                setSeedKind("CORN");
+
+                switch (plantKind) {
+                  case "SEED":
+                    setRewardMultiplier(8);
+                    break;
+                  case "STEM":
+                    switch (stemLP) {
+                      case "LKKUB":
+                        setRewardMultiplier(24);
+                        break;
+                      case "LKUSDT":
+                        setRewardMultiplier(20);
+                        break;
+                    }
+                    break;
+                }
+              }}
+            >
+              CORN
+            </button>
+            <button
+              className={`btn btn-outline btn-xs${
+                seedKind === "CABBAGE" ? " btn-active" : ""
+              }`}
+              onClick={() => {
+                setSeedKind("CABBAGE");
+
+                switch (plantKind) {
+                  case "SEED":
+                    setRewardMultiplier(8);
+                    break;
+                  case "STEM":
+                    switch (stemLP) {
+                      case "LKKUB":
+                        setRewardMultiplier(24);
+                        break;
+                      case "LKUSDT":
+                        setRewardMultiplier(20);
+                        break;
+                    }
+                    break;
+                }
+              }}
+            >
+              CABBAGE
+            </button>
+            <button
+              className={`btn btn-outline btn-xs${
+                seedKind === "CARROT" ? " btn-active" : ""
+              }`}
+              onClick={() => {
+                setSeedKind("CARROT");
+
+                switch (plantKind) {
+                  case "SEED":
+                    setRewardMultiplier(15);
+                    break;
+                  case "STEM":
+                    switch (stemLP) {
+                      case "LKKUB":
+                        setRewardMultiplier(30);
+                        break;
+                      case "LKUSDT":
+                        setRewardMultiplier(25);
+                        break;
+                    }
+                    break;
+                }
+              }}
+            >
+              CARROT
+            </button>
+          </div>
+
+          <div className="btn-group self-center">
+            <button
+              className={`btn btn-outline btn-xs${
+                rewardMultiplier === 8 ? " btn-active" : ""
+              }`}
+              disabled
+            >
+              8X
+            </button>
+            <button
+              className={`btn btn-outline btn-xs${
+                rewardMultiplier === 15 ? " btn-active" : ""
+              }`}
+              disabled
+            >
+              15X
+            </button>
+            <button
+              className={`btn btn-outline btn-xs${
+                rewardMultiplier === 20 ? " btn-active" : ""
+              }`}
+              disabled
+            >
+              20X
+            </button>
+            <button
+              className={`btn btn-outline btn-xs${
+                rewardMultiplier === 24 ? " btn-active" : ""
+              }`}
+              disabled
+            >
+              24X
+            </button>
+            <button
+              className={`btn btn-outline btn-xs${
+                rewardMultiplier === 25 ? " btn-active" : ""
+              }`}
+              disabled
+            >
+              25X
+            </button>
+            <button
+              className={`btn btn-outline btn-xs${
+                rewardMultiplier === 30 ? " btn-active" : ""
+              }`}
+              disabled
+            >
+              30X
+            </button>
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">
+                จำนวน {plantKind === "SEED" ? "SEED" : "STEM"} ที่จะปลูก
+              </span>
+            </label>
+            <label className="input-group input-group-sm">
+              <input
+                className="input input-bordered input-sm flex-1"
+                type="number"
+                placeholder="0.00"
+                value={seedAmount?.toString() || ""}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value);
+                  setSeedAmount(isNaN(value) || value < 0 ? null : value);
+                }}
+              />
+              <span>{plantKind === "SEED" ? "SEED" : "STEM"}</span>
+            </label>
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Total Liquidity</span>
+            </label>
+            <label className="input-group input-group-sm">
+              <input
+                className="input input-bordered input-sm flex-1"
+                type="number"
+                placeholder="0.00"
+                value={totalLiquidity?.toString() || ""}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value);
+                  setTotalLiquidity(isNaN(value) || value < 0 ? null : value);
+                }}
+              />
+              <span>{plantKind === "SEED" ? "SEEDS" : "$"}</span>
+            </label>
           </div>
         </div>
       </div>
