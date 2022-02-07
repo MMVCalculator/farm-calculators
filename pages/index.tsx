@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { Ticker } from "../interfaces/Ticker";
+import Link from "next/link";
 
 type Data = {
   THB_KUB: number;
@@ -23,8 +24,9 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
   const [stemLP, setStemLP] = useState<StemLP>("LKKUB");
   const [seedKind, setSeedKind] = useState<SeedKind>("TOMATO");
   const [rewardMultiplier, setRewardMultiplier] = useState<RewardMultiplier>(8);
-  const [seedAmount, setSeedAmount] = useState<number | null>(null);
+  const [seedOrStemAmount, setSeedOrStemAmount] = useState<number | null>(null);
   const [totalLiquidity, setTotalLiquidity] = useState<number | null>(null);
+  const [cropsPerDay, setCropsPerDay] = useState<string | "-">("-");
 
   useEffect(() => {
     document.getElementsByTagName("html")[0].dataset.theme = "light";
@@ -61,15 +63,63 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
     };
   }, []);
 
+  useEffect(() => {
+    switch (plantKind) {
+      case "SEED":
+        const cropsPerDaySeed = parseFloat(
+          (
+            (17280 * (0.1 * rewardMultiplier) * (seedOrStemAmount || 0)) /
+            (totalLiquidity ? totalLiquidity + (seedOrStemAmount || 0) : 0)
+          ).toFixed(2)
+        );
+
+        setCropsPerDay(
+          cropsPerDaySeed <= 0 ||
+            cropsPerDaySeed === Infinity ||
+            isNaN(cropsPerDaySeed)
+            ? "-"
+            : cropsPerDaySeed.toLocaleString("th-TH")
+        );
+        break;
+
+      case "STEM":
+        const cropsPerDayStem = parseFloat(
+          (
+            (17280 * (0.1 * rewardMultiplier) * (seedOrStemAmount || 0)) /
+            (totalLiquidity
+              ? totalLiquidity / 2.01 + (seedOrStemAmount || 0)
+              : 0)
+          ).toFixed(2)
+        );
+
+        setCropsPerDay(
+          cropsPerDayStem <= 0 ||
+            cropsPerDayStem === Infinity ||
+            isNaN(cropsPerDayStem)
+            ? "-"
+            : cropsPerDayStem.toLocaleString("th-TH")
+        );
+        break;
+    }
+  }, [plantKind, rewardMultiplier, seedOrStemAmount, totalLiquidity]);
+
   return (
     <div className="bg-slate-100 flex flex-col w-screen h-screen overflow-auto">
       <Head>
         <title>MMV EZ - Home</title>
       </Head>
 
-      <nav className="navbar sticky top-0 flex space-x-2 bg-white shadow-lg">
-        <div className="flex-1">
-          <span className="text-lg font-bold select-none">MMV EZ</span>
+      <nav className="navbar sticky top-0 z-50 flex space-x-2 bg-white shadow-lg">
+        <div className="flex flex-1 ml-2 space-x-2">
+          <div className="w-10 h-10">
+            <Image
+              src="/icons/chicken_loading.gif"
+              alt="chicken_loading"
+              width={512}
+              height={512}
+            />
+          </div>
+          <span className="font-bold select-none">MMV EZ</span>
         </div>
 
         {/* <div className="lg:flex flex-none hidden">
@@ -146,34 +196,30 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
         </div>
       </nav>
 
-      <div className="container self-center p-4 space-y-4">
+      <div className="sm:max-w-screen-sm container z-0 self-center flex-1 p-4 space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
-            <div className="bg-zinc-700 flex flex-col items-center justify-center p-2">
-              <Image src="/icons/KUB.png" alt="KUB" width={32} height={32} />
+            <div className="bg-zinc-700 flex flex-col items-center justify-center w-12 h-12 p-2">
+              <Image src="/icons/KUB.png" alt="KUB" width={80} height={80} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">{thbKub}</h1>
-              <p className="[font-size:10px] [line-height:12px] font-medium text-stone-400">
-                THB/KUB
-              </p>
+              <h1 className="text-zinc-700 font-bold">{thbKub}</h1>
+              <p className="text-2xs text-stone-400 font-medium">THB/KUB</p>
             </div>
           </div>
           <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
-            <div className="bg-zinc-700 flex flex-col items-center justify-center p-2">
-              <Image src="/icons/USDT.png" alt="USDT" width={32} height={32} />
+            <div className="bg-zinc-700 flex flex-col items-center justify-center w-12 h-12 p-2">
+              <Image src="/icons/USDT.png" alt="USDT" width={80} height={80} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">{thbUsdt}</h1>
-              <p className="[font-size:10px] [line-height:12px] font-medium text-stone-400">
-                THB/USDT
-              </p>
+              <h1 className="text-zinc-700 font-bold">{thbUsdt}</h1>
+              <p className="text-2xs text-stone-400 font-medium">THB/USDT</p>
             </div>
           </div>
         </div>
 
         <div className="card flex flex-col p-4 space-y-4 overflow-hidden bg-white shadow-lg">
-          <h1 className="text-lg font-medium text-center">คำนวนผลผลิตต่อวัน</h1>
+          <h1 className="text-lg font-medium text-center">คำนวณผลผลิตต่อวัน</h1>
 
           <div className="btn-group self-center">
             <button
@@ -184,7 +230,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                 setPlantKind("SEED");
 
                 switch (seedKind) {
-                  case "TOMATO" || "CORN" || "CABBAGE":
+                  case "TOMATO":
+                    setRewardMultiplier(8);
+                    break;
+                  case "CORN":
+                    setRewardMultiplier(8);
+                    break;
+                  case "CABBAGE":
                     setRewardMultiplier(8);
                     break;
                   case "CARROT":
@@ -205,7 +257,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                 switch (stemLP) {
                   case "LKKUB":
                     switch (seedKind) {
-                      case "TOMATO" || "CORN" || "CABBAGE":
+                      case "TOMATO":
+                        setRewardMultiplier(24);
+                        break;
+                      case "CORN":
+                        setRewardMultiplier(24);
+                        break;
+                      case "CABBAGE":
                         setRewardMultiplier(24);
                         break;
                       case "CARROT":
@@ -215,7 +273,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                     break;
                   case "LKUSDT":
                     switch (seedKind) {
-                      case "TOMATO" || "CORN" || "CABBAGE":
+                      case "TOMATO":
+                        setRewardMultiplier(20);
+                        break;
+                      case "CORN":
+                        setRewardMultiplier(20);
+                        break;
+                      case "CABBAGE":
                         setRewardMultiplier(20);
                         break;
                       case "CARROT":
@@ -240,7 +304,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                   setStemLP("LKKUB");
 
                   switch (seedKind) {
-                    case "TOMATO" || "CORN" || "CABBAGE":
+                    case "TOMATO":
+                      setRewardMultiplier(24);
+                      break;
+                    case "CORN":
+                      setRewardMultiplier(24);
+                      break;
+                    case "CABBAGE":
                       setRewardMultiplier(24);
                       break;
                     case "CARROT":
@@ -259,7 +329,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                   setStemLP("LKUSDT");
 
                   switch (seedKind) {
-                    case "TOMATO" || "CORN" || "CABBAGE":
+                    case "TOMATO":
+                      setRewardMultiplier(20);
+                      break;
+                    case "CORN":
+                      setRewardMultiplier(20);
+                      break;
+                    case "CABBAGE":
                       setRewardMultiplier(20);
                       break;
                     case "CARROT":
@@ -272,6 +348,15 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
               </button>
             </div>
           )}
+
+          <div className="ring ring-primary ring-offset-base-100 ring-offset-2 self-center w-10 h-10 mb-8 rounded-full">
+            <Image
+              src={`/icons/crop-${seedKind.toLocaleLowerCase()}.png`}
+              alt="crop"
+              width={80}
+              height={80}
+            />
+          </div>
 
           <div className="btn-group self-center">
             <button
@@ -439,16 +524,18 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </label>
             <label className="input-group input-group-sm">
               <input
-                className="input input-bordered input-sm flex-1"
+                className="input input-bordered input-sm w-full"
                 type="number"
                 placeholder="0.00"
-                value={seedAmount?.toString() || ""}
+                value={
+                  typeof seedOrStemAmount === "number" ? seedOrStemAmount : ""
+                }
                 onChange={(e) => {
                   const value = parseFloat(e.target.value);
-                  setSeedAmount(isNaN(value) || value < 0 ? null : value);
+                  setSeedOrStemAmount(isNaN(value) || value < 0 ? null : value);
                 }}
               />
-              <span>{plantKind === "SEED" ? "SEED" : "STEM"}</span>
+              <span>{plantKind === "SEED" ? "SEEDS" : "STEMS"}</span>
             </label>
           </div>
 
@@ -458,10 +545,10 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </label>
             <label className="input-group input-group-sm">
               <input
-                className="input input-bordered input-sm flex-1"
+                className="input input-bordered input-sm w-full"
                 type="number"
                 placeholder="0.00"
-                value={totalLiquidity?.toString() || ""}
+                value={typeof totalLiquidity === "number" ? totalLiquidity : ""}
                 onChange={(e) => {
                   const value = parseFloat(e.target.value);
                   setTotalLiquidity(isNaN(value) || value < 0 ? null : value);
@@ -470,8 +557,78 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
               <span>{plantKind === "SEED" ? "SEEDS" : "$"}</span>
             </label>
           </div>
+
+          <div
+            className={`grid${
+              plantKind === "SEED" ? " grid-cols-2" : "grid-cols-1"
+            }`}
+          >
+            <div className="stat p-4 border-none">
+              <div className="stat-title text-sm">Produce Rate</div>
+              <div className="stat-value text-2xl">{cropsPerDay}</div>
+              <div className="stat-title text-xs">Crops/Day</div>
+            </div>
+            {plantKind === "SEED" && (
+              <div className="stat p-4 border-none">
+                <div className="stat-title text-sm">48 hours earn</div>
+                <div className="stat-value text-2xl">
+                  {parseFloat(cropsPerDay)
+                    ? `≈ ${parseFloat(cropsPerDay) * 2}`
+                    : "-"}
+                </div>
+                <div className="stat-title text-xs">Crops</div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      <footer className="footer bg-neutral text-neutral-content items-center gap-4 p-4">
+        <div className="items-center grid-flow-col">
+          <p>Copyright © 2022 - All right reserved</p>
+        </div>
+        <div className="md:place-self-center md:justify-self-end grid-flow-col gap-4">
+          <Link href="https://www.facebook.com/artzeeker/">
+            <a target="_blank">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                className="fill-current"
+              >
+                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
+              </svg>
+            </a>
+          </Link>
+          <Link href="https://www.youtube.com/channel/UCyqsJtVoVGO98oHvaI14UXg">
+            <a target="_blank">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                className="fill-current"
+              >
+                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
+              </svg>
+            </a>
+          </Link>
+          <Link href="https://twitter.com/artzeeker">
+            <a target="_blank">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                className="fill-current"
+              >
+                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+              </svg>
+            </a>
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 };
