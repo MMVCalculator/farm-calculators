@@ -146,14 +146,14 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
         </div>
       </nav>
 
-      <div className="container self-center p-4 space-y-4">
+      <div className="container self-center flex-1 p-4 space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
             <div className="bg-zinc-700 flex flex-col items-center justify-center p-2">
               <Image src="/icons/KUB.png" alt="KUB" width={32} height={32} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">{thbKub}</h1>
+              <h1 className="text-zinc-700 font-bold">{thbKub}</h1>
               <p className="[font-size:10px] [line-height:12px] font-medium text-stone-400">
                 THB/KUB
               </p>
@@ -164,7 +164,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
               <Image src="/icons/USDT.png" alt="USDT" width={32} height={32} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">{thbUsdt}</h1>
+              <h1 className="text-zinc-700 font-bold">{thbUsdt}</h1>
               <p className="[font-size:10px] [line-height:12px] font-medium text-stone-400">
                 THB/USDT
               </p>
@@ -184,7 +184,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                 setPlantKind("SEED");
 
                 switch (seedKind) {
-                  case "TOMATO" || "CORN" || "CABBAGE":
+                  case "TOMATO":
+                    setRewardMultiplier(8);
+                    break;
+                  case "CORN":
+                    setRewardMultiplier(8);
+                    break;
+                  case "CABBAGE":
                     setRewardMultiplier(8);
                     break;
                   case "CARROT":
@@ -205,7 +211,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                 switch (stemLP) {
                   case "LKKUB":
                     switch (seedKind) {
-                      case "TOMATO" || "CORN" || "CABBAGE":
+                      case "TOMATO":
+                        setRewardMultiplier(24);
+                        break;
+                      case "CORN":
+                        setRewardMultiplier(24);
+                        break;
+                      case "CABBAGE":
                         setRewardMultiplier(24);
                         break;
                       case "CARROT":
@@ -215,7 +227,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                     break;
                   case "LKUSDT":
                     switch (seedKind) {
-                      case "TOMATO" || "CORN" || "CABBAGE":
+                      case "TOMATO":
+                        setRewardMultiplier(20);
+                        break;
+                      case "CORN":
+                        setRewardMultiplier(20);
+                        break;
+                      case "CABBAGE":
                         setRewardMultiplier(20);
                         break;
                       case "CARROT":
@@ -240,7 +258,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                   setStemLP("LKKUB");
 
                   switch (seedKind) {
-                    case "TOMATO" || "CORN" || "CABBAGE":
+                    case "TOMATO":
+                      setRewardMultiplier(24);
+                      break;
+                    case "CORN":
+                      setRewardMultiplier(24);
+                      break;
+                    case "CABBAGE":
                       setRewardMultiplier(24);
                       break;
                     case "CARROT":
@@ -259,7 +283,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                   setStemLP("LKUSDT");
 
                   switch (seedKind) {
-                    case "TOMATO" || "CORN" || "CABBAGE":
+                    case "TOMATO":
+                      setRewardMultiplier(20);
+                      break;
+                    case "CORN":
+                      setRewardMultiplier(20);
+                      break;
+                    case "CABBAGE":
                       setRewardMultiplier(20);
                       break;
                     case "CARROT":
@@ -439,7 +469,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </label>
             <label className="input-group input-group-sm">
               <input
-                className="input input-bordered input-sm flex-1"
+                className="input input-bordered input-sm w-full"
                 type="number"
                 placeholder="0.00"
                 value={seedAmount?.toString() || ""}
@@ -458,7 +488,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </label>
             <label className="input-group input-group-sm">
               <input
-                className="input input-bordered input-sm flex-1"
+                className="input input-bordered input-sm w-full"
                 type="number"
                 placeholder="0.00"
                 value={totalLiquidity?.toString() || ""}
@@ -472,6 +502,12 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
           </div>
         </div>
       </div>
+
+      <footer className="footer bg-base-300 text-base-content footer-center p-4">
+        <div>
+          <p>Copyright © 2022 - All right reserved by Artzeeker</p>
+        </div>
+      </footer>
     </div>
   );
 };
