@@ -13,7 +13,7 @@ type Data = {
 type PlantKind = "SEED" | "STEM";
 type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
-type RewardMultiplier = 10 | 15 | 25 | 30;
+type RewardMultiplier = 8 | 15 | 20 | 24 | 25 | 30;
 
 const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
   const [thbKub, setThbKub] = useState<number>(THB_KUB);
@@ -22,9 +22,8 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
   const [plantKind, setPlantKind] = useState<PlantKind>("SEED");
   const [stemLP, setStemLP] = useState<StemLP>("LKKUB");
   const [seedKind, setSeedKind] = useState<SeedKind>("TOMATO");
-  const [rewardMultiplier, setRewardMultiplier] =
-    useState<RewardMultiplier>(10);
-  const [seedAmount, setSeedAmount] = useState<number | null>(null);
+  const [rewardMultiplier, setRewardMultiplier] = useState<RewardMultiplier>(8);
+  const [seedOrStemAmount, setSeedOrStemAmount] = useState<number | null>(null);
   const [totalLiquidity, setTotalLiquidity] = useState<number | null>(null);
   const [cropsPerDay, setCropsPerDay] = useState<string | "-">("-");
 
@@ -64,19 +63,44 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
   }, []);
 
   useEffect(() => {
-    const cropsPerDay = parseFloat(
-      (
-        (17280 * (0.1 * rewardMultiplier) * (seedAmount || 0)) /
-        (totalLiquidity ? totalLiquidity + (seedAmount || 0) : 0)
-      ).toFixed(2)
-    );
+    switch (plantKind) {
+      case "SEED":
+        const cropsPerDaySeed = parseFloat(
+          (
+            (17280 * (0.1 * rewardMultiplier) * (seedOrStemAmount || 0)) /
+            (totalLiquidity ? totalLiquidity + (seedOrStemAmount || 0) : 0)
+          ).toFixed(2)
+        );
 
-    setCropsPerDay(
-      cropsPerDay <= 0 || cropsPerDay === Infinity || isNaN(cropsPerDay)
-        ? "-"
-        : cropsPerDay.toLocaleString("th-TH")
-    );
-  }, [rewardMultiplier, seedAmount, totalLiquidity]);
+        setCropsPerDay(
+          cropsPerDaySeed <= 0 ||
+            cropsPerDaySeed === Infinity ||
+            isNaN(cropsPerDaySeed)
+            ? "-"
+            : cropsPerDaySeed.toLocaleString("th-TH")
+        );
+        break;
+
+      case "STEM":
+        const cropsPerDayStem = parseFloat(
+          (
+            (17280 * (0.1 * rewardMultiplier) * (seedOrStemAmount || 0)) /
+            (totalLiquidity
+              ? totalLiquidity / 2.01 + (seedOrStemAmount || 0)
+              : 0)
+          ).toFixed(2)
+        );
+
+        setCropsPerDay(
+          cropsPerDayStem <= 0 ||
+            cropsPerDayStem === Infinity ||
+            isNaN(cropsPerDayStem)
+            ? "-"
+            : cropsPerDayStem.toLocaleString("th-TH")
+        );
+        break;
+    }
+  }, [plantKind, rewardMultiplier, seedOrStemAmount, totalLiquidity]);
 
   return (
     <div className="bg-slate-100 flex flex-col w-screen h-screen overflow-auto">
@@ -171,9 +195,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
               <h1 className="text-zinc-700 font-bold">{thbKub}</h1>
-              <p className="[font-size:10px] [line-height:12px] font-medium text-stone-400">
-                THB/KUB
-              </p>
+              <p className="text-2xs text-stone-400 font-medium">THB/KUB</p>
             </div>
           </div>
           <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
@@ -182,15 +204,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
               <h1 className="text-zinc-700 font-bold">{thbUsdt}</h1>
-              <p className="[font-size:10px] [line-height:12px] font-medium text-stone-400">
-                THB/USDT
-              </p>
+              <p className="text-2xs text-stone-400 font-medium">THB/USDT</p>
             </div>
           </div>
         </div>
 
         <div className="card flex flex-col p-4 space-y-4 overflow-hidden bg-white shadow-lg">
-          <h1 className="text-lg font-medium text-center">คำนวนผลผลิตต่อวัน</h1>
+          <h1 className="text-lg font-medium text-center">คำนวณผลผลิตต่อวัน</h1>
 
           <div className="btn-group self-center">
             <button
@@ -202,13 +222,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
 
                 switch (seedKind) {
                   case "TOMATO":
-                    setRewardMultiplier(10);
+                    setRewardMultiplier(8);
                     break;
                   case "CORN":
-                    setRewardMultiplier(10);
+                    setRewardMultiplier(8);
                     break;
                   case "CABBAGE":
-                    setRewardMultiplier(10);
+                    setRewardMultiplier(8);
                     break;
                   case "CARROT":
                     setRewardMultiplier(15);
@@ -229,13 +249,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                   case "LKKUB":
                     switch (seedKind) {
                       case "TOMATO":
-                        setRewardMultiplier(30);
+                        setRewardMultiplier(24);
                         break;
                       case "CORN":
-                        setRewardMultiplier(30);
+                        setRewardMultiplier(24);
                         break;
                       case "CABBAGE":
-                        setRewardMultiplier(30);
+                        setRewardMultiplier(24);
                         break;
                       case "CARROT":
                         setRewardMultiplier(30);
@@ -245,13 +265,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                   case "LKUSDT":
                     switch (seedKind) {
                       case "TOMATO":
-                        setRewardMultiplier(25);
+                        setRewardMultiplier(20);
                         break;
                       case "CORN":
-                        setRewardMultiplier(25);
+                        setRewardMultiplier(20);
                         break;
                       case "CABBAGE":
-                        setRewardMultiplier(25);
+                        setRewardMultiplier(20);
                         break;
                       case "CARROT":
                         setRewardMultiplier(25);
@@ -276,13 +296,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
 
                   switch (seedKind) {
                     case "TOMATO":
-                      setRewardMultiplier(30);
+                      setRewardMultiplier(24);
                       break;
                     case "CORN":
-                      setRewardMultiplier(30);
+                      setRewardMultiplier(24);
                       break;
                     case "CABBAGE":
-                      setRewardMultiplier(30);
+                      setRewardMultiplier(24);
                       break;
                     case "CARROT":
                       setRewardMultiplier(30);
@@ -301,13 +321,13 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
 
                   switch (seedKind) {
                     case "TOMATO":
-                      setRewardMultiplier(25);
+                      setRewardMultiplier(20);
                       break;
                     case "CORN":
-                      setRewardMultiplier(25);
+                      setRewardMultiplier(20);
                       break;
                     case "CABBAGE":
-                      setRewardMultiplier(25);
+                      setRewardMultiplier(20);
                       break;
                     case "CARROT":
                       setRewardMultiplier(25);
@@ -330,15 +350,15 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
 
                 switch (plantKind) {
                   case "SEED":
-                    setRewardMultiplier(10);
+                    setRewardMultiplier(8);
                     break;
                   case "STEM":
                     switch (stemLP) {
                       case "LKKUB":
-                        setRewardMultiplier(30);
+                        setRewardMultiplier(24);
                         break;
                       case "LKUSDT":
-                        setRewardMultiplier(25);
+                        setRewardMultiplier(20);
                         break;
                     }
                     break;
@@ -356,15 +376,15 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
 
                 switch (plantKind) {
                   case "SEED":
-                    setRewardMultiplier(10);
+                    setRewardMultiplier(8);
                     break;
                   case "STEM":
                     switch (stemLP) {
                       case "LKKUB":
-                        setRewardMultiplier(30);
+                        setRewardMultiplier(24);
                         break;
                       case "LKUSDT":
-                        setRewardMultiplier(25);
+                        setRewardMultiplier(20);
                         break;
                     }
                     break;
@@ -382,15 +402,15 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
 
                 switch (plantKind) {
                   case "SEED":
-                    setRewardMultiplier(10);
+                    setRewardMultiplier(8);
                     break;
                   case "STEM":
                     switch (stemLP) {
                       case "LKKUB":
-                        setRewardMultiplier(30);
+                        setRewardMultiplier(24);
                         break;
                       case "LKUSDT":
-                        setRewardMultiplier(25);
+                        setRewardMultiplier(20);
                         break;
                     }
                     break;
@@ -430,11 +450,11 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
           <div className="btn-group self-center">
             <button
               className={`btn btn-outline btn-xs${
-                rewardMultiplier === 10 ? " btn-active" : ""
+                rewardMultiplier === 8 ? " btn-active" : ""
               }`}
               disabled
             >
-              10X
+              8X
             </button>
             <button
               className={`btn btn-outline btn-xs${
@@ -443,6 +463,22 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
               disabled
             >
               15X
+            </button>
+            <button
+              className={`btn btn-outline btn-xs${
+                rewardMultiplier === 20 ? " btn-active" : ""
+              }`}
+              disabled
+            >
+              20X
+            </button>
+            <button
+              className={`btn btn-outline btn-xs${
+                rewardMultiplier === 24 ? " btn-active" : ""
+              }`}
+              disabled
+            >
+              24X
             </button>
             <button
               className={`btn btn-outline btn-xs${
@@ -473,10 +509,12 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                 className="input input-bordered input-sm w-full"
                 type="number"
                 placeholder="0.00"
-                value={typeof seedAmount === "number" ? seedAmount : ""}
+                value={
+                  typeof seedOrStemAmount === "number" ? seedOrStemAmount : ""
+                }
                 onChange={(e) => {
                   const value = parseFloat(e.target.value);
-                  setSeedAmount(isNaN(value) || value < 0 ? null : value);
+                  setSeedOrStemAmount(isNaN(value) || value < 0 ? null : value);
                 }}
               />
               <span>{plantKind === "SEED" ? "SEED" : "STEM"}</span>
@@ -502,7 +540,26 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </label>
           </div>
 
-          <div>{cropsPerDay} Crops/Day</div>
+          <div
+            className={`grid${
+              plantKind === "SEED" ? " grid-cols-2" : "grid-cols-1"
+            }`}
+          >
+            <div className="stat p-4 border-none">
+              <div className="stat-title text-sm">Produce Rate</div>
+              <div className="stat-value text-2xl">{cropsPerDay}</div>
+              <div className="stat-title text-xs">Crops/Day</div>
+            </div>
+            {plantKind === "SEED" && (
+              <div className="stat p-4 border-none">
+                <div className="stat-title text-sm">48 hours earn</div>
+                <div className="stat-value text-2xl">
+                  {parseFloat(cropsPerDay) * 2 || "-"}
+                </div>
+                <div className="stat-title text-xs">Crops</div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
