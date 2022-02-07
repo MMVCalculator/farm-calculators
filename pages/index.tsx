@@ -563,7 +563,9 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
               <div className="stat p-4 border-none">
                 <div className="stat-title text-sm">48 hours earn</div>
                 <div className="stat-value text-2xl">
-                  {parseFloat(cropsPerDay) * 2 || "-"}
+                  {parseFloat(cropsPerDay)
+                    ? `≈ ${parseFloat(cropsPerDay) * 2}`
+                    : "-"}
                 </div>
                 <div className="stat-title text-xs">Crops</div>
               </div>
