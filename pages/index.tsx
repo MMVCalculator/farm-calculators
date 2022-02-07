@@ -187,11 +187,11 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
         </div>
       </nav>
 
-      <div className="container self-center flex-1 p-4 space-y-4">
+      <div className="sm:max-w-screen-sm container self-center flex-1 p-4 space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
-            <div className="bg-zinc-700 flex flex-col items-center justify-center p-2">
-              <Image src="/icons/KUB.png" alt="KUB" width={32} height={32} />
+            <div className="bg-zinc-700 flex flex-col items-center justify-center w-12 h-12 p-2">
+              <Image src="/icons/KUB.png" alt="KUB" width={80} height={80} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
               <h1 className="text-zinc-700 font-bold">{thbKub}</h1>
@@ -199,8 +199,8 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </div>
           </div>
           <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
-            <div className="bg-zinc-700 flex flex-col items-center justify-center p-2">
-              <Image src="/icons/USDT.png" alt="USDT" width={32} height={32} />
+            <div className="bg-zinc-700 flex flex-col items-center justify-center w-12 h-12 p-2">
+              <Image src="/icons/USDT.png" alt="USDT" width={80} height={80} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
               <h1 className="text-zinc-700 font-bold">{thbUsdt}</h1>
@@ -339,6 +339,15 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
               </button>
             </div>
           )}
+
+          <div className="ring ring-primary ring-offset-base-100 ring-offset-2 self-center w-10 h-10 mb-8 rounded-full">
+            <Image
+              src={`/icons/crop-${seedKind.toLocaleLowerCase()}.png`}
+              alt="crop"
+              width={80}
+              height={80}
+            />
+          </div>
 
           <div className="btn-group self-center">
             <button
