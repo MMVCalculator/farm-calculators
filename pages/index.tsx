@@ -526,7 +526,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                   setSeedOrStemAmount(isNaN(value) || value < 0 ? null : value);
                 }}
               />
-              <span>{plantKind === "SEED" ? "SEED" : "STEM"}</span>
+              <span>{plantKind === "SEED" ? "SEEDS" : "STEMS"}</span>
             </label>
           </div>
 
