@@ -86,9 +86,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
         const cropsPerDayStem = parseFloat(
           (
             (17280 * (0.1 * rewardMultiplier) * (seedOrStemAmount || 0)) /
-            (totalLiquidity
-              ? totalLiquidity / 2.01 + (seedOrStemAmount || 0)
-              : 0)
+            (totalLiquidity ? totalLiquidity / 2 + (seedOrStemAmount || 0) : 0)
           ).toFixed(2)
         );
 
@@ -350,7 +348,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </div>
           )}
 
-          <div className="ring ring-primary ring-offset-base-100 ring-offset-2 self-center w-10 h-10 mb-8 rounded-full">
+          <div className="ring ring-neutral self-center w-10 h-10 rounded-full">
             <Image
               src={`/icons/crop-${seedKind.toLocaleLowerCase()}.png`}
               alt="crop"
@@ -559,22 +557,45 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </label>
           </div>
 
-          <div
-            className={`grid${
-              plantKind === "SEED" ? " grid-cols-2" : "grid-cols-1"
-            }`}
-          >
-            <div className="stat p-4 border-none">
-              <div className="stat-title text-sm">Produce Rate</div>
-              <div className="stat-value text-2xl">
-                {cropsPerDay.toLocaleString("th-TH")}
+          <div className="grid grid-cols-2">
+            <div className="stat p-2 border-none">
+              <div className="stat-title flex items-center space-x-2 text-xs opacity-100">
+                <div className="flex items-center justify-center opacity-50">
+                  Produce Rate
+                </div>
+                <div className="ring-[1.5px] ring-neutral self-center w-4 h-4 rounded-full">
+                  <Image
+                    src={`/icons/crop-${seedKind.toLowerCase()}.png`}
+                    alt="lumi"
+                    width={80}
+                    height={80}
+                  />
+                </div>
+              </div>
+              <div className="stat-value text-lg">
+                {`${
+                  plantKind === "STEM" ? "≈ " : ""
+                }${cropsPerDay.toLocaleString("th-TH")}`}
               </div>
               <div className="stat-title text-xs">Crops/Day</div>
             </div>
+
             {plantKind === "SEED" && (
-              <div className="stat p-4 border-none">
-                <div className="stat-title text-sm">48 hours earn</div>
-                <div className="stat-value text-2xl">
+              <div className="stat p-2 border-none">
+                <div className="stat-title flex items-center space-x-2 text-xs opacity-100">
+                  <div className="flex items-center justify-center opacity-50">
+                    48 hours earn
+                  </div>
+                  <div className="ring-[1.5px] ring-neutral self-center w-4 h-4 rounded-full">
+                    <Image
+                      src={`/icons/crop-${seedKind.toLowerCase()}.png`}
+                      alt="lumi"
+                      width={80}
+                      height={80}
+                    />
+                  </div>
+                </div>
+                <div className="stat-value text-lg">
                   {typeof cropsPerDay === "number"
                     ? `≈ ${(cropsPerDay * 2).toLocaleString("th-TH")}`
                     : "-"}
@@ -582,6 +603,56 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                 <div className="stat-title text-xs">Crops</div>
               </div>
             )}
+
+            <div className="stat p-2 border-none">
+              <div className="stat-title flex items-center space-x-1 text-xs opacity-100">
+                <div className="stat-title flex items-center space-x-2 text-xs opacity-100">
+                  <div className="flex items-center justify-center opacity-50">
+                    Sell to KYLE
+                  </div>
+                  <div className="ring-[1.5px] ring-neutral self-center w-4 h-4 rounded-full">
+                    <Image
+                      src="/icons/lumi.png"
+                      alt="lumi"
+                      width={80}
+                      height={80}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="stat-value text-lg">
+                {typeof cropsPerDay === "number"
+                  ? `≈ ${(
+                      cropsPerDay *
+                      (plantKind === "STEM" ? 1 : 2) *
+                      0.095
+                    ).toLocaleString("th-TH")}`
+                  : "-"}
+              </div>
+              <div className="stat-title text-xs">
+                {`LUMI${plantKind === "STEM" ? "/Day" : ""}`}
+              </div>
+            </div>
+
+            <div className="stat p-2 border-none">
+              <div className="stat-title text-xs">Estimated</div>
+              <div className="stat-value text-lg">
+                {typeof cropsPerDay === "number"
+                  ? `≈ ${parseFloat(
+                      (
+                        cropsPerDay *
+                        (plantKind === "STEM" ? 1 : 2) *
+                        0.095 *
+                        0.1 *
+                        thbKub
+                      ).toFixed(2)
+                    ).toLocaleString("th-TH")}`
+                  : "-"}
+              </div>
+              <div className="stat-title text-xs">
+                THB{plantKind === "STEM" ? "/Day" : ""}
+              </div>
+            </div>
           </div>
         </div>
 
