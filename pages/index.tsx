@@ -86,9 +86,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
         const cropsPerDayStem = parseFloat(
           (
             (17280 * (0.1 * rewardMultiplier) * (seedOrStemAmount || 0)) /
-            (totalLiquidity
-              ? totalLiquidity / 2.01 + (seedOrStemAmount || 0)
-              : 0)
+            (totalLiquidity ? totalLiquidity / 2 + (seedOrStemAmount || 0) : 0)
           ).toFixed(2)
         );
 
@@ -106,20 +104,21 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
   return (
     <div className="bg-slate-100 flex flex-col w-screen h-screen overflow-auto">
       <Head>
-        <title>MMV EZ - Home</title>
+        <title>MMVez</title>
       </Head>
 
       <nav className="navbar sticky top-0 z-50 flex space-x-2 bg-white shadow-lg">
         <div className="flex flex-1 ml-2 space-x-2">
-          <div className="w-10 h-10">
+          <span className="select-none font-[Chewy]">MMVez</span>
+
+          {/* <div className="w-10 h-10">
             <Image
               src="/icons/chicken_loading.gif"
               alt="chicken_loading"
               width={512}
               height={512}
             />
-          </div>
-          <span className="font-bold select-none">MMV EZ</span>
+          </div> */}
         </div>
 
         {/* <div className="lg:flex flex-none hidden">
@@ -200,7 +199,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
         <div className="grid grid-cols-2 gap-4">
           <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
             <div className="bg-zinc-700 flex flex-col items-center justify-center w-12 h-12 p-2">
-              <Image src="/icons/KUB.png" alt="KUB" width={80} height={80} />
+              <Image src="/icons/kub.png" alt="kub" width={80} height={80} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
               <h1 className="text-zinc-700 font-bold">{thbKub}</h1>
@@ -209,7 +208,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
           </div>
           <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
             <div className="bg-zinc-700 flex flex-col items-center justify-center w-12 h-12 p-2">
-              <Image src="/icons/USDT.png" alt="USDT" width={80} height={80} />
+              <Image src="/icons/usdt.png" alt="usdt" width={80} height={80} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
               <h1 className="text-zinc-700 font-bold">{thbUsdt}</h1>
@@ -349,7 +348,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </div>
           )}
 
-          <div className="ring ring-primary ring-offset-base-100 ring-offset-2 self-center w-10 h-10 mb-8 rounded-full">
+          <div className="ring ring-neutral self-center w-10 h-10 rounded-full">
             <Image
               src={`/icons/crop-${seedKind.toLocaleLowerCase()}.png`}
               alt="crop"
@@ -558,22 +557,45 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </label>
           </div>
 
-          <div
-            className={`grid${
-              plantKind === "SEED" ? " grid-cols-2" : "grid-cols-1"
-            }`}
-          >
-            <div className="stat p-4 border-none">
-              <div className="stat-title text-sm">Produce Rate</div>
-              <div className="stat-value text-2xl">
-                {cropsPerDay.toLocaleString("th-TH")}
+          <div className="grid grid-cols-2">
+            <div className="stat p-2 border-none">
+              <div className="stat-title flex items-center space-x-2 text-xs opacity-100">
+                <div className="flex items-center justify-center opacity-50">
+                  Produce Rate
+                </div>
+                <div className="ring-[1.5px] ring-neutral self-center w-4 h-4 rounded-full">
+                  <Image
+                    src={`/icons/crop-${seedKind.toLowerCase()}.png`}
+                    alt="lumi"
+                    width={80}
+                    height={80}
+                  />
+                </div>
+              </div>
+              <div className="stat-value text-lg">
+                {`${
+                  plantKind === "STEM" ? "≈ " : ""
+                }${cropsPerDay.toLocaleString("th-TH")}`}
               </div>
               <div className="stat-title text-xs">Crops/Day</div>
             </div>
+
             {plantKind === "SEED" && (
-              <div className="stat p-4 border-none">
-                <div className="stat-title text-sm">48 hours earn</div>
-                <div className="stat-value text-2xl">
+              <div className="stat p-2 border-none">
+                <div className="stat-title flex items-center space-x-2 text-xs opacity-100">
+                  <div className="flex items-center justify-center opacity-50">
+                    48 hours earn
+                  </div>
+                  <div className="ring-[1.5px] ring-neutral self-center w-4 h-4 rounded-full">
+                    <Image
+                      src={`/icons/crop-${seedKind.toLowerCase()}.png`}
+                      alt="lumi"
+                      width={80}
+                      height={80}
+                    />
+                  </div>
+                </div>
+                <div className="stat-value text-lg">
                   {typeof cropsPerDay === "number"
                     ? `≈ ${(cropsPerDay * 2).toLocaleString("th-TH")}`
                     : "-"}
@@ -581,6 +603,56 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                 <div className="stat-title text-xs">Crops</div>
               </div>
             )}
+
+            <div className="stat p-2 border-none">
+              <div className="stat-title flex items-center space-x-1 text-xs opacity-100">
+                <div className="stat-title flex items-center space-x-2 text-xs opacity-100">
+                  <div className="flex items-center justify-center opacity-50">
+                    Sell to KYLE
+                  </div>
+                  <div className="ring-[1.5px] ring-neutral self-center w-4 h-4 rounded-full">
+                    <Image
+                      src="/icons/lumi.png"
+                      alt="lumi"
+                      width={80}
+                      height={80}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="stat-value text-lg">
+                {typeof cropsPerDay === "number"
+                  ? `≈ ${(
+                      cropsPerDay *
+                      (plantKind === "STEM" ? 1 : 2) *
+                      0.095
+                    ).toLocaleString("th-TH")}`
+                  : "-"}
+              </div>
+              <div className="stat-title text-xs">
+                {`LUMI${plantKind === "STEM" ? "/Day" : ""}`}
+              </div>
+            </div>
+
+            <div className="stat p-2 border-none">
+              <div className="stat-title text-xs">Estimated</div>
+              <div className="stat-value text-lg">
+                {typeof cropsPerDay === "number"
+                  ? `≈ ${parseFloat(
+                      (
+                        cropsPerDay *
+                        (plantKind === "STEM" ? 1 : 2) *
+                        0.095 *
+                        0.1 *
+                        thbKub
+                      ).toFixed(2)
+                    ).toLocaleString("th-TH")}`
+                  : "-"}
+              </div>
+              <div className="stat-title text-xs">
+                THB{plantKind === "STEM" ? "/Day" : ""}
+              </div>
+            </div>
           </div>
         </div>
 
