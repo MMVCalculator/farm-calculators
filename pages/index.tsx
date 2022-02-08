@@ -199,7 +199,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
         <div className="grid grid-cols-2 gap-4">
           <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
             <div className="bg-zinc-700 flex flex-col items-center justify-center w-12 h-12 p-2">
-              <Image src="/icons/KUB.png" alt="KUB" width={80} height={80} />
+              <Image src="/icons/kub.png" alt="kub" width={80} height={80} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
               <h1 className="text-zinc-700 font-bold">{thbKub}</h1>
@@ -208,7 +208,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
           </div>
           <div className="card flex flex-row space-x-2 overflow-hidden bg-white shadow-lg">
             <div className="bg-zinc-700 flex flex-col items-center justify-center w-12 h-12 p-2">
-              <Image src="/icons/USDT.png" alt="USDT" width={80} height={80} />
+              <Image src="/icons/usdt.png" alt="usdt" width={80} height={80} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
               <h1 className="text-zinc-700 font-bold">{thbUsdt}</h1>
