@@ -26,7 +26,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
   const [rewardMultiplier, setRewardMultiplier] = useState<RewardMultiplier>(8);
   const [seedOrStemAmount, setSeedOrStemAmount] = useState<number | null>(null);
   const [totalLiquidity, setTotalLiquidity] = useState<number | null>(null);
-  const [cropsPerDay, setCropsPerDay] = useState<string | "-">("-");
+  const [cropsPerDay, setCropsPerDay] = useState<number | "-">("-");
 
   useEffect(() => {
     document.getElementsByTagName("html")[0].dataset.theme = "light";
@@ -78,7 +78,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             cropsPerDaySeed === Infinity ||
             isNaN(cropsPerDaySeed)
             ? "-"
-            : cropsPerDaySeed.toLocaleString("th-TH")
+            : cropsPerDaySeed
         );
         break;
 
@@ -97,7 +97,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             cropsPerDayStem === Infinity ||
             isNaN(cropsPerDayStem)
             ? "-"
-            : cropsPerDayStem.toLocaleString("th-TH")
+            : cropsPerDayStem
         );
         break;
     }
@@ -565,15 +565,17 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
           >
             <div className="stat p-4 border-none">
               <div className="stat-title text-sm">Produce Rate</div>
-              <div className="stat-value text-2xl">{cropsPerDay}</div>
+              <div className="stat-value text-2xl">
+                {cropsPerDay.toLocaleString("th-TH")}
+              </div>
               <div className="stat-title text-xs">Crops/Day</div>
             </div>
             {plantKind === "SEED" && (
               <div className="stat p-4 border-none">
                 <div className="stat-title text-sm">48 hours earn</div>
                 <div className="stat-value text-2xl">
-                  {parseFloat(cropsPerDay)
-                    ? `≈ ${parseFloat(cropsPerDay) * 2}`
+                  {typeof cropsPerDay === "number"
+                    ? `≈ ${(cropsPerDay * 2).toLocaleString("th-TH")}`
                     : "-"}
                 </div>
                 <div className="stat-title text-xs">Crops</div>
@@ -581,6 +583,10 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             )}
           </div>
         </div>
+
+        {/* <div className="card flex flex-col p-4 space-y-4 overflow-hidden bg-white shadow-lg">
+          New 
+        </div> */}
       </div>
 
       <footer className="footer bg-neutral text-neutral-content items-center gap-4 p-4">
