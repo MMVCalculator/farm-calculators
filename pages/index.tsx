@@ -574,7 +574,9 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
               </div>
               <div className="stat-value text-lg">
                 {`${
-                  plantKind === "STEM" ? "≈ " : ""
+                  plantKind === "STEM" && typeof cropsPerDay === "number"
+                    ? "≈ "
+                    : ""
                 }${cropsPerDay.toLocaleString("th-TH")}`}
               </div>
               <div className="stat-title text-xs">Crops/Day</div>
