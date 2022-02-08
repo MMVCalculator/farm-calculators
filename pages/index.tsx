@@ -351,7 +351,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
           <div className="ring ring-neutral self-center w-10 h-10 rounded-full">
             <Image
               src={`/icons/crop-${seedKind.toLocaleLowerCase()}.png`}
-              alt="crop"
+              alt={`crop-${seedKind.toLocaleLowerCase()}`}
               width={80}
               height={80}
             />
@@ -566,7 +566,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                 <div className="ring-[1.5px] ring-neutral self-center w-4 h-4 rounded-full">
                   <Image
                     src={`/icons/crop-${seedKind.toLowerCase()}.png`}
-                    alt="lumi"
+                    alt={`crop-${seedKind.toLocaleLowerCase()}`}
                     width={80}
                     height={80}
                   />
@@ -591,7 +591,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                   <div className="ring-[1.5px] ring-neutral self-center w-4 h-4 rounded-full">
                     <Image
                       src={`/icons/crop-${seedKind.toLowerCase()}.png`}
-                      alt="lumi"
+                      alt={`crop-${seedKind.toLocaleLowerCase()}`}
                       width={80}
                       height={80}
                     />
