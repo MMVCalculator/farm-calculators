@@ -106,20 +106,21 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
   return (
     <div className="bg-slate-100 flex flex-col w-screen h-screen overflow-auto">
       <Head>
-        <title>MMV EZ - Home</title>
+        <title>MMVez</title>
       </Head>
 
       <nav className="navbar sticky top-0 z-50 flex space-x-2 bg-white shadow-lg">
         <div className="flex flex-1 ml-2 space-x-2">
-          <div className="w-10 h-10">
+          <span className="select-none font-[Chewy]">MMVez</span>
+
+          {/* <div className="w-10 h-10">
             <Image
               src="/icons/chicken_loading.gif"
               alt="chicken_loading"
               width={512}
               height={512}
             />
-          </div>
-          <span className="font-bold select-none">MMV EZ</span>
+          </div> */}
         </div>
 
         {/* <div className="lg:flex flex-none hidden">
