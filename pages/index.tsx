@@ -541,6 +541,12 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
           <div className="form-control">
             <label className="label">
               <span className="label-text">Total Liquidity</span>
+              <div
+                data-tip="คลิกที่แปลงผักที่จะปลูกในเกม"
+                className="label-text-alt tooltip tooltip-left"
+              >
+                อยู่ตรงไหน?
+              </div>
             </label>
             <label className="input-group input-group-sm">
               <input
