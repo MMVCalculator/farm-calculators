@@ -66,11 +66,17 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
   useEffect(() => {
     switch (plantKind) {
       case "SEED":
+        const rewardsSeedPercentage =
+          (seedOrStemAmount || 0) /
+          ((typeof totalLiquidity === "number" && totalLiquidity >= 0
+            ? totalLiquidity
+            : Infinity) +
+            (seedOrStemAmount || 0));
+
+        console.log(rewardsSeedPercentage);
+
         const cropsPerDaySeed = parseFloat(
-          (
-            (17280 * (0.1 * rewardMultiplier) * (seedOrStemAmount || 0)) /
-            (totalLiquidity ? totalLiquidity + (seedOrStemAmount || 0) : 0)
-          ).toFixed(2)
+          (17280 * 0.1 * rewardMultiplier * rewardsSeedPercentage).toFixed(2)
         );
 
         setCropsPerDay(
@@ -83,23 +89,71 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
         break;
 
       case "STEM":
-        const cropsPerDayStem = parseFloat(
-          (
-            (17280 * (0.1 * rewardMultiplier) * (seedOrStemAmount || 0)) /
-            (totalLiquidity ? totalLiquidity / 2 + (seedOrStemAmount || 0) : 0)
-          ).toFixed(2)
-        );
+        switch (stemLP) {
+          case "LKKUB":
+            const stemLkKubAmountToUsdt =
+              ((seedOrStemAmount || 0) * thbKub * 0.625) / thbUsdt;
+            const rewardsLkkubPercentage =
+              stemLkKubAmountToUsdt /
+              ((typeof totalLiquidity === "number" && totalLiquidity >= 0
+                ? totalLiquidity
+                : Infinity) +
+                stemLkKubAmountToUsdt);
 
-        setCropsPerDay(
-          cropsPerDayStem <= 0 ||
-            cropsPerDayStem === Infinity ||
-            isNaN(cropsPerDayStem)
-            ? "-"
-            : cropsPerDayStem
-        );
+            const cropsPerDayStemLkKub = parseFloat(
+              (17280 * 0.1 * rewardMultiplier * rewardsLkkubPercentage).toFixed(
+                2
+              )
+            );
+
+            setCropsPerDay(
+              cropsPerDayStemLkKub <= 0 ||
+                cropsPerDayStemLkKub === Infinity ||
+                isNaN(cropsPerDayStemLkKub)
+                ? "-"
+                : cropsPerDayStemLkKub
+            );
+            break;
+
+          case "LKUSDT":
+            const stemLkUsdtAmountToUsdt = (seedOrStemAmount || 0) * 1.995;
+            const rewardsLkUsdtPercentage =
+              stemLkUsdtAmountToUsdt /
+              ((typeof totalLiquidity === "number" && totalLiquidity >= 0
+                ? totalLiquidity
+                : Infinity) +
+                stemLkUsdtAmountToUsdt);
+
+            const cropsPerDayStemLkUsdt = parseFloat(
+              (
+                17280 *
+                0.1 *
+                rewardMultiplier *
+                rewardsLkUsdtPercentage
+              ).toFixed(2)
+            );
+
+            setCropsPerDay(
+              cropsPerDayStemLkUsdt <= 0 ||
+                cropsPerDayStemLkUsdt === Infinity ||
+                isNaN(cropsPerDayStemLkUsdt)
+                ? "-"
+                : cropsPerDayStemLkUsdt
+            );
+            break;
+        }
+
         break;
     }
-  }, [plantKind, rewardMultiplier, seedOrStemAmount, totalLiquidity]);
+  }, [
+    plantKind,
+    rewardMultiplier,
+    seedOrStemAmount,
+    stemLP,
+    thbKub,
+    thbUsdt,
+    totalLiquidity,
+  ]);
 
   return (
     <div className="bg-slate-100 flex flex-col w-screen h-screen overflow-auto">
