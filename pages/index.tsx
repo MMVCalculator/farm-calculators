@@ -3,12 +3,13 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
-import { Ticker } from "../interfaces/Ticker";
+import { BitkubTicker, CoinExTicker } from "../interfaces/Ticker";
 import Link from "next/link";
 
-type Data = {
+type Props = {
   THB_KUB: number;
   THB_USDT: number;
+  LUMI_USDT: number;
 };
 
 type PlantKind = "SEED" | "STEM";
@@ -16,9 +17,10 @@ type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
 type RewardMultiplier = 8 | 15 | 20 | 24 | 25 | 30;
 
-const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
+const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
   const [thbKub, setThbKub] = useState<number>(THB_KUB);
   const [thbUsdt, setThbUsdt] = useState<number>(THB_USDT);
+  const [lumiUsdt, setLumiUsdt] = useState<number>(LUMI_USDT);
 
   const [plantKind, setPlantKind] = useState<PlantKind>("SEED");
   const [stemLP, setStemLP] = useState<StemLP>("LKKUB");
@@ -31,16 +33,18 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
   useEffect(() => {
     document.getElementsByTagName("html")[0].dataset.theme = "light";
 
-    const BASE_API_URL = "wss://api.bitkub.com/websocket-api";
+    const BASE_API_URL_BITKUB = "wss://api.bitkub.com/websocket-api";
+    const BASE_API_URL_COINEX = "wss://socket.coinex.com/";
 
-    const ws = new WebSocket(
-      `${BASE_API_URL}/market.ticker.thb_kub,market.ticker.thb_usdt`
+    const wsBitkub = new WebSocket(
+      `${BASE_API_URL_BITKUB}/market.ticker.thb_kub,market.ticker.thb_usdt`
     );
+    const wsCoinEx = new WebSocket(`${BASE_API_URL_COINEX}`);
 
-    ws.onopen = () => {
-      ws.onmessage = (ev) => {
+    wsBitkub.onopen = () => {
+      wsBitkub.onmessage = (ev) => {
         try {
-          const { id, last } = JSON.parse(ev.data) as Ticker;
+          const { id, last } = JSON.parse(ev.data) as BitkubTicker;
 
           switch (id) {
             case 8:
@@ -61,6 +65,30 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
         }
       };
     };
+
+    wsCoinEx.onopen = () => {
+      wsCoinEx.onmessage = (ev) => {
+        try {
+          const data: CoinExTicker = JSON.parse(ev.data);
+          setLumiUsdt(data.params[0].LUMIUSDT.last);
+        } catch (error) {
+          if (error instanceof SyntaxError) {
+            // Do nothing
+            return;
+          }
+
+          console.log("❗️", (error as Error).name);
+        }
+      };
+
+      const request = {
+        method: "state.subscribe",
+        params: ["LUMIUSDT"],
+        id: 1,
+      };
+
+      wsCoinEx.send(JSON.stringify(request));
+    };
   }, []);
 
   useEffect(() => {
@@ -72,8 +100,6 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             ? totalLiquidity
             : Infinity) +
             (seedOrStemAmount || 0));
-
-        console.log(rewardsSeedPercentage);
 
         const cropsPerDaySeed = parseFloat(
           (17280 * 0.1 * rewardMultiplier * rewardsSeedPercentage).toFixed(2)
@@ -267,6 +293,20 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             <div className="flex flex-col items-center justify-center flex-1 text-center">
               <h1 className="text-zinc-700 font-bold">{thbUsdt}</h1>
               <p className="text-2xs text-stone-400 font-medium">THB/USDT</p>
+            </div>
+          </div>
+          <div className="card flex flex-row space-x-2 overflow-visible bg-white shadow-lg">
+            <div className="bg-zinc-700 rounded-l-2xl flex flex-col items-center justify-center w-12 h-12 p-2">
+              <Image src="/icons/lumi.png" alt="lumi" width={80} height={80} />
+            </div>
+            <div className="relative flex flex-col items-center justify-center flex-1 text-center">
+              <h1 className="text-zinc-700 font-bold">
+                {(thbUsdt * lumiUsdt).toFixed(2)}
+              </h1>
+              <p className="text-2xs text-stone-400 font-medium">THB/LUMI</p>
+              <div className="badge badge-secondary badge-xs -top-1.5 absolute right-0">
+                beta
+              </div>
             </div>
           </div>
         </div>
@@ -705,8 +745,7 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
                         cropsPerDay *
                         (plantKind === "STEM" ? 1 : 2) *
                         0.095 *
-                        0.1 *
-                        thbKub
+                        (lumiUsdt * thbUsdt)
                       ).toFixed(2)
                     ).toLocaleString("th-TH")}`
                   : "-"}
@@ -717,10 +756,6 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
             </div>
           </div>
         </div>
-
-        {/* <div className="card flex flex-col p-4 space-y-4 overflow-hidden bg-white shadow-lg">
-          New 
-        </div> */}
       </div>
 
       <footer className="footer bg-neutral text-neutral-content items-center gap-4 p-4">
@@ -773,16 +808,18 @@ const Home: NextPage<Data> = ({ THB_KUB, THB_USDT }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<Data> = async (context) => {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const responses = await Promise.all([
     axios.get("https://api.bitkub.com/api/market/ticker?sym=THB_KUB"),
     axios.get("https://api.bitkub.com/api/market/ticker?sym=THB_USDT"),
+    axios.get("https://api.coinex.com/v1/market/ticker?market=LUMIUSDT"),
   ]);
 
   return {
     props: {
       THB_KUB: responses[0].data.THB_KUB.last,
       THB_USDT: responses[1].data.THB_USDT.last,
+      LUMI_USDT: responses[2].data.data.ticker.last,
     },
   };
 };

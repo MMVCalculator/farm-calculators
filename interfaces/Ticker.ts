@@ -1,7 +1,7 @@
 /**
- * Ticker stream - Websocket API for Bitkub
+ * Bitkub ticker stream - Websocket API for Bitkub
  */
-export interface Ticker {
+export interface BitkubTicker {
   stream: string;
   id: number;
   last: number;
@@ -18,4 +18,30 @@ export interface Ticker {
   low24hr: number;
   open: number;
   close: number;
+}
+
+/**
+ * CoinEx ticker stream - Websocket API for CoinEx
+ */
+export interface CoinExTicker {
+  method: string;
+  params: Param[];
+  id: number;
+}
+
+export interface Param {
+  [x: string]: Market;
+}
+
+export interface Market {
+  last: number;
+  open: number;
+  close: number;
+  high: number;
+  low: number;
+  volume: number;
+  sell_total: number;
+  buy_total: number;
+  period: number;
+  deal: number;
 }
