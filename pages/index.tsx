@@ -189,16 +189,15 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
 
       <nav className="navbar sticky top-0 z-50 flex space-x-2 bg-white shadow-lg">
         <div className="flex flex-1 ml-2 space-x-2">
-          <span className="select-none font-[Chewy]">MMVez</span>
-
-          {/* <div className="w-10 h-10">
+          <div className="aspect-square flex flex-col items-center justify-center w-10 h-10">
             <Image
-              src="/icons/chicken_loading.gif"
-              alt="chicken_loading"
-              width={512}
-              height={512}
+              src="/icons/mmv_logo.png"
+              alt="mmv-logo"
+              width={960}
+              height={960}
             />
-          </div> */}
+          </div>
+          <span className="select-none font-[Chewy]">MMVez</span>
         </div>
 
         {/* <div className="lg:flex flex-none hidden">
