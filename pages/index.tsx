@@ -568,11 +568,11 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
             </button>
             <button
               className={`btn btn-outline btn-xs${
-                rewardMultiplier === 15 ? " btn-active" : ""
+                rewardMultiplier === 12 ? " btn-active" : ""
               }`}
               disabled
             >
-              15X
+              12X
             </button>
             <button
               className={`btn btn-outline btn-xs${
@@ -589,22 +589,6 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
               disabled
             >
               24X
-            </button>
-            <button
-              className={`btn btn-outline btn-xs${
-                rewardMultiplier === 25 ? " btn-active" : ""
-              }`}
-              disabled
-            >
-              25X
-            </button>
-            <button
-              className={`btn btn-outline btn-xs${
-                rewardMultiplier === 30 ? " btn-active" : ""
-              }`}
-              disabled
-            >
-              30X
             </button>
           </div>
 
