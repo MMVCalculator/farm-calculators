@@ -543,7 +543,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
                   case "STEM":
                     switch (stemLP) {
                       case "LKKUB":
-                        setRewardMultiplier(25);
+                        setRewardMultiplier(24);
                         break;
                       case "LKUSDT":
                         setRewardMultiplier(20);
