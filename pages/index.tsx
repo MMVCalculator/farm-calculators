@@ -15,7 +15,7 @@ type Props = {
 type PlantKind = "SEED" | "STEM";
 type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
-type RewardMultiplier = 8 | 15 | 20 | 24 | 25 | 30;
+type RewardMultiplier = 8 | 12 | 20 | 24;
 
 const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
   const [thbKub, setThbKub] = useState<number>(THB_KUB);
@@ -332,7 +332,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
                     setRewardMultiplier(8);
                     break;
                   case "CARROT":
-                    setRewardMultiplier(15);
+                    setRewardMultiplier(12);
                     break;
                 }
               }}
@@ -359,7 +359,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
                         setRewardMultiplier(24);
                         break;
                       case "CARROT":
-                        setRewardMultiplier(30);
+                        setRewardMultiplier(24);
                         break;
                     }
                     break;
@@ -375,7 +375,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
                         setRewardMultiplier(20);
                         break;
                       case "CARROT":
-                        setRewardMultiplier(25);
+                        setRewardMultiplier(20);
                         break;
                     }
                     break;
@@ -406,7 +406,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
                       setRewardMultiplier(24);
                       break;
                     case "CARROT":
-                      setRewardMultiplier(30);
+                      setRewardMultiplier(24);
                       break;
                   }
                 }}
@@ -431,7 +431,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
                       setRewardMultiplier(20);
                       break;
                     case "CARROT":
-                      setRewardMultiplier(25);
+                      setRewardMultiplier(20);
                       break;
                   }
                 }}
@@ -538,15 +538,15 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
 
                 switch (plantKind) {
                   case "SEED":
-                    setRewardMultiplier(15);
+                    setRewardMultiplier(12);
                     break;
                   case "STEM":
                     switch (stemLP) {
                       case "LKKUB":
-                        setRewardMultiplier(30);
+                        setRewardMultiplier(25);
                         break;
                       case "LKUSDT":
-                        setRewardMultiplier(25);
+                        setRewardMultiplier(20);
                         break;
                     }
                     break;
