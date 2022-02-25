@@ -118,7 +118,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
         switch (stemLP) {
           case "LKKUB":
             const stemLkKubAmountToUsdt =
-              ((seedOrStemAmount || 0) * thbKub * 0.625) / thbUsdt;
+              ((seedOrStemAmount || 0) * thbKub * 0.625) / thbUsdt; // ! Get rate from SHOP > STEM > SELL
             const rewardsLkkubPercentage =
               stemLkKubAmountToUsdt /
               ((typeof totalLiquidity === "number" && totalLiquidity >= 0
@@ -142,7 +142,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
             break;
 
           case "LKUSDT":
-            const stemLkUsdtAmountToUsdt = (seedOrStemAmount || 0) * 1.995;
+            const stemLkUsdtAmountToUsdt = (seedOrStemAmount || 0) * 1.82; // ! Get rate from SHOP > STEM > SELL
             const rewardsLkUsdtPercentage =
               stemLkUsdtAmountToUsdt /
               ((typeof totalLiquidity === "number" && totalLiquidity >= 0
