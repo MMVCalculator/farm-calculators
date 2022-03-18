@@ -1,15 +1,21 @@
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
-import { BitkubTicker, CoinExTicker } from "../interfaces/Ticker";
+import {
+  IBitkubTicker,
+  ILatestRates,
+  IUsdLumiCurrentPrice,
+} from "../interfaces/responses";
 import Link from "next/link";
+import useSWR from "swr";
 
 type Props = {
   THB_KUB: number;
   THB_USDT: number;
-  LUMI_USDT: number;
+  latestRates: ILatestRates;
+  usdLumi: number;
 };
 
 type PlantKind = "SEED" | "STEM";
@@ -17,10 +23,13 @@ type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
 type RewardMultiplier = 8 | 12 | 20 | 24;
 
-const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
+const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
   const [thbKub, setThbKub] = useState<number>(THB_KUB);
   const [thbUsdt, setThbUsdt] = useState<number>(THB_USDT);
-  const [lumiUsdt, setLumiUsdt] = useState<number>(LUMI_USDT);
+  const [thbLumi, setThbLumi] = useState<number>(
+    latestRates.rates.THB * usdLumi
+  );
+  const [thbUsd, setThbUsd] = useState<number>(latestRates.rates.THB);
 
   const [plantKind, setPlantKind] = useState<PlantKind>("SEED");
   const [stemLP, setStemLP] = useState<StemLP>("LKKUB");
@@ -30,21 +39,71 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
   const [totalLiquidity, setTotalLiquidity] = useState<number | null>(null);
   const [cropsPerDay, setCropsPerDay] = useState<number | "-">("-");
 
+  useSWR(
+    "https://api.loremboard.finance/api/v1/dashboard/fiat/latest",
+    async (apiPath) => {
+      const latestRatesResponse = await axios.get<ILatestRates>(apiPath);
+      setThbUsd(latestRatesResponse.data.rates.THB);
+    },
+    {
+      refreshInterval: 10000,
+      revalidateOnFocus: true,
+    }
+  );
+
+  useSWR(
+    "lumiUsdCurrentPrice",
+    async () => {
+      const now = Math.floor(Date.now() / 1000);
+
+      const usdLumiCurrentPriceResponse = await axios.get<IUsdLumiCurrentPrice>(
+        `https://api.bkc.loremboard.finance/charts/history?symbol=LUMI&resolution=120&from=${
+          now - 10000
+        }&to=${now}&currencyCode=USD`
+      );
+
+      setThbLumi(
+        thbUsd *
+          usdLumiCurrentPriceResponse.data.c[
+            usdLumiCurrentPriceResponse.data.c.length - 1
+          ]
+      );
+    },
+    {
+      refreshInterval: 10000,
+      revalidateOnFocus: true,
+    }
+  );
+
+  // useSWR(
+  //   "https://api.bkcport.com/v1/token-ranking",
+  //   async (apiPath) => {
+  //     const tokenRankingResponse = await axios.get<ITokenRanking[]>(apiPath);
+  //     setThbLumi(
+  //       thbUsd *
+  //         (tokenRankingResponse.data.find((token) => token.symbol === "LUMI")
+  //           ?.last || 0)
+  //     );
+  //   },
+  //   {
+  //     refreshInterval: 10000,
+  //     revalidateOnFocus: true,
+  //   }
+  // );
+
   useEffect(() => {
     document.getElementsByTagName("html")[0].dataset.theme = "light";
 
     const BASE_API_URL_BITKUB = "wss://api.bitkub.com/websocket-api";
-    const BASE_API_URL_COINEX = "wss://socket.coinex.com/";
 
     const wsBitkub = new WebSocket(
       `${BASE_API_URL_BITKUB}/market.ticker.thb_kub,market.ticker.thb_usdt`
     );
-    const wsCoinEx = new WebSocket(`${BASE_API_URL_COINEX}`);
 
     wsBitkub.onopen = () => {
       wsBitkub.onmessage = (ev) => {
         try {
-          const { id, last } = JSON.parse(ev.data) as BitkubTicker;
+          const { id, last } = JSON.parse(ev.data) as IBitkubTicker;
 
           switch (id) {
             case 8:
@@ -64,30 +123,6 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
           console.log("❗️", (error as Error).name);
         }
       };
-    };
-
-    wsCoinEx.onopen = () => {
-      wsCoinEx.onmessage = (ev) => {
-        try {
-          const data: CoinExTicker = JSON.parse(ev.data);
-          setLumiUsdt(data.params[0].LUMIUSDT.last);
-        } catch (error) {
-          if (error instanceof SyntaxError) {
-            // Do nothing
-            return;
-          }
-
-          console.log("❗️", (error as Error).name);
-        }
-      };
-
-      const request = {
-        method: "state.subscribe",
-        params: ["LUMIUSDT"],
-        id: 1,
-      };
-
-      wsCoinEx.send(JSON.stringify(request));
     };
   }, []);
 
@@ -118,7 +153,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
         switch (stemLP) {
           case "LKKUB":
             const stemLkKubAmountToUsdt =
-              ((seedOrStemAmount || 0) * thbKub * 0.5401) / thbUsdt; // ! Get rate from SHOP > STEM > SELL
+              ((seedOrStemAmount || 0) * thbKub * 0.5445) / thbUsdt; // ! Get rate from SHOP > STEM > SELL
             const rewardsLkkubPercentage =
               stemLkKubAmountToUsdt /
               ((typeof totalLiquidity === "number" && totalLiquidity >= 0
@@ -142,7 +177,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
             break;
 
           case "LKUSDT":
-            const stemLkUsdtAmountToUsdt = (seedOrStemAmount || 0) * 1.5181; // ! Get rate from SHOP > STEM > SELL
+            const stemLkUsdtAmountToUsdt = (seedOrStemAmount || 0) * 1.5274; // ! Get rate from SHOP > STEM > SELL
             const rewardsLkUsdtPercentage =
               stemLkUsdtAmountToUsdt /
               ((typeof totalLiquidity === "number" && totalLiquidity >= 0
@@ -299,13 +334,29 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
               <Image src="/icons/lumi.png" alt="lumi" width={80} height={80} />
             </div>
             <div className="relative flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="text-zinc-700 font-bold">
-                {(thbUsdt * lumiUsdt).toFixed(2)}
-              </h1>
+              <h1 className="text-zinc-700 font-bold">{thbLumi.toFixed(2)}</h1>
               <p className="text-2xs text-stone-400 font-medium">THB/LUMI</p>
-              <div className="badge badge-secondary badge-xs -top-1.5 absolute right-0">
-                beta
-              </div>
+            </div>
+          </div>
+          <div className="card flex flex-row space-x-2 overflow-visible bg-white shadow-lg">
+            <div className="bg-zinc-700 rounded-l-2xl flex flex-col items-center justify-center w-12 h-12 p-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-12 h-12 -m-1"
+                viewBox="0 0 20 20"
+                fill="gold"
+              >
+                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className="relative flex flex-col items-center justify-center flex-1 text-center">
+              <h1 className="text-zinc-700 font-bold">{thbUsd.toFixed(2)}</h1>
+              <p className="text-2xs text-stone-400 font-medium">THB/USD</p>
             </div>
           </div>
         </div>
@@ -728,7 +779,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
                         cropsPerDay *
                         (plantKind === "STEM" ? 1 : 2) *
                         0.095 *
-                        (lumiUsdt * thbUsdt)
+                        thbLumi
                       ).toFixed(2)
                     ).toLocaleString("th-TH")}`
                   : "-"}
@@ -792,17 +843,27 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, LUMI_USDT }) => {
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  const now = Math.floor(Date.now() / 1000);
+
   const responses = await Promise.all([
     axios.get("https://api.bitkub.com/api/market/ticker?sym=THB_KUB"),
     axios.get("https://api.bitkub.com/api/market/ticker?sym=THB_USDT"),
-    axios.get("https://api.coinex.com/v1/market/ticker?market=LUMIUSDT"),
+    axios.get<ILatestRates>(
+      "https://api.loremboard.finance/api/v1/dashboard/fiat/latest"
+    ),
+    axios.get<IUsdLumiCurrentPrice>(
+      `https://api.bkc.loremboard.finance/charts/history?symbol=LUMI&resolution=120&from=${
+        now - 10000
+      }&to=${now}&currencyCode=USD`
+    ),
   ]);
 
   return {
     props: {
       THB_KUB: responses[0].data.THB_KUB.last,
       THB_USDT: responses[1].data.THB_USDT.last,
-      LUMI_USDT: responses[2].data.data.ticker.last,
+      latestRates: responses[2].data,
+      usdLumi: responses[3].data.c[responses[3].data.c.length - 1],
     },
   };
 };
