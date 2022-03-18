@@ -223,36 +223,38 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
 
       <Navbar />
 
-      <div className="sm:max-w-screen-sm container z-0 self-center flex-1 p-4 space-y-4">
+      <div className="sm:max-w-screen-sm gap-y-4 container flex flex-col self-center flex-1 p-4">
         <div className="grid grid-cols-2 gap-4">
-          <div className="card bg-base-100 flex flex-row space-x-2 overflow-hidden shadow-lg">
+          <div className="card bg-base-100 flex flex-row overflow-hidden shadow-lg">
             <div className="bg-neutral flex flex-col items-center justify-center w-12 h-12 p-2">
               <Image src="/icons/kub.png" alt="kub" width={80} height={80} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">{thbKub}</h1>
-              <p className="text-2xs">THB/KUB</p>
+              <h1 className="font-bold">{thbKub.toLocaleString("th-TH")}</h1>
+              <p className="text-2xs opacity-60">THB/KUB</p>
             </div>
           </div>
-          <div className="card bg-base-100 flex flex-row space-x-2 overflow-hidden shadow-lg">
+          <div className="card bg-base-100 flex flex-row overflow-hidden shadow-lg">
             <div className="bg-neutral flex flex-col items-center justify-center w-12 h-12 p-2">
               <Image src="/icons/usdt.png" alt="usdt" width={80} height={80} />
             </div>
             <div className="flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">{thbUsdt}</h1>
-              <p className="text-2xs">THB/USDT</p>
+              <h1 className="font-bold">{thbUsdt.toLocaleString("th-TH")}</h1>
+              <p className="text-2xs opacity-60">THB/USDT</p>
             </div>
           </div>
-          <div className="card bg-base-100 flex flex-row space-x-2 overflow-hidden shadow-lg">
+          <div className="card bg-base-100 flex flex-row overflow-hidden shadow-lg">
             <div className="bg-neutral flex flex-col items-center justify-center w-12 h-12 p-2">
               <Image src="/icons/lumi.png" alt="lumi" width={80} height={80} />
             </div>
             <div className="relative flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">{parseFloat(thbLumi.toFixed(2))}</h1>
-              <p className="text-2xs">THB/LUMI</p>
+              <h1 className="font-bold">
+                {parseFloat(thbLumi.toFixed(2)).toLocaleString("th-TH")}
+              </h1>
+              <p className="text-2xs opacity-60">THB/LUMI</p>
             </div>
           </div>
-          <div className="card bg-base-100 flex flex-row space-x-2 overflow-hidden shadow-lg">
+          <div className="card bg-base-100 flex flex-row overflow-hidden shadow-lg">
             <div className="bg-neutral flex flex-col items-center justify-center w-12 h-12 p-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -269,8 +271,10 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
               </svg>
             </div>
             <div className="relative flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">{parseFloat(thbUsd.toFixed(2))}</h1>
-              <p className="text-2xs">THB/USD</p>
+              <h1 className="font-bold">
+                {parseFloat(thbUsd.toFixed(2)).toLocaleString("th-TH")}
+              </h1>
+              <p className="text-2xs opacity-60">THB/USD</p>
             </div>
           </div>
         </div>
@@ -279,10 +283,13 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
           <h1 className="text-lg font-medium text-center">คำนวณผลผลิตต่อวัน</h1>
 
           <div className="btn-group self-center">
-            <button
-              className={`btn btn-outline btn-sm${
-                plantKind === "SEED" ? " btn-active" : ""
-              }`}
+            <input
+              className="btn"
+              type="radio"
+              name="plantKind"
+              data-title="SEED"
+              readOnly
+              checked={plantKind === "SEED"}
               onClick={() => {
                 setPlantKind("SEED");
                 switch (seedKind) {
@@ -300,13 +307,15 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            >
-              SEED
-            </button>
-            <button
-              className={`btn btn-outline btn-sm${
-                plantKind === "STEM" ? " btn-active" : ""
-              }`}
+            />
+
+            <input
+              className="btn"
+              type="radio"
+              name="plantKind"
+              data-title="STEM"
+              readOnly
+              checked={plantKind === "STEM"}
               onClick={() => {
                 setPlantKind("STEM");
                 switch (stemLP) {
@@ -344,17 +353,18 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            >
-              STEM
-            </button>
+            />
           </div>
 
           {plantKind === "STEM" && (
             <div className="btn-group self-center">
-              <button
-                className={`btn btn-outline btn-sm${
-                  stemLP === "LKKUB" ? " btn-active" : ""
-                }`}
+              <input
+                className="btn btn-sm"
+                type="radio"
+                name="stemLp"
+                data-title="LKKUB"
+                readOnly
+                checked={stemLP === "LKKUB"}
                 onClick={() => {
                   setStemLP("LKKUB");
                   switch (seedKind) {
@@ -372,13 +382,15 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                       break;
                   }
                 }}
-              >
-                LKKUB
-              </button>
-              <button
-                className={`btn btn-outline btn-sm${
-                  stemLP === "LKUSDT" ? " btn-active" : ""
-                }`}
+              />
+
+              <input
+                className="btn btn-sm"
+                type="radio"
+                name="stemLp"
+                data-title="LKUSDT"
+                readOnly
+                checked={stemLP === "LKUSDT"}
                 onClick={() => {
                   setStemLP("LKUSDT");
                   switch (seedKind) {
@@ -396,13 +408,11 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                       break;
                   }
                 }}
-              >
-                LKUSDT
-              </button>
+              />
             </div>
           )}
 
-          <div className="ring ring-neutral self-center w-10 h-10 rounded-full">
+          <div className="ring ring-accent self-center w-10 h-10 rounded-full">
             <Image
               src={`/icons/crop-${seedKind.toLocaleLowerCase()}.png`}
               alt={`crop-${seedKind.toLocaleLowerCase()}`}
@@ -412,10 +422,13 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
           </div>
 
           <div className="btn-group self-center">
-            <button
-              className={`btn btn-outline btn-xs${
-                seedKind === "TOMATO" ? " btn-active" : ""
-              }`}
+            <input
+              className="btn btn-xs"
+              type="radio"
+              name="seed"
+              data-title="TOMATO"
+              readOnly
+              checked={seedKind === "TOMATO"}
               onClick={() => {
                 setSeedKind("TOMATO");
                 switch (plantKind) {
@@ -434,13 +447,15 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            >
-              TOMATO
-            </button>
-            <button
-              className={`btn btn-outline btn-xs${
-                seedKind === "CORN" ? " btn-active" : ""
-              }`}
+            />
+
+            <input
+              className="btn btn-xs"
+              type="radio"
+              name="seed"
+              data-title="CORN"
+              readOnly
+              checked={seedKind === "CORN"}
               onClick={() => {
                 setSeedKind("CORN");
                 switch (plantKind) {
@@ -459,13 +474,15 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            >
-              CORN
-            </button>
-            <button
-              className={`btn btn-outline btn-xs${
-                seedKind === "CABBAGE" ? " btn-active" : ""
-              }`}
+            />
+
+            <input
+              className="btn btn-xs"
+              type="radio"
+              name="seed"
+              data-title="CABBAGE"
+              readOnly
+              checked={seedKind === "CABBAGE"}
               onClick={() => {
                 setSeedKind("CABBAGE");
                 switch (plantKind) {
@@ -484,13 +501,15 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            >
-              CABBAGE
-            </button>
-            <button
-              className={`btn btn-outline btn-xs${
-                seedKind === "CARROT" ? " btn-active" : ""
-              }`}
+            />
+
+            <input
+              className="btn btn-xs"
+              type="radio"
+              name="seed"
+              data-title="CARROT"
+              readOnly
+              checked={seedKind === "CARROT"}
               onClick={() => {
                 setSeedKind("CARROT");
                 switch (plantKind) {
@@ -509,44 +528,49 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            >
-              CARROT
-            </button>
+            />
           </div>
 
           <div className="btn-group self-center">
-            <button
-              className={`btn btn-outline btn-xs${
-                rewardMultiplier === 8 ? " btn-active" : ""
-              }`}
-              disabled
-            >
-              8X
-            </button>
-            <button
-              className={`btn btn-outline btn-xs${
-                rewardMultiplier === 12 ? " btn-active" : ""
-              }`}
-              disabled
-            >
-              12X
-            </button>
-            <button
-              className={`btn btn-outline btn-xs${
-                rewardMultiplier === 20 ? " btn-active" : ""
-              }`}
-              disabled
-            >
-              20X
-            </button>
-            <button
-              className={`btn btn-outline btn-xs${
-                rewardMultiplier === 24 ? " btn-active" : ""
-              }`}
-              disabled
-            >
-              24X
-            </button>
+            <input
+              className="btn btn-xs !btn-accent disabled:!btn-disabled"
+              type="radio"
+              readOnly
+              name="multiplier"
+              data-title="8X"
+              disabled={rewardMultiplier !== 8}
+              checked={rewardMultiplier === 8}
+            />
+
+            <input
+              className="btn btn-xs !btn-accent disabled:!btn-disabled"
+              type="radio"
+              readOnly
+              name="multiplier"
+              data-title="12X"
+              disabled={rewardMultiplier !== 12}
+              checked={rewardMultiplier === 12}
+            />
+
+            <input
+              className="btn btn-xs !btn-accent disabled:!btn-disabled"
+              type="radio"
+              readOnly
+              name="multiplier"
+              data-title="20X"
+              disabled={rewardMultiplier !== 20}
+              checked={rewardMultiplier === 20}
+            />
+
+            <input
+              className="btn btn-xs !btn-accent disabled:!btn-disabled"
+              type="radio"
+              readOnly
+              name="multiplier"
+              data-title="24X"
+              disabled={rewardMultiplier !== 24}
+              checked={rewardMultiplier === 24}
+            />
           </div>
 
           <div className="form-control">
@@ -558,7 +582,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
             <label className="input-group input-group-sm">
               <input
                 className="input input-bordered input-sm w-full"
-                type="number"
+                type="text"
                 placeholder="0.00"
                 value={
                   typeof seedOrStemAmount === "number" ? seedOrStemAmount : ""
@@ -599,11 +623,11 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
 
           <div className="grid grid-cols-2">
             <div className="stat p-2 border-none">
-              <div className="stat-title flex items-center space-x-2 text-xs opacity-100">
+              <div className="stat-title flex items-center gap-2 text-xs opacity-100">
                 <div className="flex items-center justify-center opacity-50">
                   Produce Rate
                 </div>
-                <div className="ring-[1.5px] ring-neutral self-center w-4 h-4 rounded-full">
+                <div className="ring-[1.5px] ring-accent self-center w-4 h-4 rounded-full">
                   <Image
                     src={`/icons/crop-${seedKind.toLowerCase()}.png`}
                     alt={`crop-${seedKind.toLocaleLowerCase()}`}
@@ -624,11 +648,11 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
 
             {plantKind === "SEED" && (
               <div className="stat p-2 border-none">
-                <div className="stat-title flex items-center space-x-2 text-xs opacity-100">
+                <div className="stat-title flex items-center gap-2 text-xs opacity-100">
                   <div className="flex items-center justify-center opacity-50">
                     48 hours earn
                   </div>
-                  <div className="ring-[1.5px] ring-neutral self-center w-4 h-4 rounded-full">
+                  <div className="ring-[1.5px] ring-accent self-center w-4 h-4 rounded-full">
                     <Image
                       src={`/icons/crop-${seedKind.toLowerCase()}.png`}
                       alt={`crop-${seedKind.toLocaleLowerCase()}`}
@@ -647,12 +671,12 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
             )}
 
             <div className="stat p-2 border-none">
-              <div className="stat-title flex items-center space-x-1 text-xs opacity-100">
-                <div className="stat-title flex items-center space-x-2 text-xs opacity-100">
+              <div className="stat-title flex items-center gap-1 text-xs opacity-100">
+                <div className="stat-title flex items-center gap-2 text-xs opacity-100">
                   <div className="flex items-center justify-center opacity-50">
                     Sell to KYLE
                   </div>
-                  <div className="ring-[1.5px] ring-neutral self-center w-4 h-4 rounded-full">
+                  <div className="ring-[1.5px] ring-accent self-center w-4 h-4 rounded-full">
                     <Image
                       src="/icons/lumi.png"
                       alt="lumi"
