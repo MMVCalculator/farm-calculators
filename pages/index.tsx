@@ -267,13 +267,8 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
           <h1 className="text-lg font-medium text-center">คำนวณผลผลิตต่อวัน</h1>
 
           <div className="btn-group self-center">
-            <input
-              className="btn"
-              type="radio"
-              name="plantKind"
-              data-title="SEED"
-              readOnly
-              checked={plantKind === "SEED"}
+            <button
+              className={`btn${plantKind === "SEED" ? " btn-active" : ""}`}
               onClick={() => {
                 setPlantKind("SEED");
                 switch (seedKind) {
@@ -291,15 +286,12 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            />
+            >
+              SEED
+            </button>
 
-            <input
-              className="btn"
-              type="radio"
-              name="plantKind"
-              data-title="STEM"
-              readOnly
-              checked={plantKind === "STEM"}
+            <button
+              className={`btn${plantKind === "STEM" ? " btn-active" : ""}`}
               onClick={() => {
                 setPlantKind("STEM");
                 switch (stemLP) {
@@ -337,18 +329,17 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            />
+            >
+              STEM
+            </button>
           </div>
 
           {plantKind === "STEM" && (
             <div className="btn-group self-center">
-              <input
-                className="btn btn-sm"
-                type="radio"
-                name="stemLp"
-                data-title="LKKUB"
-                readOnly
-                checked={stemLP === "LKKUB"}
+              <button
+                className={`btn btn-sm${
+                  stemLP === "LKKUB" ? " btn-active" : ""
+                }`}
                 onClick={() => {
                   setStemLP("LKKUB");
                   switch (seedKind) {
@@ -366,15 +357,14 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                       break;
                   }
                 }}
-              />
+              >
+                LKKUB
+              </button>
 
-              <input
-                className="btn btn-sm"
-                type="radio"
-                name="stemLp"
-                data-title="LKUSDT"
-                readOnly
-                checked={stemLP === "LKUSDT"}
+              <button
+                className={`btn btn-sm${
+                  stemLP === "LKUSDT" ? " btn-active" : ""
+                }`}
                 onClick={() => {
                   setStemLP("LKUSDT");
                   switch (seedKind) {
@@ -392,7 +382,9 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                       break;
                   }
                 }}
-              />
+              >
+                LKUSDT
+              </button>
             </div>
           )}
 
@@ -406,13 +398,10 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
           </div>
 
           <div className="btn-group self-center">
-            <input
-              className="btn btn-xs"
-              type="radio"
-              name="seed"
-              data-title="TOMATO"
-              readOnly
-              checked={seedKind === "TOMATO"}
+            <button
+              className={`btn btn-xs${
+                seedKind === "TOMATO" ? " btn-active" : ""
+              }`}
               onClick={() => {
                 setSeedKind("TOMATO");
                 switch (plantKind) {
@@ -431,15 +420,14 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            />
+            >
+              TOMATO
+            </button>
 
-            <input
-              className="btn btn-xs"
-              type="radio"
-              name="seed"
-              data-title="CORN"
-              readOnly
-              checked={seedKind === "CORN"}
+            <button
+              className={`btn btn-xs${
+                seedKind === "CORN" ? " btn-active" : ""
+              }`}
               onClick={() => {
                 setSeedKind("CORN");
                 switch (plantKind) {
@@ -458,15 +446,14 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            />
+            >
+              CORN
+            </button>
 
-            <input
-              className="btn btn-xs"
-              type="radio"
-              name="seed"
-              data-title="CABBAGE"
-              readOnly
-              checked={seedKind === "CABBAGE"}
+            <button
+              className={`btn btn-xs${
+                seedKind === "CABBAGE" ? " btn-active" : ""
+              }`}
               onClick={() => {
                 setSeedKind("CABBAGE");
                 switch (plantKind) {
@@ -485,15 +472,14 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            />
+            >
+              CABBAGE
+            </button>
 
-            <input
-              className="btn btn-xs"
-              type="radio"
-              name="seed"
-              data-title="CARROT"
-              readOnly
-              checked={seedKind === "CARROT"}
+            <button
+              className={`btn btn-xs${
+                seedKind === "CARROT" ? " btn-active" : ""
+              }`}
               onClick={() => {
                 setSeedKind("CARROT");
                 switch (plantKind) {
@@ -512,49 +498,47 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                     break;
                 }
               }}
-            />
+            >
+              CARROT
+            </button>
           </div>
 
           <div className="btn-group self-center">
-            <input
-              className="btn btn-xs !btn-accent disabled:!btn-disabled"
-              type="radio"
-              readOnly
-              name="multiplier"
-              data-title="8X"
-              disabled={rewardMultiplier !== 8}
-              checked={rewardMultiplier === 8}
-            />
+            <button
+              className={`btn btn-xs${
+                rewardMultiplier === 8 ? " !btn-accent" : ""
+              }`}
+              disabled
+            >
+              8X
+            </button>
 
-            <input
-              className="btn btn-xs !btn-accent disabled:!btn-disabled"
-              type="radio"
-              readOnly
-              name="multiplier"
-              data-title="12X"
-              disabled={rewardMultiplier !== 12}
-              checked={rewardMultiplier === 12}
-            />
+            <button
+              className={`btn btn-xs${
+                rewardMultiplier === 12 ? " !btn-accent" : ""
+              }`}
+              disabled
+            >
+              12X
+            </button>
 
-            <input
-              className="btn btn-xs !btn-accent disabled:!btn-disabled"
-              type="radio"
-              readOnly
-              name="multiplier"
-              data-title="20X"
-              disabled={rewardMultiplier !== 20}
-              checked={rewardMultiplier === 20}
-            />
+            <button
+              className={`btn btn-xs${
+                rewardMultiplier === 20 ? " !btn-accent" : ""
+              }`}
+              disabled
+            >
+              20X
+            </button>
 
-            <input
-              className="btn btn-xs !btn-accent disabled:!btn-disabled"
-              type="radio"
-              readOnly
-              name="multiplier"
-              data-title="24X"
-              disabled={rewardMultiplier !== 24}
-              checked={rewardMultiplier === 24}
-            />
+            <button
+              className={`btn btn-xs${
+                rewardMultiplier === 24 ? " !btn-accent" : ""
+              }`}
+              disabled
+            >
+              24X
+            </button>
           </div>
 
           <div className="form-control">
