@@ -76,22 +76,6 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
     }
   );
 
-  // useSWR(
-  //   "https://api.bkcport.com/v1/token-ranking",
-  //   async (apiPath) => {
-  //     const tokenRankingResponse = await axios.get<ITokenRanking[]>(apiPath);
-  //     setThbLumi(
-  //       thbUsd *
-  //         (tokenRankingResponse.data.find((token) => token.symbol === "LUMI")
-  //           ?.last || 0)
-  //     );
-  //   },
-  //   {
-  //     refreshInterval: 10000,
-  //     revalidateOnFocus: true,
-  //   }
-  // );
-
   useEffect(() => {
     const BASE_API_URL_BITKUB = "wss://api.bitkub.com/websocket-api";
 

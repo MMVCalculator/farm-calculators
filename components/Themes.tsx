@@ -39,14 +39,26 @@ const Themes = () => {
   });
 
   useEffect(() => {
-    if (!themeName) {
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? setThemeName("dark")
-        : setThemeName("light");
+    if (!themeName || !themes.includes(themeName)) {
+      setThemeName(
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
+      );
       return;
     }
 
     document.getElementsByTagName("html")[0].dataset.theme = themeName;
+
+    const themeButtons = document.getElementsByClassName(
+      "theme-button-outline"
+    );
+
+    for (const button of themeButtons) {
+      button.getAttribute("data-set-theme") === themeName
+        ? button.classList.add("outline")
+        : button.classList.remove("outline");
+    }
   }, [setThemeName, themeName]);
 
   return (
@@ -80,45 +92,42 @@ const Themes = () => {
       </div>
       <div className="dropdown-content bg-base-200 text-base-content rounded-t-box rounded-b-box top-px max-h-96 h-[70vh] w-52 overflow-y-auto shadow-2xl mt-16">
         <div className="grid grid-cols-1 gap-3 p-3" tabIndex={0}>
-          {themeName &&
-            themes.map((theme) => {
-              return (
+          {themes.map((theme) => {
+            return (
+              <div
+                className="theme-button-outline outline-base-content outline-2 outline-offset-2 overflow-hidden rounded-lg"
+                key={theme}
+                data-set-theme={theme}
+                data-act-class="outline"
+                onClick={(e) => {
+                  setThemeName(e.currentTarget.dataset.setTheme);
+                }}
+              >
                 <div
-                  className={`outline-base-content overflow-hidden rounded-lg outline-2 outline-offset-2 ${
-                    theme === themeName ? "outline" : ""
-                  }`}
-                  key={theme}
-                  data-set-theme={theme}
-                  data-act-class="outline"
-                  onClick={(e) => {
-                    setThemeName(e.currentTarget.dataset.setTheme);
-                  }}
+                  data-theme={theme}
+                  className="bg-base-100 text-base-content w-full font-sans cursor-pointer"
                 >
-                  <div
-                    data-theme={theme}
-                    className="bg-base-100 text-base-content w-full font-sans cursor-pointer"
-                  >
-                    <div className="grid grid-cols-5 grid-rows-3">
-                      <div className="flex col-span-5 row-span-3 row-start-1 gap-1 px-4 py-3">
-                        <div
-                          className={`flex-grow text-sm font-bold ${
-                            theme === "cmyk" ? "uppercase" : "capitalize"
-                          }`}
-                        >
-                          {theme}
-                        </div>
-                        <div className="flex flex-wrap flex-shrink-0 gap-1">
-                          <div className="bg-primary w-2 rounded"></div>
-                          <div className="bg-secondary w-2 rounded"></div>
-                          <div className="bg-accent w-2 rounded"></div>
-                          <div className="bg-neutral w-2 rounded"></div>
-                        </div>
+                  <div className="grid grid-cols-5 grid-rows-3">
+                    <div className="flex col-span-5 row-span-3 row-start-1 gap-1 px-4 py-3">
+                      <div
+                        className={`flex-grow text-sm font-bold${
+                          theme === "cmyk" ? " uppercase" : " capitalize"
+                        }`}
+                      >
+                        {theme}
+                      </div>
+                      <div className="flex flex-wrap flex-shrink-0 gap-1">
+                        <div className="bg-primary w-2 rounded"></div>
+                        <div className="bg-secondary w-2 rounded"></div>
+                        <div className="bg-accent w-2 rounded"></div>
+                        <div className="bg-neutral w-2 rounded"></div>
                       </div>
                     </div>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
