@@ -566,7 +566,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
             <label className="input-group input-group-sm">
               <input
                 className="input input-bordered input-sm w-full"
-                type="text"
+                type="number"
                 placeholder="0.00"
                 value={
                   typeof seedOrStemAmount === "number" ? seedOrStemAmount : ""
