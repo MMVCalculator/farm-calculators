@@ -240,36 +240,42 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
   );
 
   useEffect(() => {
-    const BASE_API_URL_BITKUB = "wss://api.bitkub.com/websocket-api";
+    const wsBitkubConnection = () => {
+      const BASE_API_URL_BITKUB = "wss://api.bitkub.com/websocket-api";
 
-    const wsBitkub = new WebSocket(
-      `${BASE_API_URL_BITKUB}/market.ticker.thb_kub,market.ticker.thb_usdt`
-    );
+      const wsBitkub = new WebSocket(
+        `${BASE_API_URL_BITKUB}/market.ticker.thb_kub,market.ticker.thb_usdt`
+      );
 
-    wsBitkub.onopen = () => {
-      wsBitkub.onmessage = (ev) => {
-        try {
-          const { id, last } = JSON.parse(ev.data) as IBitkubTicker;
+      wsBitkub.onopen = () => {
+        wsBitkub.onmessage = (ev) => {
+          try {
+            const { id, last } = JSON.parse(ev.data) as IBitkubTicker;
 
-          switch (id) {
-            case 8:
-              setThbUsdt(last);
-              break;
+            switch (id) {
+              case 8:
+                setThbUsdt(last);
+                break;
 
-            case 92:
-              setThbKub(last);
-              break;
+              case 92:
+                setThbKub(last);
+                break;
+            }
+          } catch (error) {
+            if (error instanceof SyntaxError) {
+              // Do nothing
+              return;
+            }
+
+            console.log("❗️", (error as Error).name);
           }
-        } catch (error) {
-          if (error instanceof SyntaxError) {
-            // Do nothing
-            return;
-          }
-
-          console.log("❗️", (error as Error).name);
-        }
+        };
       };
+
+      wsBitkub.onclose = () => wsBitkubConnection();
     };
+
+    wsBitkubConnection();
   }, []);
 
   useEffect(() => {
