@@ -34,11 +34,107 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
 
   const [plantKind, setPlantKind] = useState<PlantKind>("SEED");
   const [stemLP, setStemLP] = useState<StemLP>("LKKUB");
+  const [stemLkusdtPrice, setStemLkusdtPrice] = useState<number>(0);
+  const [stemLkkubPrice, setStemLkkubPrice] = useState<number>(0);
   const [seedKind, setSeedKind] = useState<SeedKind>("TOMATO");
   const [rewardMultiplier, setRewardMultiplier] = useState<RewardMultiplier>(8);
   const [seedOrStemAmount, setSeedOrStemAmount] = useState<number | null>(null);
   const [totalLiquidity, setTotalLiquidity] = useState<number | null>(null);
+  const [totalLiquidities, setTotalLiquidities] = useState<
+    {
+      name: string;
+      totalLiquidity: number;
+    }[]
+  >([]);
   const [cropsPerDay, setCropsPerDay] = useState<number | "-">("-");
+
+  useSWR(
+    "stemLkusdtPrice",
+    async () => {
+      const response = await axios.post<{
+        error: { code: number; message: string };
+        result: string;
+      }>("https://bitkub-chain-rpc.morningmoonvillage.com", {
+        jsonrpc: "2.0",
+        id: Date.now(),
+        method: "eth_call",
+        params: [
+          {
+            data: "0x252dba420000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000006e9e62018a013b20bcb7c573690fd1425ddd6b26000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4d06ca61f00000000000000000000000000000000000000000000000011b18a8faacd4b4f0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000200000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa3610000000000000000000000007d984c24d2499d840eb3b7016077164e15e5faa600000000000000000000000000000000000000000000000000000000",
+            to: "0xb2dd98bd8a916a9fef1ce0e35302a53ae23fd260",
+          },
+          "latest",
+        ],
+      });
+
+      const lumi =
+        parseInt(
+          (
+            response.data.result.replace("0x", "").match(/.{64}/g) as string[]
+          )[7],
+          16
+        ) / Math.pow(10, 18);
+
+      const kusdt =
+        parseInt(
+          (
+            response.data.result.replace("0x", "").match(/.{64}/g) as string[]
+          )[8],
+          16
+        ) / Math.pow(10, 18);
+
+      setStemLkusdtPrice(
+        (lumi * thbLumi) / thbUsd + (kusdt * thbUsdt) / thbUsd
+      );
+    },
+    {
+      refreshInterval: 10000,
+      revalidateOnFocus: true,
+    }
+  );
+
+  useSWR(
+    "stemLkkubPrice",
+    async () => {
+      const response = await axios.post<{
+        error: { code: number; message: string };
+        result: string;
+      }>("https://bitkub-chain-rpc.morningmoonvillage.com", {
+        jsonrpc: "2.0",
+        id: Date.now(),
+        method: "eth_call",
+        params: [
+          {
+            data: "0x252dba420000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000006e9e62018a013b20bcb7c573690fd1425ddd6b26000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4d06ca61f00000000000000000000000000000000000000000000000032a3b4df72f80e540000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000200000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa36100000000000000000000000067ebd850304c70d983b2d1b93ea79c7cd6c3f6b500000000000000000000000000000000000000000000000000000000",
+            to: "0xb2dd98bd8a916a9fef1ce0e35302a53ae23fd260",
+          },
+          "latest",
+        ],
+      });
+
+      const lumi =
+        parseInt(
+          (
+            response.data.result.replace("0x", "").match(/.{64}/g) as string[]
+          )[7],
+          16
+        ) / Math.pow(10, 18);
+
+      const kkub =
+        parseInt(
+          (
+            response.data.result.replace("0x", "").match(/.{64}/g) as string[]
+          )[8],
+          16
+        ) / Math.pow(10, 18);
+
+      setStemLkkubPrice((lumi * thbLumi) / thbUsd + (kkub * thbKub) / thbUsd);
+    },
+    {
+      refreshInterval: 10000,
+      revalidateOnFocus: true,
+    }
+  );
 
   useSWR(
     "https://api.loremboard.finance/api/v1/dashboard/fiat/latest",
@@ -69,6 +165,73 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
             usdLumiCurrentPriceResponse.data.c.length - 1
           ]
       );
+    },
+    {
+      refreshInterval: 10000,
+      revalidateOnFocus: true,
+    }
+  );
+
+  useSWR(
+    "totalLiquidities",
+    async () => {
+      const tokens = [
+        {
+          name: "seedFarmTomato",
+          address: "ec85f017ea248c169c5ae32a782e380e0db3b10d",
+        },
+        {
+          name: "seedFarmCorn",
+          address: "eef084a9e4efb5436ed7115f271dd1f47789b81b",
+        },
+        {
+          name: "seedFarmCabage",
+          address: "e0c8e0d1e281deb31a305369b5527f45898e2fd8",
+        },
+        {
+          name: "seedFarmCarrot",
+          address: "b92cd3ab59d8fbb1156f07f9bc0deacc9bc4954d",
+        },
+      ];
+
+      const totalLiquiditiesResponse = await Promise.all(
+        tokens.map((token) => {
+          return axios.post<{
+            error: { code: number; message: string };
+            result: string;
+          }>("https://bitkub-chain-rpc.morningmoonvillage.com", {
+            jsonrpc: "2.0",
+            id: Date.now(),
+            method: "eth_call",
+            params: [
+              {
+                data: `0x252dba420000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000001c000000000000000000000000000000000000000000000000000000000000002e000000000000000000000000000000000000000000000000000000000000003800000000000000000000000000000000000000000000000000000000000000420000000000000000000000000${token.address}0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000449df8d3300000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000004921979af000000000000000000000000000000000000000000000000000000000000000000000000000000006e9e62018a013b20bcb7c573690fd1425ddd6b26000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4d06ca61f0000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000200000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa3610000000000000000000000007d984c24d2499d840eb3b7016077164e15e5faa600000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000241959a002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000024f40f0f52000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ec85f017ea248c169c5ae32a782e380e0db3b10d000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000042705e86500000000000000000000000000000000000000000000000000000000`,
+                to: "0xb2dd98bd8a916a9fef1ce0e35302a53ae23fd260",
+              },
+              "latest",
+            ],
+          });
+        })
+      );
+
+      const totalLiquidities = totalLiquiditiesResponse.map(
+        (totalLiquidityResponse, index) => {
+          return {
+            name: tokens[index].name,
+            totalLiquidity:
+              parseInt(
+                (
+                  totalLiquidityResponse.data.result
+                    .replace("0x", "")
+                    .match(/.{64}/g) as string[]
+                )[12],
+                16
+              ) / Math.pow(10, 18),
+          };
+        }
+      );
+
+      setTotalLiquidities([...totalLiquidities]);
     },
     {
       refreshInterval: 10000,
@@ -116,6 +279,14 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
           (seedOrStemAmount || 0) /
           ((typeof totalLiquidity === "number" && totalLiquidity >= 0
             ? totalLiquidity
+            : seedKind === "TOMATO"
+            ? totalLiquidities[0]?.totalLiquidity
+            : seedKind === "CORN"
+            ? totalLiquidities[1]?.totalLiquidity
+            : seedKind === "CABBAGE"
+            ? totalLiquidities[2]?.totalLiquidity
+            : seedKind === "CARROT"
+            ? totalLiquidities[3]?.totalLiquidity
             : Infinity) +
             (seedOrStemAmount || 0));
 
@@ -136,7 +307,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
         switch (stemLP) {
           case "LKKUB":
             const stemLkKubAmountToUsdt =
-              ((seedOrStemAmount || 0) * thbKub * 0.5503) / thbUsdt; // ! Get rate from SHOP > STEM > SELL
+              ((seedOrStemAmount || 0) * thbKub * 0.5503) / stemLkkubPrice; // ! Get rate from SHOP > STEM > SELL
             const rewardsLkkubPercentage =
               stemLkKubAmountToUsdt /
               ((typeof totalLiquidity === "number" && totalLiquidity >= 0
@@ -160,7 +331,8 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
             break;
 
           case "LKUSDT":
-            const stemLkUsdtAmountToUsdt = (seedOrStemAmount || 0) * 1.5409; // ! Get rate from SHOP > STEM > SELL
+            const stemLkUsdtAmountToUsdt =
+              (seedOrStemAmount || 0) * stemLkusdtPrice; // ! Get rate from SHOP > STEM > SELL
             const rewardsLkUsdtPercentage =
               stemLkUsdtAmountToUsdt /
               ((typeof totalLiquidity === "number" && totalLiquidity >= 0
@@ -192,10 +364,14 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
   }, [
     plantKind,
     rewardMultiplier,
+    seedKind,
     seedOrStemAmount,
     stemLP,
+    stemLkkubPrice,
+    stemLkusdtPrice,
     thbKub,
     thbUsdt,
+    totalLiquidities,
     totalLiquidity,
   ]);
 
@@ -578,7 +754,35 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
               <input
                 className="input input-bordered input-sm w-full"
                 type="number"
-                placeholder="0.00"
+                placeholder={
+                  plantKind === "SEED"
+                    ? seedKind === "TOMATO"
+                      ? (totalLiquidities[0] &&
+                          parseFloat(
+                            totalLiquidities[0].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
+                      : seedKind === "CORN"
+                      ? (totalLiquidities[1] &&
+                          parseFloat(
+                            totalLiquidities[1].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
+                      : seedKind === "CABBAGE"
+                      ? (totalLiquidities[2] &&
+                          parseFloat(
+                            totalLiquidities[2].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
+                      : seedKind === "CARROT"
+                      ? (totalLiquidities[3] &&
+                          parseFloat(
+                            totalLiquidities[3].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
+                      : "-"
+                    : "-"
+                }
                 value={typeof totalLiquidity === "number" ? totalLiquidity : ""}
                 onChange={(e) => {
                   const value = parseFloat(e.target.value);
