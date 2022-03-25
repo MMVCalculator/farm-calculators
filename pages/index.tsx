@@ -83,9 +83,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
           16
         ) / Math.pow(10, 18);
 
-      setStemLkusdtPrice(
-        (lumi * thbLumi) / thbUsd + (kusdt * thbUsdt) / thbUsd
-      );
+      setStemLkusdtPrice((lumi * thbLumi + kusdt * thbUsdt) / thbUsdt);
     },
     {
       refreshInterval: 10000,
@@ -128,7 +126,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
           16
         ) / Math.pow(10, 18);
 
-      setStemLkkubPrice((lumi * thbLumi) / thbUsd + (kkub * thbKub) / thbUsd);
+      setStemLkkubPrice((lumi * thbLumi + kkub * thbKub) / thbKub);
     },
     {
       refreshInterval: 10000,
@@ -312,14 +310,14 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
       case "STEM":
         switch (stemLP) {
           case "LKKUB":
-            const stemLkKubAmountToUsdt =
-              ((seedOrStemAmount || 0) * thbKub * 0.5503) / stemLkkubPrice; // ! Get rate from SHOP > STEM > SELL
+            const stemLkKubAmountToUsd =
+              ((seedOrStemAmount || 0) * stemLkkubPrice * thbKub) / thbUsd; // ! Get rate from SHOP > STEM > SELL
             const rewardsLkkubPercentage =
-              stemLkKubAmountToUsdt /
+              stemLkKubAmountToUsd /
               ((typeof totalLiquidity === "number" && totalLiquidity >= 0
                 ? totalLiquidity
                 : Infinity) +
-                stemLkKubAmountToUsdt);
+                stemLkKubAmountToUsd);
 
             const cropsPerDayStemLkKub = parseFloat(
               (17280 * 0.1 * rewardMultiplier * rewardsLkkubPercentage).toFixed(
@@ -337,14 +335,16 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
             break;
 
           case "LKUSDT":
-            const stemLkUsdtAmountToUsdt =
-              (seedOrStemAmount || 0) * stemLkusdtPrice; // ! Get rate from SHOP > STEM > SELL
+            console.log(stemLkusdtPrice, "STEM/USDT");
+
+            const stemLkUsdtAmountToUsd =
+              ((seedOrStemAmount || 0) * stemLkusdtPrice * thbUsdt) / thbUsd; // ! Get rate from SHOP > STEM > SELL
             const rewardsLkUsdtPercentage =
-              stemLkUsdtAmountToUsdt /
+              stemLkUsdtAmountToUsd /
               ((typeof totalLiquidity === "number" && totalLiquidity >= 0
                 ? totalLiquidity
                 : Infinity) +
-                stemLkUsdtAmountToUsdt);
+                stemLkUsdtAmountToUsd);
 
             const cropsPerDayStemLkUsdt = parseFloat(
               (
@@ -376,6 +376,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
     stemLkkubPrice,
     stemLkusdtPrice,
     thbKub,
+    thbUsd,
     thbUsdt,
     totalLiquidities,
     totalLiquidity,
