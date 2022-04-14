@@ -13,10 +13,10 @@ import useSWR from "swr";
 import Navbar from "../components/Navbar";
 import { CSSTransition } from "react-transition-group";
 
-type PlantKind = "SEED" | "STEM";
+type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
-type RewardMultiplier = 8 | 12 | 20 | 24;
+type RewardMultiplier = 4 | 8 | 12 | 20 | 24;
 
 const Home: NextPage = () => {
   const [thbKub, setThbKub] = useState<number | null>(null);
@@ -26,11 +26,19 @@ const Home: NextPage = () => {
 
   const [plantKind, setPlantKind] = useState<PlantKind>("SEED");
   const [stemLP, setStemLP] = useState<StemLP>("LKKUB");
-  const [stemLkusdtPrice, setStemLkusdtPrice] = useState<number>(0);
-  const [stemLkkubPrice, setStemLkkubPrice] = useState<number>(0);
+  const [stemLkusdtCompose, setStemLkusdtCompose] = useState<{
+    lumi: number;
+    kusdt: number;
+  }>();
+  const [stemLkusdtPrice, setStemLkusdtPrice] = useState<number>();
+  const [stemLkkubCompose, setStemLkkubCompose] = useState<{
+    lumi: number;
+    kkub: number;
+  }>();
+  const [stemLkkubPrice, setStemLkkubPrice] = useState<number>();
   const [seedKind, setSeedKind] = useState<SeedKind>("TOMATO");
   const [rewardMultiplier, setRewardMultiplier] = useState<RewardMultiplier>(8);
-  const [seedOrStemAmount, setSeedOrStemAmount] = useState<number | null>(null);
+  const [plantAmount, setPlantAmount] = useState<number | null>(null);
   const [totalLiquidity, setTotalLiquidity] = useState<number | null>(null);
   const [totalLiquidities, setTotalLiquidities] = useState<
     {
@@ -38,7 +46,7 @@ const Home: NextPage = () => {
       totalLiquidity: number;
     }[]
   >([]);
-  const [cropsPerDay, setCropsPerDay] = useState<number | "-">("-");
+  const [yieldPerDay, setYieldPerDay] = useState<number | "-">("-");
 
   const initialRates = async () => {
     const now = Math.floor(Date.now() / 1000);
@@ -103,9 +111,7 @@ const Home: NextPage = () => {
           16
         ) / Math.pow(10, 18);
 
-      setStemLkusdtPrice(
-        (lumi * (thbLumi || 0) + kusdt * (thbUsdt || 0)) / (thbUsdt || 0)
-      );
+      setStemLkusdtCompose({ lumi, kusdt });
     },
     {
       refreshInterval: 10000,
@@ -148,9 +154,7 @@ const Home: NextPage = () => {
           16
         ) / Math.pow(10, 18);
 
-      setStemLkkubPrice(
-        (lumi * (thbLumi || 0) + kkub * (thbKub || 0)) / (thbKub || 0)
-      );
+      setStemLkkubCompose({ lumi, kkub });
     },
     {
       refreshInterval: 10000,
@@ -214,6 +218,10 @@ const Home: NextPage = () => {
           name: "seedFarmCarrot",
           address: "b92cd3ab59d8fbb1156f07f9bc0deacc9bc4954d",
         },
+        {
+          name: "lumiCowMilkFarm",
+          address: "d8356f78379afca40d2a966beb95e9c27ebc2915",
+        },
       ];
 
       const totalLiquiditiesResponse = await Promise.all(
@@ -227,7 +235,10 @@ const Home: NextPage = () => {
             method: "eth_call",
             params: [
               {
-                data: `0x252dba420000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000001c000000000000000000000000000000000000000000000000000000000000002e000000000000000000000000000000000000000000000000000000000000003800000000000000000000000000000000000000000000000000000000000000420000000000000000000000000${token.address}0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000449df8d3300000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000004921979af000000000000000000000000000000000000000000000000000000000000000000000000000000006e9e62018a013b20bcb7c573690fd1425ddd6b26000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4d06ca61f0000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000200000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa3610000000000000000000000007d984c24d2499d840eb3b7016077164e15e5faa600000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000241959a002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000024f40f0f52000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ec85f017ea248c169c5ae32a782e380e0db3b10d000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000042705e86500000000000000000000000000000000000000000000000000000000`,
+                data:
+                  token.name === "lumiCowMilkFarm"
+                    ? "0x252dba42000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001a0000000000000000000000000000000000000000000000000000000000000024000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000449df8d3300000000000000000000000000000000000000000000000000000000000000000000000000000000d8356f78379afca40d2a966beb95e9c27ebc2915000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000241959a00200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa3610000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000002470a08231000000000000000000000000d8356f78379afca40d2a966beb95e9c27ebc291500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000024f40f0f52000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                    : `0x252dba420000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000001c000000000000000000000000000000000000000000000000000000000000002e000000000000000000000000000000000000000000000000000000000000003800000000000000000000000000000000000000000000000000000000000000420000000000000000000000000${token.address}0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000449df8d3300000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000004921979af000000000000000000000000000000000000000000000000000000000000000000000000000000006e9e62018a013b20bcb7c573690fd1425ddd6b26000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4d06ca61f0000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000200000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa3610000000000000000000000007d984c24d2499d840eb3b7016077164e15e5faa600000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000241959a002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000024f40f0f52000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ec85f017ea248c169c5ae32a782e380e0db3b10d000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000042705e86500000000000000000000000000000000000000000000000000000000`,
                 to: "0xb2dd98bd8a916a9fef1ce0e35302a53ae23fd260",
               },
               "latest",
@@ -301,10 +312,39 @@ const Home: NextPage = () => {
   }, []);
 
   useEffect(() => {
+    if (
+      stemLkusdtCompose?.kusdt &&
+      stemLkusdtCompose?.lumi &&
+      thbLumi &&
+      thbUsdt
+    ) {
+      setStemLkusdtPrice(
+        (stemLkusdtCompose.lumi * thbLumi + stemLkusdtCompose.kusdt * thbUsdt) /
+          thbUsdt
+      );
+    }
+
+    if (stemLkkubCompose?.lumi && thbLumi && stemLkkubCompose?.kkub && thbKub) {
+      setStemLkkubPrice(
+        (stemLkkubCompose.lumi * thbLumi + stemLkkubCompose.kkub * thbKub) /
+          thbKub
+      );
+    }
+  }, [
+    stemLkkubCompose?.kkub,
+    stemLkkubCompose?.lumi,
+    stemLkusdtCompose?.kusdt,
+    stemLkusdtCompose?.lumi,
+    thbKub,
+    thbLumi,
+    thbUsdt,
+  ]);
+
+  useEffect(() => {
     switch (plantKind) {
       case "SEED":
         const rewardsSeedPercentage =
-          (seedOrStemAmount || 0) /
+          (plantAmount || 0) /
           ((typeof totalLiquidity === "number" && totalLiquidity >= 0
             ? totalLiquidity
             : seedKind === "TOMATO"
@@ -316,18 +356,18 @@ const Home: NextPage = () => {
             : seedKind === "CARROT"
             ? totalLiquidities[3]?.totalLiquidity
             : Infinity) +
-            (seedOrStemAmount || 0));
+            (plantAmount || 0));
 
-        const cropsPerDaySeed = parseFloat(
+        const yieldPerDaySeed = parseFloat(
           (17280 * 0.1 * rewardMultiplier * rewardsSeedPercentage).toFixed(2)
         );
 
-        setCropsPerDay(
-          cropsPerDaySeed <= 0 ||
-            cropsPerDaySeed === Infinity ||
-            isNaN(cropsPerDaySeed)
+        setYieldPerDay(
+          yieldPerDaySeed <= 0 ||
+            yieldPerDaySeed === Infinity ||
+            isNaN(yieldPerDaySeed)
             ? "-"
-            : cropsPerDaySeed
+            : yieldPerDaySeed
         );
         break;
 
@@ -335,7 +375,7 @@ const Home: NextPage = () => {
         switch (stemLP) {
           case "LKKUB":
             const stemLkKubAmountToUsd =
-              ((seedOrStemAmount || 0) * stemLkkubPrice * (thbKub || 0)) /
+              ((plantAmount || 0) * (stemLkkubPrice || 0) * (thbKub || 0)) /
               (thbUsd || 0);
             const rewardsLkkubPercentage =
               stemLkKubAmountToUsd /
@@ -344,26 +384,24 @@ const Home: NextPage = () => {
                 : Infinity) +
                 stemLkKubAmountToUsd);
 
-            const cropsPerDayStemLkKub = parseFloat(
+            const yieldPerDayStemLkKub = parseFloat(
               (17280 * 0.1 * rewardMultiplier * rewardsLkkubPercentage).toFixed(
                 2
               )
             );
 
-            setCropsPerDay(
-              cropsPerDayStemLkKub <= 0 ||
-                cropsPerDayStemLkKub === Infinity ||
-                isNaN(cropsPerDayStemLkKub)
+            setYieldPerDay(
+              yieldPerDayStemLkKub <= 0 ||
+                yieldPerDayStemLkKub === Infinity ||
+                isNaN(yieldPerDayStemLkKub)
                 ? "-"
-                : cropsPerDayStemLkKub
+                : yieldPerDayStemLkKub
             );
             break;
 
           case "LKUSDT":
-            console.log(stemLkusdtPrice, "STEM/USDT");
-
             const stemLkUsdtAmountToUsd =
-              ((seedOrStemAmount || 0) * stemLkusdtPrice * (thbUsdt || 0)) /
+              ((plantAmount || 0) * (stemLkusdtPrice || 0) * (thbUsdt || 0)) /
               (thbUsd || 0);
             const rewardsLkUsdtPercentage =
               stemLkUsdtAmountToUsd /
@@ -372,7 +410,7 @@ const Home: NextPage = () => {
                 : Infinity) +
                 stemLkUsdtAmountToUsd);
 
-            const cropsPerDayStemLkUsdt = parseFloat(
+            const yieldPerDayStemLkUsdt = parseFloat(
               (
                 17280 *
                 0.1 *
@@ -381,23 +419,44 @@ const Home: NextPage = () => {
               ).toFixed(2)
             );
 
-            setCropsPerDay(
-              cropsPerDayStemLkUsdt <= 0 ||
-                cropsPerDayStemLkUsdt === Infinity ||
-                isNaN(cropsPerDayStemLkUsdt)
+            setYieldPerDay(
+              yieldPerDayStemLkUsdt <= 0 ||
+                yieldPerDayStemLkUsdt === Infinity ||
+                isNaN(yieldPerDayStemLkUsdt)
                 ? "-"
-                : cropsPerDayStemLkUsdt
+                : yieldPerDayStemLkUsdt
             );
             break;
         }
 
+        break;
+
+      case "LUMI":
+        const rewardsLumiPercentage =
+          (plantAmount || 0) /
+          ((typeof totalLiquidity === "number" && totalLiquidity >= 0
+            ? totalLiquidity
+            : totalLiquidities[4]?.totalLiquidity) +
+            (plantAmount || 0));
+
+        const yieldPerDayLumi = parseFloat(
+          (17280 * 0.1 * rewardMultiplier * rewardsLumiPercentage).toFixed(2)
+        );
+
+        setYieldPerDay(
+          yieldPerDayLumi <= 0 ||
+            yieldPerDayLumi === Infinity ||
+            isNaN(yieldPerDayLumi)
+            ? "-"
+            : yieldPerDayLumi
+        );
         break;
     }
   }, [
     plantKind,
     rewardMultiplier,
     seedKind,
-    seedOrStemAmount,
+    plantAmount,
     stemLP,
     stemLkkubPrice,
     stemLkusdtPrice,
@@ -641,6 +700,16 @@ const Home: NextPage = () => {
             >
               STEM
             </button>
+
+            <button
+              className={`btn${plantKind === "LUMI" ? " btn-active" : ""}`}
+              onClick={() => {
+                setPlantKind("LUMI");
+                setRewardMultiplier(4);
+              }}
+            >
+              LUMI
+            </button>
           </div>
 
           {plantKind === "STEM" && (
@@ -699,120 +768,135 @@ const Home: NextPage = () => {
 
           <div className="ring ring-accent self-center w-10 h-10 rounded-full">
             <Image
-              src={`/icons/crop-${seedKind.toLocaleLowerCase()}.png`}
-              alt={`crop-${seedKind.toLocaleLowerCase()}`}
+              src={
+                plantKind === "LUMI"
+                  ? "/icons/lumi.png"
+                  : `/icons/seed_${seedKind.toLocaleLowerCase()}.png`
+              }
+              alt="plant_kind"
               width={80}
               height={80}
             />
           </div>
 
+          {plantKind !== "LUMI" && (
+            <div className="btn-group self-center">
+              <button
+                className={`btn btn-xs${
+                  seedKind === "TOMATO" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("TOMATO");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(8);
+                      break;
+                    case "STEM":
+                      switch (stemLP) {
+                        case "LKKUB":
+                          setRewardMultiplier(24);
+                          break;
+                        case "LKUSDT":
+                          setRewardMultiplier(20);
+                          break;
+                      }
+                      break;
+                  }
+                }}
+              >
+                TOMATO
+              </button>
+
+              <button
+                className={`btn btn-xs${
+                  seedKind === "CORN" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("CORN");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(8);
+                      break;
+                    case "STEM":
+                      switch (stemLP) {
+                        case "LKKUB":
+                          setRewardMultiplier(24);
+                          break;
+                        case "LKUSDT":
+                          setRewardMultiplier(20);
+                          break;
+                      }
+                      break;
+                  }
+                }}
+              >
+                CORN
+              </button>
+
+              <button
+                className={`btn btn-xs${
+                  seedKind === "CABBAGE" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("CABBAGE");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(8);
+                      break;
+                    case "STEM":
+                      switch (stemLP) {
+                        case "LKKUB":
+                          setRewardMultiplier(24);
+                          break;
+                        case "LKUSDT":
+                          setRewardMultiplier(20);
+                          break;
+                      }
+                      break;
+                  }
+                }}
+              >
+                CABBAGE
+              </button>
+
+              <button
+                className={`btn btn-xs${
+                  seedKind === "CARROT" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("CARROT");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(12);
+                      break;
+                    case "STEM":
+                      switch (stemLP) {
+                        case "LKKUB":
+                          setRewardMultiplier(24);
+                          break;
+                        case "LKUSDT":
+                          setRewardMultiplier(20);
+                          break;
+                      }
+                      break;
+                  }
+                }}
+              >
+                CARROT
+              </button>
+            </div>
+          )}
+
           <div className="btn-group self-center">
             <button
               className={`btn btn-xs${
-                seedKind === "TOMATO" ? " btn-active" : ""
+                rewardMultiplier === 4 ? " !btn-accent" : ""
               }`}
-              onClick={() => {
-                setSeedKind("TOMATO");
-                switch (plantKind) {
-                  case "SEED":
-                    setRewardMultiplier(8);
-                    break;
-                  case "STEM":
-                    switch (stemLP) {
-                      case "LKKUB":
-                        setRewardMultiplier(24);
-                        break;
-                      case "LKUSDT":
-                        setRewardMultiplier(20);
-                        break;
-                    }
-                    break;
-                }
-              }}
+              disabled
             >
-              TOMATO
+              4X
             </button>
 
-            <button
-              className={`btn btn-xs${
-                seedKind === "CORN" ? " btn-active" : ""
-              }`}
-              onClick={() => {
-                setSeedKind("CORN");
-                switch (plantKind) {
-                  case "SEED":
-                    setRewardMultiplier(8);
-                    break;
-                  case "STEM":
-                    switch (stemLP) {
-                      case "LKKUB":
-                        setRewardMultiplier(24);
-                        break;
-                      case "LKUSDT":
-                        setRewardMultiplier(20);
-                        break;
-                    }
-                    break;
-                }
-              }}
-            >
-              CORN
-            </button>
-
-            <button
-              className={`btn btn-xs${
-                seedKind === "CABBAGE" ? " btn-active" : ""
-              }`}
-              onClick={() => {
-                setSeedKind("CABBAGE");
-                switch (plantKind) {
-                  case "SEED":
-                    setRewardMultiplier(8);
-                    break;
-                  case "STEM":
-                    switch (stemLP) {
-                      case "LKKUB":
-                        setRewardMultiplier(24);
-                        break;
-                      case "LKUSDT":
-                        setRewardMultiplier(20);
-                        break;
-                    }
-                    break;
-                }
-              }}
-            >
-              CABBAGE
-            </button>
-
-            <button
-              className={`btn btn-xs${
-                seedKind === "CARROT" ? " btn-active" : ""
-              }`}
-              onClick={() => {
-                setSeedKind("CARROT");
-                switch (plantKind) {
-                  case "SEED":
-                    setRewardMultiplier(12);
-                    break;
-                  case "STEM":
-                    switch (stemLP) {
-                      case "LKKUB":
-                        setRewardMultiplier(24);
-                        break;
-                      case "LKUSDT":
-                        setRewardMultiplier(20);
-                        break;
-                    }
-                    break;
-                }
-              }}
-            >
-              CARROT
-            </button>
-          </div>
-
-          <div className="btn-group self-center">
             <button
               className={`btn btn-xs${
                 rewardMultiplier === 8 ? " !btn-accent" : ""
@@ -853,7 +937,8 @@ const Home: NextPage = () => {
           <div className="form-control">
             <label className="label">
               <span className="label-text">
-                จำนวน {plantKind === "SEED" ? "SEED" : "STEM"} ที่จะปลูก
+                จำนวน {plantKind} ที่จะ
+                {plantKind === "LUMI" ? " stake" : "ปลูก"}
               </span>
             </label>
             <label className="input-group input-group-sm">
@@ -861,15 +946,13 @@ const Home: NextPage = () => {
                 className="input input-bordered input-sm w-full"
                 type="number"
                 placeholder="0.00"
-                value={
-                  typeof seedOrStemAmount === "number" ? seedOrStemAmount : ""
-                }
+                value={typeof plantAmount === "number" ? plantAmount : ""}
                 onChange={(e) => {
                   const value = parseFloat(e.target.value);
-                  setSeedOrStemAmount(isNaN(value) || value < 0 ? null : value);
+                  setPlantAmount(isNaN(value) || value < 0 ? null : value);
                 }}
               />
-              <span>{plantKind === "SEED" ? "SEEDS" : "STEMS"}</span>
+              <span>{plantKind}</span>
             </label>
           </div>
 
@@ -914,6 +997,12 @@ const Home: NextPage = () => {
                           ).toLocaleString("th-TH")) ||
                         "-"
                       : "-"
+                    : plantKind === "LUMI"
+                    ? (totalLiquidities[4] &&
+                        parseFloat(
+                          totalLiquidities[4].totalLiquidity.toFixed(2)
+                        ).toLocaleString("th-TH")) ||
+                      "-"
                     : "-"
                 }
                 value={typeof totalLiquidity === "number" ? totalLiquidity : ""}
@@ -922,7 +1011,15 @@ const Home: NextPage = () => {
                   setTotalLiquidity(isNaN(value) || value < 0 ? null : value);
                 }}
               />
-              <span>{plantKind === "SEED" ? "SEEDS" : "$"}</span>
+              <span>
+                {plantKind === "SEED"
+                  ? "SEEDS"
+                  : plantKind === "STEM"
+                  ? "$"
+                  : plantKind === "LUMI"
+                  ? "LUMI"
+                  : ""}
+              </span>
             </label>
           </div>
 
@@ -934,8 +1031,12 @@ const Home: NextPage = () => {
                 </div>
                 <div className="ring-[1.5px] ring-accent self-center w-4 h-4 rounded-full">
                   <Image
-                    src={`/icons/crop-${seedKind.toLowerCase()}.png`}
-                    alt={`crop-${seedKind.toLocaleLowerCase()}`}
+                    src={
+                      plantKind === "LUMI"
+                        ? "/icons/cowmilk.png"
+                        : `/icons/crop_${seedKind.toLowerCase()}.png`
+                    }
+                    alt={"plant_kind"}
                     width={80}
                     height={80}
                   />
@@ -943,12 +1044,14 @@ const Home: NextPage = () => {
               </div>
               <div className="stat-value text-lg">
                 {`${
-                  plantKind === "STEM" && typeof cropsPerDay === "number"
+                  plantKind === "STEM" && typeof yieldPerDay === "number"
                     ? "≈ "
                     : ""
-                }${cropsPerDay.toLocaleString("th-TH")}`}
+                }${yieldPerDay.toLocaleString("th-TH")}`}
               </div>
-              <div className="stat-title text-xs">Crops/Day</div>
+              <div className="stat-title text-xs">
+                {plantKind === "LUMI" ? "Milk" : "Crops"}/Day
+              </div>
             </div>
 
             {plantKind === "SEED" && (
@@ -959,16 +1062,16 @@ const Home: NextPage = () => {
                   </div>
                   <div className="ring-[1.5px] ring-accent self-center w-4 h-4 rounded-full">
                     <Image
-                      src={`/icons/crop-${seedKind.toLowerCase()}.png`}
-                      alt={`crop-${seedKind.toLocaleLowerCase()}`}
+                      src={`/icons/crop_${seedKind.toLowerCase()}.png`}
+                      alt="plant_kind"
                       width={80}
                       height={80}
                     />
                   </div>
                 </div>
                 <div className="stat-value text-lg">
-                  {typeof cropsPerDay === "number"
-                    ? `≈ ${(cropsPerDay * 2).toLocaleString("th-TH")}`
+                  {typeof yieldPerDay === "number"
+                    ? `≈ ${(yieldPerDay * 2).toLocaleString("th-TH")}`
                     : "-"}
                 </div>
                 <div className="stat-title text-xs">Crops</div>
@@ -992,9 +1095,9 @@ const Home: NextPage = () => {
                 </div>
               </div>
               <div className="stat-value text-lg">
-                {typeof cropsPerDay === "number"
+                {typeof yieldPerDay === "number"
                   ? `≈ ${(
-                      cropsPerDay *
+                      yieldPerDay *
                       (plantKind === "STEM" ? 1 : 2) *
                       0.095
                     ).toLocaleString("th-TH")}`
@@ -1008,10 +1111,10 @@ const Home: NextPage = () => {
             <div className="stat p-2 border-none">
               <div className="stat-title text-xs">Estimated</div>
               <div className="stat-value text-lg">
-                {typeof cropsPerDay === "number"
+                {typeof yieldPerDay === "number"
                   ? `≈ ${parseFloat(
                       (
-                        cropsPerDay *
+                        yieldPerDay *
                         (plantKind === "STEM" ? 1 : 2) *
                         0.095 *
                         (thbLumi || 0)
