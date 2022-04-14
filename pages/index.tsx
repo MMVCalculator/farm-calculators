@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -11,26 +11,18 @@ import {
 import Link from "next/link";
 import useSWR from "swr";
 import Navbar from "../components/Navbar";
-
-type Props = {
-  THB_KUB: number;
-  THB_USDT: number;
-  latestRates: ILatestRates;
-  usdLumi: number;
-};
+import { CSSTransition } from "react-transition-group";
 
 type PlantKind = "SEED" | "STEM";
 type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
 type RewardMultiplier = 8 | 12 | 20 | 24;
 
-const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
-  const [thbKub, setThbKub] = useState<number>(THB_KUB);
-  const [thbUsdt, setThbUsdt] = useState<number>(THB_USDT);
-  const [thbLumi, setThbLumi] = useState<number>(
-    latestRates.rates.THB * usdLumi
-  );
-  const [thbUsd, setThbUsd] = useState<number>(latestRates.rates.THB);
+const Home: NextPage = () => {
+  const [thbKub, setThbKub] = useState<number | null>(null);
+  const [thbUsdt, setThbUsdt] = useState<number | null>(null);
+  const [thbLumi, setThbLumi] = useState<number | null>(null);
+  const [thbUsd, setThbUsd] = useState<number | null>(null);
 
   const [plantKind, setPlantKind] = useState<PlantKind>("SEED");
   const [stemLP, setStemLP] = useState<StemLP>("LKKUB");
@@ -47,6 +39,34 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
     }[]
   >([]);
   const [cropsPerDay, setCropsPerDay] = useState<number | "-">("-");
+
+  const initialRates = async () => {
+    const now = Math.floor(Date.now() / 1000);
+    const responses = await Promise.all([
+      axios.get("https://api.bitkub.com/api/market/ticker?sym=THB_KUB"),
+      axios.get("https://api.bitkub.com/api/market/ticker?sym=THB_USDT"),
+      axios.get<ILatestRates>(
+        "https://api.loremboard.finance/api/v1/dashboard/fiat/latest"
+      ),
+      axios.get<IUsdLumiCurrentPrice>(
+        `https://api.bkc.loremboard.finance/charts/history?symbol=LUMI&resolution=120&from=${
+          now - 10000
+        }&to=${now}&currencyCode=USD`
+      ),
+    ]);
+
+    setThbKub(responses[0].data.THB_KUB.last);
+    setThbUsdt(responses[1].data.THB_USDT.last);
+    setThbUsd(responses[2].data.rates.THB);
+    setThbLumi(
+      responses[3].data.c[responses[3].data.c.length - 1] *
+        responses[2].data.rates.THB
+    );
+  };
+
+  useEffect(() => {
+    initialRates();
+  }, []);
 
   useSWR(
     "stemLkusdtPrice",
@@ -83,7 +103,9 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
           16
         ) / Math.pow(10, 18);
 
-      setStemLkusdtPrice((lumi * thbLumi + kusdt * thbUsdt) / thbUsdt);
+      setStemLkusdtPrice(
+        (lumi * (thbLumi || 0) + kusdt * (thbUsdt || 0)) / (thbUsdt || 0)
+      );
     },
     {
       refreshInterval: 10000,
@@ -126,7 +148,9 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
           16
         ) / Math.pow(10, 18);
 
-      setStemLkkubPrice((lumi * thbLumi + kkub * thbKub) / thbKub);
+      setStemLkkubPrice(
+        (lumi * (thbLumi || 0) + kkub * (thbKub || 0)) / (thbKub || 0)
+      );
     },
     {
       refreshInterval: 10000,
@@ -158,7 +182,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
       );
 
       setThbLumi(
-        thbUsd *
+        (thbUsd || 0) *
           usdLumiCurrentPriceResponse.data.c[
             usdLumiCurrentPriceResponse.data.c.length - 1
           ]
@@ -311,7 +335,8 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
         switch (stemLP) {
           case "LKKUB":
             const stemLkKubAmountToUsd =
-              ((seedOrStemAmount || 0) * stemLkkubPrice * thbKub) / thbUsd; // ! Get rate from SHOP > STEM > SELL
+              ((seedOrStemAmount || 0) * stemLkkubPrice * (thbKub || 0)) /
+              (thbUsd || 0);
             const rewardsLkkubPercentage =
               stemLkKubAmountToUsd /
               ((typeof totalLiquidity === "number" && totalLiquidity >= 0
@@ -338,7 +363,8 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
             console.log(stemLkusdtPrice, "STEM/USDT");
 
             const stemLkUsdtAmountToUsd =
-              ((seedOrStemAmount || 0) * stemLkusdtPrice * thbUsdt) / thbUsd; // ! Get rate from SHOP > STEM > SELL
+              ((seedOrStemAmount || 0) * stemLkusdtPrice * (thbUsdt || 0)) /
+              (thbUsd || 0);
             const rewardsLkUsdtPercentage =
               stemLkUsdtAmountToUsd /
               ((typeof totalLiquidity === "number" && totalLiquidity >= 0
@@ -396,18 +422,68 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
             <div className="bg-neutral flex flex-col items-center justify-center w-12 h-12 p-2">
               <Image src="/icons/kub.png" alt="kub" width={80} height={80} />
             </div>
-            <div className="flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">{thbKub.toLocaleString("th-TH")}</h1>
-              <p className="text-2xs opacity-60">THB/KUB</p>
+            <div className="relative flex flex-col items-center justify-center flex-1 text-center">
+              <CSSTransition
+                in={!thbKub}
+                timeout={150}
+                classNames="pop"
+                unmountOnExit
+              >
+                <Image
+                  className="absolute"
+                  src="/images/chicken_loading.gif"
+                  alt="chicken_loading"
+                  width={36}
+                  height={36}
+                />
+              </CSSTransition>
+              <CSSTransition
+                in={!!thbKub}
+                timeout={150}
+                classNames="pop"
+                unmountOnExit
+              >
+                <div className="absolute flex flex-col">
+                  <h1 className="font-bold">
+                    {(thbKub || 0).toLocaleString("th-TH")}
+                  </h1>
+                  <p className="text-2xs opacity-60">THB/KUB</p>
+                </div>
+              </CSSTransition>
             </div>
           </div>
           <div className="card bg-base-100 flex flex-row overflow-hidden shadow-lg">
             <div className="bg-neutral flex flex-col items-center justify-center w-12 h-12 p-2">
               <Image src="/icons/usdt.png" alt="usdt" width={80} height={80} />
             </div>
-            <div className="flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">{thbUsdt.toLocaleString("th-TH")}</h1>
-              <p className="text-2xs opacity-60">THB/USDT</p>
+            <div className="relative flex flex-col items-center justify-center flex-1 text-center">
+              <CSSTransition
+                in={!thbUsdt}
+                timeout={150}
+                classNames="pop"
+                unmountOnExit
+              >
+                <Image
+                  className="absolute"
+                  src="/images/chicken_loading.gif"
+                  alt="chicken_loading"
+                  width={36}
+                  height={36}
+                />
+              </CSSTransition>
+              <CSSTransition
+                in={!!thbUsdt}
+                timeout={150}
+                classNames="pop"
+                unmountOnExit
+              >
+                <div className="absolute flex flex-col">
+                  <h1 className="font-bold">
+                    {(thbUsdt || 0).toLocaleString("th-TH")}
+                  </h1>
+                  <p className="text-2xs opacity-60">THB/USDT</p>
+                </div>
+              </CSSTransition>
             </div>
           </div>
           <div className="card bg-base-100 flex flex-row overflow-hidden shadow-lg">
@@ -415,10 +491,35 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
               <Image src="/icons/lumi.png" alt="lumi" width={80} height={80} />
             </div>
             <div className="relative flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">
-                {parseFloat(thbLumi.toFixed(2)).toLocaleString("th-TH")}
-              </h1>
-              <p className="text-2xs opacity-60">THB/LUMI</p>
+              <CSSTransition
+                in={!thbLumi}
+                timeout={150}
+                classNames="pop"
+                unmountOnExit
+              >
+                <Image
+                  className="absolute"
+                  src="/images/chicken_loading.gif"
+                  alt="chicken_loading"
+                  width={36}
+                  height={36}
+                />
+              </CSSTransition>
+              <CSSTransition
+                in={!!thbLumi}
+                timeout={150}
+                classNames="pop"
+                unmountOnExit
+              >
+                <div className="absolute flex flex-col">
+                  <h1 className="font-bold">
+                    {parseFloat((thbLumi || 0).toFixed(2)).toLocaleString(
+                      "th-TH"
+                    )}
+                  </h1>
+                  <p className="text-2xs opacity-60">THB/LUMI</p>
+                </div>
+              </CSSTransition>
             </div>
           </div>
           <div className="card bg-base-100 flex flex-row overflow-hidden shadow-lg">
@@ -438,10 +539,35 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
               </svg>
             </div>
             <div className="relative flex flex-col items-center justify-center flex-1 text-center">
-              <h1 className="font-bold">
-                {parseFloat(thbUsd.toFixed(2)).toLocaleString("th-TH")}
-              </h1>
-              <p className="text-2xs opacity-60">THB/USD</p>
+              <CSSTransition
+                in={!thbUsd}
+                timeout={150}
+                classNames="pop"
+                unmountOnExit
+              >
+                <Image
+                  className="absolute"
+                  src="/images/chicken_loading.gif"
+                  alt="chicken_loading"
+                  width={36}
+                  height={36}
+                />
+              </CSSTransition>
+              <CSSTransition
+                in={!!thbUsd}
+                timeout={150}
+                classNames="pop"
+                unmountOnExit
+              >
+                <div className="absolute flex flex-col">
+                  <h1 className="font-bold">
+                    {parseFloat((thbUsd || 0).toFixed(2)).toLocaleString(
+                      "th-TH"
+                    )}
+                  </h1>
+                  <p className="text-2xs opacity-60">THB/USD</p>
+                </div>
+              </CSSTransition>
             </div>
           </div>
         </div>
@@ -888,7 +1014,7 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
                         cropsPerDay *
                         (plantKind === "STEM" ? 1 : 2) *
                         0.095 *
-                        thbLumi
+                        (thbLumi || 0)
                       ).toFixed(2)
                     ).toLocaleString("th-TH")}`
                   : "-"}
@@ -949,29 +1075,5 @@ const Home: NextPage<Props> = ({ THB_KUB, THB_USDT, latestRates, usdLumi }) => {
       </footer>
     </div>
   );
-};
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const now = Math.floor(Date.now() / 1000);
-  const responses = await Promise.all([
-    axios.get("https://api.bitkub.com/api/market/ticker?sym=THB_KUB"),
-    axios.get("https://api.bitkub.com/api/market/ticker?sym=THB_USDT"),
-    axios.get<ILatestRates>(
-      "https://api.loremboard.finance/api/v1/dashboard/fiat/latest"
-    ),
-    axios.get<IUsdLumiCurrentPrice>(
-      `https://api.bkc.loremboard.finance/charts/history?symbol=LUMI&resolution=120&from=${
-        now - 10000
-      }&to=${now}&currencyCode=USD`
-    ),
-  ]);
-  return {
-    props: {
-      THB_KUB: responses[0].data.THB_KUB.last,
-
-      THB_USDT: responses[1].data.THB_USDT.last,
-      latestRates: responses[2].data,
-      usdLumi: responses[3].data.c[responses[3].data.c.length - 1],
-    },
-  };
 };
 export default Home;
