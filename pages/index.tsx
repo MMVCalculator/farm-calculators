@@ -16,7 +16,7 @@ import { CSSTransition } from "react-transition-group";
 type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
-type RewardMultiplier = 4 | 8 | 12 | 20 | 24;
+type RewardMultiplier = 4 | 6 | 10 | 20 | 24;
 
 const Home: NextPage = () => {
   const [thbKub, setThbKub] = useState<number | null>(null);
@@ -641,16 +641,16 @@ const Home: NextPage = () => {
                 setPlantKind("SEED");
                 switch (seedKind) {
                   case "TOMATO":
-                    setRewardMultiplier(8);
+                    setRewardMultiplier(6);
                     break;
                   case "CORN":
-                    setRewardMultiplier(8);
+                    setRewardMultiplier(6);
                     break;
                   case "CABBAGE":
-                    setRewardMultiplier(8);
+                    setRewardMultiplier(6);
                     break;
                   case "CARROT":
-                    setRewardMultiplier(12);
+                    setRewardMultiplier(10);
                     break;
                 }
               }}
@@ -658,48 +658,56 @@ const Home: NextPage = () => {
               SEED
             </button>
 
-            <button
-              className={`btn${plantKind === "STEM" ? " btn-active" : ""}`}
-              onClick={() => {
-                setPlantKind("STEM");
-                switch (stemLP) {
-                  case "LKKUB":
-                    switch (seedKind) {
-                      case "TOMATO":
-                        setRewardMultiplier(24);
-                        break;
-                      case "CORN":
-                        setRewardMultiplier(24);
-                        break;
-                      case "CABBAGE":
-                        setRewardMultiplier(24);
-                        break;
-                      case "CARROT":
-                        setRewardMultiplier(24);
-                        break;
-                    }
-                    break;
-                  case "LKUSDT":
-                    switch (seedKind) {
-                      case "TOMATO":
-                        setRewardMultiplier(20);
-                        break;
-                      case "CORN":
-                        setRewardMultiplier(20);
-                        break;
-                      case "CABBAGE":
-                        setRewardMultiplier(20);
-                        break;
-                      case "CARROT":
-                        setRewardMultiplier(20);
-                        break;
-                    }
-                    break;
-                }
-              }}
+            <div
+              className="tooltip peer-hover:visible self-center"
+              data-tip="ปิดการใช้งานการคำนวณ STEM ไว้ชั่วคราว เนื่องจากมีการคำนวณที่คาดเคลื่อนสูงเกินไป"
             >
-              STEM
-            </button>
+              <button
+                className={`rounded-none btn${
+                  plantKind === "STEM" ? " btn-active" : ""
+                }`}
+                disabled
+                onClick={() => {
+                  setPlantKind("STEM");
+                  switch (stemLP) {
+                    case "LKKUB":
+                      switch (seedKind) {
+                        case "TOMATO":
+                          setRewardMultiplier(24);
+                          break;
+                        case "CORN":
+                          setRewardMultiplier(24);
+                          break;
+                        case "CABBAGE":
+                          setRewardMultiplier(24);
+                          break;
+                        case "CARROT":
+                          setRewardMultiplier(24);
+                          break;
+                      }
+                      break;
+                    case "LKUSDT":
+                      switch (seedKind) {
+                        case "TOMATO":
+                          setRewardMultiplier(20);
+                          break;
+                        case "CORN":
+                          setRewardMultiplier(20);
+                          break;
+                        case "CABBAGE":
+                          setRewardMultiplier(20);
+                          break;
+                        case "CARROT":
+                          setRewardMultiplier(20);
+                          break;
+                      }
+                      break;
+                  }
+                }}
+              >
+                STEM
+              </button>
+            </div>
 
             <button
               className={`btn${plantKind === "LUMI" ? " btn-active" : ""}`}
@@ -789,7 +797,7 @@ const Home: NextPage = () => {
                   setSeedKind("TOMATO");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(8);
+                      setRewardMultiplier(6);
                       break;
                     case "STEM":
                       switch (stemLP) {
@@ -815,7 +823,7 @@ const Home: NextPage = () => {
                   setSeedKind("CORN");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(8);
+                      setRewardMultiplier(6);
                       break;
                     case "STEM":
                       switch (stemLP) {
@@ -841,7 +849,7 @@ const Home: NextPage = () => {
                   setSeedKind("CABBAGE");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(8);
+                      setRewardMultiplier(6);
                       break;
                     case "STEM":
                       switch (stemLP) {
@@ -867,7 +875,7 @@ const Home: NextPage = () => {
                   setSeedKind("CARROT");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(12);
+                      setRewardMultiplier(10);
                       break;
                     case "STEM":
                       switch (stemLP) {
@@ -899,20 +907,20 @@ const Home: NextPage = () => {
 
             <button
               className={`btn btn-xs${
-                rewardMultiplier === 8 ? " !btn-accent" : ""
+                rewardMultiplier === 6 ? " !btn-accent" : ""
               }`}
               disabled
             >
-              8X
+              6X
             </button>
 
             <button
               className={`btn btn-xs${
-                rewardMultiplier === 12 ? " !btn-accent" : ""
+                rewardMultiplier === 10 ? " !btn-accent" : ""
               }`}
               disabled
             >
-              12X
+              10X
             </button>
 
             <button
