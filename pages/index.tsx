@@ -37,7 +37,7 @@ const Home: NextPage = () => {
   }>();
   const [stemLkkubPrice, setStemLkkubPrice] = useState<number>();
   const [seedKind, setSeedKind] = useState<SeedKind>("TOMATO");
-  const [rewardMultiplier, setRewardMultiplier] = useState<RewardMultiplier>(8);
+  const [rewardMultiplier, setRewardMultiplier] = useState<RewardMultiplier>(4);
   const [plantAmount, setPlantAmount] = useState<number | null>(null);
   const [totalLiquidity, setTotalLiquidity] = useState<number | null>(null);
   const [totalLiquidities, setTotalLiquidities] = useState<
