@@ -907,20 +907,20 @@ const Home: NextPage = () => {
 
             <button
               className={`btn btn-xs${
-                rewardMultiplier === 6 ? " !btn-accent" : ""
+                rewardMultiplier === 5 ? " !btn-accent" : ""
               }`}
               disabled
             >
-              6X
+              5X
             </button>
 
             <button
               className={`btn btn-xs${
-                rewardMultiplier === 10 ? " !btn-accent" : ""
+                rewardMultiplier === 9 ? " !btn-accent" : ""
               }`}
               disabled
             >
-              10X
+              9X
             </button>
 
             <button
