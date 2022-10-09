@@ -16,7 +16,7 @@ import { CSSTransition } from "react-transition-group";
 type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
-type RewardMultiplier = 4 | 6 | 10 | 20 | 24;
+type RewardMultiplier = 4 | 5 | 9 | 20 | 24;
 
 const Home: NextPage = () => {
   const [thbKub, setThbKub] = useState<number | null>(null);
@@ -641,16 +641,16 @@ const Home: NextPage = () => {
                 setPlantKind("SEED");
                 switch (seedKind) {
                   case "TOMATO":
-                    setRewardMultiplier(6);
+                    setRewardMultiplier(5);
                     break;
                   case "CORN":
-                    setRewardMultiplier(6);
+                    setRewardMultiplier(5);
                     break;
                   case "CABBAGE":
-                    setRewardMultiplier(6);
+                    setRewardMultiplier(5);
                     break;
                   case "CARROT":
-                    setRewardMultiplier(10);
+                    setRewardMultiplier(9);
                     break;
                 }
               }}
@@ -797,7 +797,7 @@ const Home: NextPage = () => {
                   setSeedKind("TOMATO");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(6);
+                      setRewardMultiplier(5);
                       break;
                     case "STEM":
                       switch (stemLP) {
@@ -823,7 +823,7 @@ const Home: NextPage = () => {
                   setSeedKind("CORN");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(6);
+                      setRewardMultiplier(5);
                       break;
                     case "STEM":
                       switch (stemLP) {
@@ -849,7 +849,7 @@ const Home: NextPage = () => {
                   setSeedKind("CABBAGE");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(6);
+                      setRewardMultiplier(5);
                       break;
                     case "STEM":
                       switch (stemLP) {
@@ -875,7 +875,7 @@ const Home: NextPage = () => {
                   setSeedKind("CARROT");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(10);
+                      setRewardMultiplier(9);
                       break;
                     case "STEM":
                       switch (stemLP) {
