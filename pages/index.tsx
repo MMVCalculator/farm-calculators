@@ -16,7 +16,7 @@ import { CSSTransition } from "react-transition-group";
 type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
-type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8;
+type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8 | 14 | 18;
 
 const Home: NextPage = () => {
   const [thbKub, setThbKub] = useState<number | null>(null);
@@ -673,32 +673,32 @@ const Home: NextPage = () => {
                     case "LKKUB":
                       switch (seedKind) {
                         case "TOMATO":
-                          setRewardMultiplier(24);
+                          setRewardMultiplier(18);
                           break;
                         case "CORN":
-                          setRewardMultiplier(24);
+                          setRewardMultiplier(18);
                           break;
                         case "CABBAGE":
-                          setRewardMultiplier(24);
+                          setRewardMultiplier(18);
                           break;
                         case "CARROT":
-                          setRewardMultiplier(24);
+                          setRewardMultiplier(18);
                           break;
                       }
                       break;
                     case "LKUSDT":
                       switch (seedKind) {
                         case "TOMATO":
-                          setRewardMultiplier(20);
+                          setRewardMultiplier(14);
                           break;
                         case "CORN":
-                          setRewardMultiplier(20);
+                          setRewardMultiplier(14);
                           break;
                         case "CABBAGE":
-                          setRewardMultiplier(20);
+                          setRewardMultiplier(14);
                           break;
                         case "CARROT":
-                          setRewardMultiplier(20);
+                          setRewardMultiplier(14);
                           break;
                       }
                       break;
@@ -713,7 +713,7 @@ const Home: NextPage = () => {
               className={`btn${plantKind === "LUMI" ? " btn-active" : ""}`}
               onClick={() => {
                 setPlantKind("LUMI");
-                setRewardMultiplier(4);
+                setRewardMultiplier(8);
               }}
             >
               LUMI
@@ -730,16 +730,16 @@ const Home: NextPage = () => {
                   setStemLP("LKKUB");
                   switch (seedKind) {
                     case "TOMATO":
-                      setRewardMultiplier(24);
+                      setRewardMultiplier(18);
                       break;
                     case "CORN":
-                      setRewardMultiplier(24);
+                      setRewardMultiplier(18);
                       break;
                     case "CABBAGE":
-                      setRewardMultiplier(24);
+                      setRewardMultiplier(18);
                       break;
                     case "CARROT":
-                      setRewardMultiplier(24);
+                      setRewardMultiplier(18);
                       break;
                   }
                 }}
@@ -755,16 +755,16 @@ const Home: NextPage = () => {
                   setStemLP("LKUSDT");
                   switch (seedKind) {
                     case "TOMATO":
-                      setRewardMultiplier(20);
+                      setRewardMultiplier(14);
                       break;
                     case "CORN":
-                      setRewardMultiplier(20);
+                      setRewardMultiplier(14);
                       break;
                     case "CABBAGE":
-                      setRewardMultiplier(20);
+                      setRewardMultiplier(14);
                       break;
                     case "CARROT":
-                      setRewardMultiplier(20);
+                      setRewardMultiplier(14);
                       break;
                   }
                 }}
@@ -802,10 +802,10 @@ const Home: NextPage = () => {
                     case "STEM":
                       switch (stemLP) {
                         case "LKKUB":
-                          setRewardMultiplier(24);
+                          setRewardMultiplier(18);
                           break;
                         case "LKUSDT":
-                          setRewardMultiplier(20);
+                          setRewardMultiplier(14);
                           break;
                       }
                       break;
@@ -828,10 +828,10 @@ const Home: NextPage = () => {
                     case "STEM":
                       switch (stemLP) {
                         case "LKKUB":
-                          setRewardMultiplier(24);
+                          setRewardMultiplier(18);
                           break;
                         case "LKUSDT":
-                          setRewardMultiplier(20);
+                          setRewardMultiplier(14);
                           break;
                       }
                       break;
@@ -854,10 +854,10 @@ const Home: NextPage = () => {
                     case "STEM":
                       switch (stemLP) {
                         case "LKKUB":
-                          setRewardMultiplier(24);
+                          setRewardMultiplier(18);
                           break;
                         case "LKUSDT":
-                          setRewardMultiplier(20);
+                          setRewardMultiplier(14);
                           break;
                       }
                       break;
@@ -880,10 +880,10 @@ const Home: NextPage = () => {
                     case "STEM":
                       switch (stemLP) {
                         case "LKKUB":
-                          setRewardMultiplier(24);
+                          setRewardMultiplier(18);
                           break;
                         case "LKUSDT":
-                          setRewardMultiplier(20);
+                          setRewardMultiplier(14);
                           break;
                       }
                       break;
@@ -948,6 +948,24 @@ const Home: NextPage = () => {
               disabled
             >
               8X
+            </button>
+
+            <button
+              className={`btn btn-xs${
+                rewardMultiplier === 14 ? " !btn-accent" : ""
+              }`}
+              disabled
+            >
+              14X
+            </button>
+
+            <button
+              className={`btn btn-xs${
+                rewardMultiplier === 18 ? " !btn-accent" : ""
+              }`}
+              disabled
+            >
+              18X
             </button>
           </div>
 
