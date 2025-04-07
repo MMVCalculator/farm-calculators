@@ -16,7 +16,7 @@ import { CSSTransition } from "react-transition-group";
 type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
-type RewardMultiplier = 4 | 5 | 9 | 20 | 24;
+type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8;
 
 const Home: NextPage = () => {
   const [thbKub, setThbKub] = useState<number | null>(null);
@@ -641,16 +641,16 @@ const Home: NextPage = () => {
                 setPlantKind("SEED");
                 switch (seedKind) {
                   case "TOMATO":
-                    setRewardMultiplier(5);
+                    setRewardMultiplier(1);
                     break;
                   case "CORN":
-                    setRewardMultiplier(5);
+                    setRewardMultiplier(1);
                     break;
                   case "CABBAGE":
-                    setRewardMultiplier(5);
+                    setRewardMultiplier(1);
                     break;
                   case "CARROT":
-                    setRewardMultiplier(9);
+                    setRewardMultiplier(6);
                     break;
                 }
               }}
@@ -797,7 +797,7 @@ const Home: NextPage = () => {
                   setSeedKind("TOMATO");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(5);
+                      setRewardMultiplier(1);
                       break;
                     case "STEM":
                       switch (stemLP) {
@@ -823,7 +823,7 @@ const Home: NextPage = () => {
                   setSeedKind("CORN");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(5);
+                      setRewardMultiplier(1);
                       break;
                     case "STEM":
                       switch (stemLP) {
@@ -849,7 +849,7 @@ const Home: NextPage = () => {
                   setSeedKind("CABBAGE");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(5);
+                      setRewardMultiplier(1);
                       break;
                     case "STEM":
                       switch (stemLP) {
@@ -875,7 +875,7 @@ const Home: NextPage = () => {
                   setSeedKind("CARROT");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(9);
+                      setRewardMultiplier(6);
                       break;
                     case "STEM":
                       switch (stemLP) {
@@ -898,6 +898,33 @@ const Home: NextPage = () => {
           <div className="btn-group self-center">
             <button
               className={`btn btn-xs${
+                rewardMultiplier === 1 ? " !btn-accent" : ""
+              }`}
+              disabled
+            >
+              1X
+            </button>
+
+            <button
+              className={`btn btn-xs${
+                rewardMultiplier === 2 ? " !btn-accent" : ""
+              }`}
+              disabled
+            >
+              2X
+            </button>
+
+            <button
+              className={`btn btn-xs${
+                rewardMultiplier === 3 ? " !btn-accent" : ""
+              }`}
+              disabled
+            >
+              3X
+            </button>
+
+            <button
+              className={`btn btn-xs${
                 rewardMultiplier === 4 ? " !btn-accent" : ""
               }`}
               disabled
@@ -907,38 +934,20 @@ const Home: NextPage = () => {
 
             <button
               className={`btn btn-xs${
-                rewardMultiplier === 5 ? " !btn-accent" : ""
+                rewardMultiplier === 6 ? " !btn-accent" : ""
               }`}
               disabled
             >
-              5X
+              6X
             </button>
 
             <button
               className={`btn btn-xs${
-                rewardMultiplier === 9 ? " !btn-accent" : ""
+                rewardMultiplier === 8 ? " !btn-accent" : ""
               }`}
               disabled
             >
-              9X
-            </button>
-
-            <button
-              className={`btn btn-xs${
-                rewardMultiplier === 20 ? " !btn-accent" : ""
-              }`}
-              disabled
-            >
-              20X
-            </button>
-
-            <button
-              className={`btn btn-xs${
-                rewardMultiplier === 24 ? " !btn-accent" : ""
-              }`}
-              disabled
-            >
-              24X
+              8X
             </button>
           </div>
 
