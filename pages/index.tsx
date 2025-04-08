@@ -478,7 +478,7 @@ const Home: NextPage = () => {
       <Head>
         <title>MMV Farms</title>
       </Head>
-
+</div>
       <Navbar />
 
       <div className="sm:max-w-screen-sm gap-y-4 container flex flex-col self-center flex-1 p-4">
