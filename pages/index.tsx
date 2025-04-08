@@ -220,12 +220,12 @@ const Home: NextPage = () => {
           address: "b92cd3ab59d8fbb1156f07f9bc0deacc9bc4954d",
         },
         {
-          name: "seedFarmCoffee",
-          address: "91e6512a01ddfbe0027f191832cd9cc877d84f15",
-        },
-        {
           name: "lumiCowMilkFarm",
           address: "d8356f78379afca40d2a966beb95e9c27ebc2915",
+        },
+        {
+          name: "seedFarmCoffee",
+          address: "91e6512a01ddfbe0027f191832cd9cc877d84f15",
         },
       ];
 
