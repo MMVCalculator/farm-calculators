@@ -16,7 +16,7 @@ import { CSSTransition } from "react-transition-group";
 
 type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
-type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT" | "COFFEE";
+type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT" | "COFFEE" | "BLUEBERRY";
 type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8 | 14 | 18;
 
 const Home: NextPage = () => {
@@ -227,6 +227,10 @@ const Home: NextPage = () => {
           name: "seedFarmCoffee",
           address: "91e6512a01ddfbe0027f191832cd9cc877d84f15",
         },
+        {
+          name: "seedFarmBlueberry",
+          address: "018391166b47632b95fd50b3c37e8b25cc61ea29",
+        },
       ];
 
       const totalLiquiditiesResponse = await Promise.all(
@@ -362,6 +366,8 @@ const Home: NextPage = () => {
             ? totalLiquidities[3]?.totalLiquidity
             : seedKind === "COFFEE"
             ? totalLiquidities[5]?.totalLiquidity
+            : seedKind === "BLUEBERRY"
+            ? totalLiquidities[6]?.totalLiquidity
             : Infinity) +
             (plantAmount || 0));
 
@@ -662,6 +668,9 @@ const Home: NextPage = () => {
                   case "COFFEE":
                     setRewardMultiplier(2);
                     break;
+                  case "BLUEBERRY":
+                    setRewardMultiplier(2);
+                    break;
                 }
               }}
             >
@@ -919,6 +928,23 @@ const Home: NextPage = () => {
               >
                 COFFEE
               </button>
+
+              <button
+                className={`btn btn-xs${
+                  seedKind === "BLUEBERRY" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("BLUEBERRY");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(2);
+                      break;
+                  
+                  }
+                }}
+              >
+                BLUEBERRY
+              </button>
             </div>
           )}
 
@@ -1062,6 +1088,12 @@ const Home: NextPage = () => {
                       ? (totalLiquidities[5] &&
                           parseFloat(
                             totalLiquidities[5].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
+                    : seedKind === "BLUEBERRY"
+                      ? (totalLiquidities[6] &&
+                          parseFloat(
+                            totalLiquidities[6].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
                       : "-"
