@@ -15,7 +15,7 @@ import { CSSTransition } from "react-transition-group";
 
 type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
-type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT";
+type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT" | "COFFEE";
 type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8 | 14 | 18;
 
 const Home: NextPage = () => {
@@ -219,6 +219,10 @@ const Home: NextPage = () => {
           address: "b92cd3ab59d8fbb1156f07f9bc0deacc9bc4954d",
         },
         {
+          name: "seedFarmCoffee",
+          address: "91e6512a01ddfbe0027f191832cd9cc877d84f15",
+        },
+        {
           name: "lumiCowMilkFarm",
           address: "d8356f78379afca40d2a966beb95e9c27ebc2915",
         },
@@ -355,6 +359,8 @@ const Home: NextPage = () => {
             ? totalLiquidities[2]?.totalLiquidity
             : seedKind === "CARROT"
             ? totalLiquidities[3]?.totalLiquidity
+            : seedKind === "COFFEE"
+            ? totalLiquidities[5]?.totalLiquidity
             : Infinity) +
             (plantAmount || 0));
 
@@ -470,7 +476,7 @@ const Home: NextPage = () => {
   return (
     <div className="bg-base-200 flex flex-col w-screen h-screen overflow-auto min-w-[20rem]">
       <Head>
-        <title>MMVez</title>
+        <title>MMV Farms</title>
       </Head>
 
       <Navbar />
@@ -652,6 +658,9 @@ const Home: NextPage = () => {
                   case "CARROT":
                     setRewardMultiplier(6);
                     break;
+                  case "COFFEE":
+                    setRewardMultiplier(2);
+                    break; 
                 }
               }}
             >
@@ -892,6 +901,24 @@ const Home: NextPage = () => {
               >
                 CARROT
               </button>
+
+              <button
+                className={`btn btn-xs${
+                  seedKind === "COFFEE" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("COFFEE");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(2);
+                      break;                    
+                      }
+                      break;
+                  }
+                }}
+              >
+                COFFEE
+              </button>
             </div>
           )}
 
@@ -1029,6 +1056,12 @@ const Home: NextPage = () => {
                       ? (totalLiquidities[3] &&
                           parseFloat(
                             totalLiquidities[3].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
+                      : seedKind === "COFFEE"
+                      ? (totalLiquidities[5] &&
+                          parseFloat(
+                            totalLiquidities[5].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
                       : "-"
@@ -1169,46 +1202,9 @@ const Home: NextPage = () => {
         <div className="items-center grid-flow-col">
           <p>Copyright © 2022 - All right reserved</p>
         </div>
-        <div className="md:place-self-center md:justify-self-end grid-flow-col gap-4">
-          <Link href="https://www.facebook.com/artzeeker/">
-            <a target="_blank">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                className="fill-current"
-              >
-                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
-              </svg>
-            </a>
-          </Link>
-          <Link href="https://www.youtube.com/channel/UCyqsJtVoVGO98oHvaI14UXg">
-            <a target="_blank">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                className="fill-current"
-              >
-                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
-              </svg>
-            </a>
-          </Link>
-          <Link href="https://twitter.com/artzeeker">
-            <a target="_blank">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                className="fill-current"
-              >
-                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
-              </svg>
-            </a>
-          </Link>
+        
+          
+         
         </div>
       </footer>
     </div>
