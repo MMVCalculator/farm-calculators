@@ -1,4 +1,3 @@
-
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -16,8 +15,17 @@ import { CSSTransition } from "react-transition-group";
 
 type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
-type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT" | "COFFEE" |
-               "BLUEBERRY" | "FISH FOOD" | "CHICKEN FOOD" | "GRASSHOPPER" | "VENGEANCE SPIRIT";
+type SeedKind =
+  | "TOMATO"
+  | "CORN"
+  | "CABBAGE"
+  | "CARROT"
+  | "COFFEE"
+  | "BLUEBERRY"
+  | "FISH FOOD"
+  | "CHICKEN FOOD"
+  | "GRASSHOPPER"
+  | "VENGEANCE SPIRIT";
 type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8 | 14 | 18;
 
 const Home: NextPage = () => {
@@ -49,6 +57,8 @@ const Home: NextPage = () => {
     }[]
   >([]);
   const [yieldPerDay, setYieldPerDay] = useState<number | "-">("-");
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalContent, setModalContent] = useState<string>("");
 
   const initialRates = async () => {
     const now = Math.floor(Date.now() / 1000);
@@ -133,7 +143,7 @@ const Home: NextPage = () => {
         method: "eth_call",
         params: [
           {
-            data: "0x252dba420000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000006e9e62018a013b20bcb7c573690fd1425ddd6b26000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4d06ca61f00000000000000000000000000000000000000000000000032a3b4df72f80e540000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000200000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa36100000000000000000000000067ebd850304c70d983b2d1b93ea79c7cd6c3f6b500000000000000000000000000000000000000000000000000000000",
+            data: "0x252dba420000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000006e9e62018a013b20bcb7c573690fd1425ddd6b26000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4d06ca61f00000000000000000000000000000000000000000000000032a3b4df72f80e5400000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000002000000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa36100000000000000000000000067ebd850304c70d983b2d1b93ea79c7cd6c3f6b500000000000000000000000000000000000000000000000000000000",
             to: "0xb2dd98bd8a916a9fef1ce0e35302a53ae23fd260",
           },
           "latest",
@@ -397,7 +407,24 @@ const Home: NextPage = () => {
             (plantAmount || 0));
 
         const yieldPerDaySeed = parseFloat(
-          (17280 * 0.1 * rewardMultiplier * rewardsSeedPercentage).toFixed(2)
+          (
+            (seedKind === "TOMATO" ||
+            seedKind === "CORN" ||
+            seedKind === "CABBAGE" ||
+            seedKind === "CARROT"
+              ? 17280 / 4 // 96 ชั่วโมง (4 วัน)
+              : seedKind === "COFFEE" ||
+                seedKind === "FISH FOOD" ||
+                seedKind === "BLUEBERRY" ||
+                seedKind === "CHICKEN FOOD" ||
+                seedKind === "GRASSHOPPER" ||
+                seedKind === "VENGEANCE SPIRIT"
+              ? 17280 / 2 // 48 ชั่วโมง (2 วัน)
+              : 17280) * // 24 ชั่วโมง (1 วัน)
+            0.1 *
+            rewardMultiplier *
+            rewardsSeedPercentage
+          ).toFixed(2)
         );
 
         setYieldPerDay(
@@ -423,9 +450,24 @@ const Home: NextPage = () => {
                 stemLkKubAmountToUsd);
 
             const yieldPerDayStemLkKub = parseFloat(
-              (17280 * 0.1 * rewardMultiplier * rewardsLkkubPercentage).toFixed(
-                2
-              )
+              (
+                (seedKind === "TOMATO" ||
+                seedKind === "CORN" ||
+                seedKind === "CABBAGE" ||
+                seedKind === "CARROT"
+                  ? 17280 / 4 // 96 ชั่วโมง (4 วัน)
+                  : seedKind === "COFFEE" ||
+                    seedKind === "FISH FOOD" ||
+                    seedKind === "BLUEBERRY" ||
+                    seedKind === "CHICKEN FOOD" ||
+                    seedKind === "GRASSHOPPER" ||
+                    seedKind === "VENGEANCE SPIRIT"
+                  ? 17280 / 2 // 48 ชั่วโมง (2 วัน)
+                  : 17280) * // 24 ชั่วโมง (1 วัน)
+                0.1 *
+                rewardMultiplier *
+                rewardsLkkubPercentage
+              ).toFixed(2)
             );
 
             setYieldPerDay(
@@ -450,7 +492,19 @@ const Home: NextPage = () => {
 
             const yieldPerDayStemLkUsdt = parseFloat(
               (
-                17280 *
+                (seedKind === "TOMATO" ||
+                seedKind === "CORN" ||
+                seedKind === "CABBAGE" ||
+                seedKind === "CARROT"
+                  ? 17280 / 4 // 96 ชั่วโมง (4 วัน)
+                  : seedKind === "COFFEE" ||
+                    seedKind === "FISH FOOD" ||
+                    seedKind === "BLUEBERRY" ||
+                    seedKind === "CHICKEN FOOD" ||
+                    seedKind === "GRASSHOPPER" ||
+                    seedKind === "VENGEANCE SPIRIT"
+                  ? 17280 / 2 // 48 ชั่วโมง (2 วัน)
+                  : 17280) * // 24 ชั่วโมง (1 วัน)
                 0.1 *
                 rewardMultiplier *
                 rewardsLkUsdtPercentage
@@ -478,7 +532,8 @@ const Home: NextPage = () => {
             (plantAmount || 0));
 
         const yieldPerDayLumi = parseFloat(
-          (17280 * 0.1 * rewardMultiplier * rewardsLumiPercentage).toFixed(2)
+          ((17280 / 2) * 0.1 * rewardMultiplier * rewardsLumiPercentage) // LUMI ใช้ 48 ชั่วโมง
+            .toFixed(2)
         );
 
         setYieldPerDay(
@@ -672,7 +727,7 @@ const Home: NextPage = () => {
         <div className="card bg-base-100 flex flex-col p-4 space-y-4 overflow-hidden shadow-lg">
           <h1 className="text-lg font-medium text-center">คำนวณผลผลิตต่อวัน</h1>
 
-          <div className="btn-group self-center">
+          <div className="btn-group flex flex-wrap self-center justify-center">
             <button
               className={`btn${plantKind === "SEED" ? " btn-active" : ""}`}
               onClick={() => {
@@ -696,7 +751,7 @@ const Home: NextPage = () => {
                   case "BLUEBERRY":
                     setRewardMultiplier(2);
                     break;
-                 case "FISH FOOD":
+                  case "FISH FOOD":
                     setRewardMultiplier(8);
                     break;
                   case "CHICKEN FOOD":
@@ -714,10 +769,7 @@ const Home: NextPage = () => {
               SEED
             </button>
 
-            <div
-              className="tooltip peer-hover:visible self-center"
-              data-tip="ปิดการใช้งานการคำนวณ STEM ไว้ชั่วคราว เนื่องจากมีการคำนวณที่คาดเคลื่อนสูงเกินไป"
-            >
+            <div className="flex items-center self-center">
               <button
                 className={`rounded-none btn${
                   plantKind === "STEM" ? " btn-active" : ""
@@ -763,6 +815,17 @@ const Home: NextPage = () => {
               >
                 STEM
               </button>
+              <button
+                className="btn btn-circle btn-ghost btn-xs text-info ml-1"
+                onClick={() => {
+                  setModalContent(
+                    "ปิดการใช้งานการคำนวณ STEM ไว้ชั่วคราว เนื่องจากมีการคำนวณที่คาดเคลื่อนสูงเกินไป"
+                  );
+                  setShowModal(true);
+                }}
+              >
+                ⓘ
+              </button>
             </div>
 
             <button
@@ -777,7 +840,7 @@ const Home: NextPage = () => {
           </div>
 
           {plantKind === "STEM" && (
-            <div className="btn-group self-center">
+            <div className="btn-group flex flex-wrap self-center justify-center">
               <button
                 className={`btn btn-sm${
                   stemLP === "LKKUB" ? " btn-active" : ""
@@ -844,9 +907,9 @@ const Home: NextPage = () => {
           </div>
 
           {plantKind !== "LUMI" && (
-            <div className="btn-group self-center">
+            <div className="btn-group flex flex-wrap self-center justify-center">
               <button
-                className={`btn btn-xs${
+                className={`btn btn-xs tomato-btn${
                   seedKind === "TOMATO" ? " btn-active" : ""
                 }`}
                 onClick={() => {
@@ -959,7 +1022,6 @@ const Home: NextPage = () => {
                     case "SEED":
                       setRewardMultiplier(2);
                       break;
-                  
                   }
                 }}
               >
@@ -976,7 +1038,6 @@ const Home: NextPage = () => {
                     case "SEED":
                       setRewardMultiplier(2);
                       break;
-                  
                   }
                 }}
               >
@@ -993,7 +1054,6 @@ const Home: NextPage = () => {
                     case "SEED":
                       setRewardMultiplier(8);
                       break;
-                  
                   }
                 }}
               >
@@ -1010,7 +1070,6 @@ const Home: NextPage = () => {
                     case "SEED":
                       setRewardMultiplier(2);
                       break;
-                  
                   }
                 }}
               >
@@ -1027,7 +1086,6 @@ const Home: NextPage = () => {
                     case "SEED":
                       setRewardMultiplier(1);
                       break;
-                  
                   }
                 }}
               >
@@ -1044,17 +1102,15 @@ const Home: NextPage = () => {
                     case "SEED":
                       setRewardMultiplier(3);
                       break;
-                  
                   }
                 }}
               >
                 VENGEANCE SPIRIT
               </button>
-             
             </div>
           )}
 
-          <div className="btn-group self-center">
+          <div className="btn-group flex flex-wrap self-center justify-center">
             <button
               className={`btn btn-xs${
                 rewardMultiplier === 1 ? " !btn-accent" : ""
@@ -1153,12 +1209,15 @@ const Home: NextPage = () => {
           <div className="form-control">
             <label className="label">
               <span className="label-text">Total Liquidity</span>
-              <div
-                data-tip="คลิกที่แปลงผักที่จะปลูกในเกม"
-                className="label-text-alt tooltip tooltip-left"
+              <button
+                className="label-text-alt btn btn-circle btn-ghost btn-xs text-info"
+                onClick={() => {
+                  setModalContent("คลิกที่แปลงผักที่จะปลูกในเกม");
+                  setShowModal(true);
+                }}
               >
-                อยู่ตรงไหน?
-              </div>
+                ⓘ
+              </button>
             </label>
             <label className="input-group input-group-sm">
               <input
@@ -1190,31 +1249,31 @@ const Home: NextPage = () => {
                             totalLiquidities[3].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
-                    : seedKind === "COFFEE"
+                      : seedKind === "COFFEE"
                       ? (totalLiquidities[5] &&
                           parseFloat(
                             totalLiquidities[5].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
-                    : seedKind === "BLUEBERRY"
+                      : seedKind === "BLUEBERRY"
                       ? (totalLiquidities[6] &&
                           parseFloat(
                             totalLiquidities[6].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
-                    : seedKind === "FISH FOOD"
+                      : seedKind === "FISH FOOD"
                       ? (totalLiquidities[7] &&
                           parseFloat(
                             totalLiquidities[7].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
-                     : seedKind === "CHICKEN FOOD"
+                      : seedKind === "CHICKEN FOOD"
                       ? (totalLiquidities[8] &&
                           parseFloat(
                             totalLiquidities[8].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
-                     : seedKind === "GRASSHOPPER"
+                      : seedKind === "GRASSHOPPER"
                       ? (totalLiquidities[9] &&
                           parseFloat(
                             totalLiquidities[9].totalLiquidity.toFixed(2)
@@ -1257,7 +1316,7 @@ const Home: NextPage = () => {
             <div className="stat p-2 border-none">
               <div className="stat-title flex items-center gap-2 text-xs opacity-100">
                 <div className="flex items-center justify-center opacity-50">
-                  Produce Rate
+                  Produce Rate (ต่อวัน)
                 </div>
                 <div className="ring-[1.5px] ring-accent self-center w-4 h-4 rounded-full">
                   <Image
@@ -1279,8 +1338,37 @@ const Home: NextPage = () => {
                     : ""
                 }${yieldPerDay.toLocaleString("th-TH")}`}
               </div>
-              <div className="stat-title text-xs">
-                {plantKind === "LUMI" ? "Milk" : "Crops"}/Day
+              <div className="stat-title flex items-start text-xs">
+                <div className="relative flex items-center w-full h-8 pb-4">
+                  <span className="whitespace-nowrap">
+                    {plantKind === "LUMI" ? "Milk" : "Crops"}/Day
+                  </span>
+                  <button
+                    className="btn btn-circle btn-ghost btn-xs text-info ml-1"
+                    onClick={() => {
+                      setModalContent(
+                        plantKind === "LUMI"
+                          ? "48 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (คำนวณเป็นต่อวัน)"
+                          : seedKind === "TOMATO" ||
+                            seedKind === "CORN" ||
+                            seedKind === "CABBAGE" ||
+                            seedKind === "CARROT"
+                          ? "96 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (คำนวณเป็นต่อวัน)"
+                          : seedKind === "COFFEE" ||
+                            seedKind === "FISH FOOD" ||
+                            seedKind === "BLUEBERRY" ||
+                            seedKind === "CHICKEN FOOD" ||
+                            seedKind === "GRASSHOPPER" ||
+                            seedKind === "VENGEANCE SPIRIT"
+                          ? "48 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (คำนวณเป็นต่อวัน)"
+                          : "24 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (คำนวณเป็นต่อวัน)"
+                      );
+                      setShowModal(true);
+                    }}
+                  >
+                    ⓘ
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -1304,7 +1392,34 @@ const Home: NextPage = () => {
                     ? `≈ ${(yieldPerDay * 2).toLocaleString("th-TH")}`
                     : "-"}
                 </div>
-                <div className="stat-title text-xs">Crops</div>
+                <div className="stat-title flex items-start text-xs">
+                  <div className="relative flex items-center w-full h-8 pb-4">
+                    <span className="whitespace-nowrap">Crops/Harvest</span>
+                    <button
+                      className="btn btn-circle btn-ghost btn-xs text-info ml-1"
+                      onClick={() => {
+                        setModalContent(
+                          seedKind === "TOMATO" ||
+                            seedKind === "CORN" ||
+                            seedKind === "CABBAGE" ||
+                            seedKind === "CARROT"
+                            ? "96 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (ผลผลิตเมื่อครบเวลา)"
+                            : seedKind === "COFFEE" ||
+                              seedKind === "FISH FOOD" ||
+                              seedKind === "BLUEBERRY" ||
+                              seedKind === "CHICKEN FOOD" ||
+                              seedKind === "GRASSHOPPER" ||
+                              seedKind === "VENGEANCE SPIRIT"
+                            ? "48 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (ผลผลิตเมื่อครบเวลา)"
+                            : "24 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (ผลผลิตเมื่อครบเวลา)"
+                        );
+                        setShowModal(true);
+                      }}
+                    >
+                      ⓘ
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -1400,12 +1515,30 @@ const Home: NextPage = () => {
                 viewBox="0 0 24 24"
                 className="fill-current"
               >
-                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-.433.232-1.205.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
               </svg>
             </a>
           </Link>
         </div>
       </footer>
+
+      {/* โมดอลสำหรับแสดงข้อความ */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+          <div className="bg-base-100 w-full max-w-md p-6 rounded-lg shadow-xl">
+            <h3 className="mb-4 text-lg font-bold">ข้อมูลเพิ่มเติม</h3>
+            <p className="py-4">{modalContent}</p>
+            <div className="modal-action">
+              <button
+                className="btn btn-primary"
+                onClick={() => setShowModal(false)}
+              >
+                ปิด
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
