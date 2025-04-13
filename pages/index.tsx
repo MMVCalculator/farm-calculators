@@ -1365,7 +1365,7 @@ const Home: NextPage = () => {
           <p>Copyright © 2025 - All right reserved</p>
         </div>
         <div className="md:place-self-center md:justify-self-end grid-flow-col gap-4">
-          <Link href="https://www.facebook.com/BreezFin14/">
+          <Link href="https://m.facebook.com/BreezFin14?/">
             <a target="_blank">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
