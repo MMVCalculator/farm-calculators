@@ -421,7 +421,7 @@ const Home: NextPage = () => {
                 seedKind === "VENGEANCE SPIRIT"
               ? 17280 / 2 // 48 ชั่วโมง (2 วัน)
               : 17280) * // 24 ชั่วโมง (1 วัน)
-            0.1 *
+            0.2 *
             rewardMultiplier *
             rewardsSeedPercentage
           ).toFixed(2)
@@ -464,7 +464,7 @@ const Home: NextPage = () => {
                     seedKind === "VENGEANCE SPIRIT"
                   ? 17280 / 2 // 48 ชั่วโมง (2 วัน)
                   : 17280) * // 24 ชั่วโมง (1 วัน)
-                0.1 *
+                0.2 *
                 rewardMultiplier *
                 rewardsLkkubPercentage
               ).toFixed(2)
@@ -505,7 +505,7 @@ const Home: NextPage = () => {
                     seedKind === "VENGEANCE SPIRIT"
                   ? 17280 / 2 // 48 ชั่วโมง (2 วัน)
                   : 17280) * // 24 ชั่วโมง (1 วัน)
-                0.1 *
+                0.2 *
                 rewardMultiplier *
                 rewardsLkUsdtPercentage
               ).toFixed(2)
@@ -532,7 +532,7 @@ const Home: NextPage = () => {
             (plantAmount || 0));
 
         const yieldPerDayLumi = parseFloat(
-          ((17280 / 2) * 0.1 * rewardMultiplier * rewardsLumiPercentage) // LUMI ใช้ 48 ชั่วโมง
+          ((17280 / 2) * 0.2 * rewardMultiplier * rewardsLumiPercentage) // LUMI ใช้ 48 ชั่วโมง
             .toFixed(2)
         );
 
