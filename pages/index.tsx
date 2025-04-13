@@ -17,7 +17,7 @@ import { CSSTransition } from "react-transition-group";
 type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT" | "COFFEE" |
-               "BLUEBERRY" | "FISH FOOD" | "CHICKEN FOOD";
+               "BLUEBERRY" | "FISH FOOD" | "CHICKEN FOOD" | "GRASSHOPPER";
 type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8 | 14 | 18;
 
 const Home: NextPage = () => {
@@ -240,6 +240,10 @@ const Home: NextPage = () => {
           name: "seedFarmCHICKEN FOOD",
           address: "fb0d3b5Fa8C211B88Be2bb4F51399bfBAA28dd7c",
         },
+        {
+          name: "seedFarmGRASSHOPPER",
+          address: "3aFe6bA743E39d220E6f8Be326E90768D9693BED",
+        },
       ];
 
       const totalLiquiditiesResponse = await Promise.all(
@@ -381,6 +385,8 @@ const Home: NextPage = () => {
             ? totalLiquidities[7]?.totalLiquidity
             : seedKind === "CHICKEN FOOD"
             ? totalLiquidities[8]?.totalLiquidity
+            : seedKind === "GRASSHOPPER"
+            ? totalLiquidities[9]?.totalLiquidity
             : Infinity) +
             (plantAmount || 0));
 
@@ -690,6 +696,9 @@ const Home: NextPage = () => {
                   case "CHICKEN FOOD":
                     setRewardMultiplier(2);
                     break;
+                  case "GRASSHOPPER":
+                    setRewardMultiplier(1);
+                    break;
                 }
               }}
             >
@@ -998,6 +1007,23 @@ const Home: NextPage = () => {
               >
                 CHICKEN FOOD
               </button>
+
+              <button
+                className={`btn btn-xs${
+                  seedKind === "GRASSHOPPER" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("GRASSHOPPER");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(1);
+                      break;
+                  
+                  }
+                }}
+              >
+                GRASSHOPPER
+              </button>
              
             </div>
           )}
@@ -1162,6 +1188,12 @@ const Home: NextPage = () => {
                             totalLiquidities[8].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
+                     : seedKind === "GRASSHOPPER"
+                      ? (totalLiquidities[9] &&
+                          parseFloat(
+                            totalLiquidities[9].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
                       : "-"
                     : plantKind === "LUMI"
                     ? (totalLiquidities[4] &&
@@ -1298,10 +1330,10 @@ const Home: NextPage = () => {
 
       <footer className="footer bg-neutral text-neutral-content items-center gap-4 p-4">
         <div className="items-center grid-flow-col">
-          <p>Copyright © 2022 - All right reserved</p>
+          <p>Copyright © 2025 - All right reserved</p>
         </div>
         <div className="md:place-self-center md:justify-self-end grid-flow-col gap-4">
-          <Link href="https://www.facebook.com/artzeeker/">
+          <Link href="https://www.facebook.com/BreezFin14/">
             <a target="_blank">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
