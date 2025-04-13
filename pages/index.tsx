@@ -17,7 +17,7 @@ import { CSSTransition } from "react-transition-group";
 type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
 type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT" | "COFFEE" |
-               "BLUEBERRY" | "FISH FOOD" | "CHICKEN FOOD" | "GRASSHOPPER";
+               "BLUEBERRY" | "FISH FOOD" | "CHICKEN FOOD" | "GRASSHOPPER" | "VENGEANCE SPIRIT";
 type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8 | 14 | 18;
 
 const Home: NextPage = () => {
@@ -244,6 +244,10 @@ const Home: NextPage = () => {
           name: "seedFarmGRASSHOPPER",
           address: "3aFe6bA743E39d220E6f8Be326E90768D9693BED",
         },
+        {
+          name: "seedFarmVENGEANCE SPIRIT",
+          address: "f28BD01f921F8415Ca94812724D8562A21ACB96F",
+        },
       ];
 
       const totalLiquiditiesResponse = await Promise.all(
@@ -387,6 +391,8 @@ const Home: NextPage = () => {
             ? totalLiquidities[8]?.totalLiquidity
             : seedKind === "GRASSHOPPER"
             ? totalLiquidities[9]?.totalLiquidity
+            : seedKind === "VENGEANCE SPIRIT"
+            ? totalLiquidities[10]?.totalLiquidity
             : Infinity) +
             (plantAmount || 0));
 
@@ -698,6 +704,9 @@ const Home: NextPage = () => {
                     break;
                   case "GRASSHOPPER":
                     setRewardMultiplier(1);
+                    break;
+                  case "VENGEANCE SPIRIT":
+                    setRewardMultiplier(3);
                     break;
                 }
               }}
@@ -1024,6 +1033,23 @@ const Home: NextPage = () => {
               >
                 GRASSHOPPER
               </button>
+
+              <button
+                className={`btn btn-xs${
+                  seedKind === "VENGEANCE SPIRIT" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("VENGEANCE SPIRIT");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(3);
+                      break;
+                  
+                  }
+                }}
+              >
+                VENGEANCE SPIRIT
+              </button>
              
             </div>
           )}
@@ -1194,6 +1220,12 @@ const Home: NextPage = () => {
                             totalLiquidities[9].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
+                      : seedKind === "VENGEANCE SPIRIT"
+                      ? (totalLiquidities[10] &&
+                          parseFloat(
+                            totalLiquidities[10].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
                       : "-"
                     : plantKind === "LUMI"
                     ? (totalLiquidities[4] &&
@@ -1346,7 +1378,7 @@ const Home: NextPage = () => {
               </svg>
             </a>
           </Link>
-          <Link href="https://www.youtube.com/channel/UCyqsJtVoVGO98oHvaI14UXg">
+          <Link href="https://www.youtube.com/@pisanupongthamthitipong7885">
             <a target="_blank">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1359,7 +1391,7 @@ const Home: NextPage = () => {
               </svg>
             </a>
           </Link>
-          <Link href="https://twitter.com/artzeeker">
+          <Link href="https://twitter.com/">
             <a target="_blank">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
