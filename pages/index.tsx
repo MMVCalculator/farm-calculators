@@ -1122,7 +1122,7 @@ const Home: NextPage = () => {
                             totalLiquidities[6].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
-                   : seedKind === "FISH FOOD"
+                   : seedKind === "CHICKEN FOOD"
                       ? (totalLiquidities[7] &&
                           parseFloat(
                             totalLiquidities[7].totalLiquidity.toFixed(2)
