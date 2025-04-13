@@ -16,7 +16,7 @@ import { CSSTransition } from "react-transition-group";
 
 type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
-type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT" | "COFFEE" | "BLUEBERRY" | "CHICKEN FOOD";
+type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT" | "COFFEE" | "BLUEBERRY";
 type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8 | 14 | 18;
 
 const Home: NextPage = () => {
@@ -231,10 +231,7 @@ const Home: NextPage = () => {
           name: "seedFarmBlueberry",
           address: "018391166b47632b95fd50b3c37e8b25cc61ea29",
         },
-        {
-          name: "seedFarmChickenfood",
-          address: "0xfb0d3b5Fa8C211B88Be2bb4F51399bfBAA28dd7c",
-        },
+        
       ];
 
       const totalLiquiditiesResponse = await Promise.all(
@@ -372,8 +369,6 @@ const Home: NextPage = () => {
             ? totalLiquidities[5]?.totalLiquidity
             : seedKind === "BLUEBERRY"
             ? totalLiquidities[6]?.totalLiquidity
-            : seedKind === "CHICKEN FOOD"
-            ? totalLiquidities[7]?.totalLiquidity
             : Infinity) +
             (plantAmount || 0));
 
@@ -677,9 +672,7 @@ const Home: NextPage = () => {
                   case "BLUEBERRY":
                     setRewardMultiplier(2);
                     break;
-                  case "CHICKEN FOOD":
-                    setRewardMultiplier(2);
-                    break;
+                 
                 }
               }}
             >
@@ -955,22 +948,7 @@ const Home: NextPage = () => {
                 BLUEBERRY
               </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "CHICKEN FOOD" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("CHICKEN FOOD");
-                  switch (plantKind) {
-                    case "SEED":
-                      setRewardMultiplier(2);
-                      break;
-                  
-                  }
-                }}
-              >
-                CHICKEN FOOD
-              </button>
+             
             </div>
           )}
 
@@ -1122,12 +1100,6 @@ const Home: NextPage = () => {
                             totalLiquidities[6].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
-                   : seedKind === "CHICKEN FOOD"
-                      ? (totalLiquidities[7] &&
-                          parseFloat(
-                            totalLiquidities[7].totalLiquidity.toFixed(2)
-                          ).toLocaleString("th-TH")) ||
-                        "-"
                       : "-"
                     : plantKind === "LUMI"
                     ? (totalLiquidities[4] &&
@@ -1190,7 +1162,7 @@ const Home: NextPage = () => {
               <div className="stat p-2 border-none">
                 <div className="stat-title flex items-center gap-2 text-xs opacity-100">
                   <div className="flex items-center justify-center opacity-50">
-                    48 hours earn
+                    earn
                   </div>
                   <div className="ring-[1.5px] ring-accent self-center w-4 h-4 rounded-full">
                     <Image
