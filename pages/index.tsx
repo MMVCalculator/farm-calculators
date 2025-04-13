@@ -16,7 +16,7 @@ import { CSSTransition } from "react-transition-group";
 
 type PlantKind = "SEED" | "STEM" | "LUMI";
 type StemLP = "LKKUB" | "LKUSDT";
-type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT" | "COFFEE" | "BLUEBERRY" | "FISH FOOD";
+type SeedKind = "TOMATO" | "CORN" | "CABBAGE" | "CARROT" | "COFFEE" | "BLUEBERRY" | "CHICKEN FOOD";
 type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8 | 14 | 18;
 
 const Home: NextPage = () => {
@@ -232,8 +232,8 @@ const Home: NextPage = () => {
           address: "018391166b47632b95fd50b3c37e8b25cc61ea29",
         },
         {
-          name: "seedFarmFishfood",
-          address: "0x2CA957C560151148aA4AB677f4171E265e76806E",
+          name: "seedFarmChickenfood",
+          address: "0xfb0d3b5Fa8C211B88Be2bb4F51399bfBAA28dd7c",
         },
       ];
 
@@ -372,7 +372,7 @@ const Home: NextPage = () => {
             ? totalLiquidities[5]?.totalLiquidity
             : seedKind === "BLUEBERRY"
             ? totalLiquidities[6]?.totalLiquidity
-            : seedKind === "FISH FOOD"
+            : seedKind === "CHICKEN FOOD"
             ? totalLiquidities[7]?.totalLiquidity
             : Infinity) +
             (plantAmount || 0));
@@ -677,8 +677,8 @@ const Home: NextPage = () => {
                   case "BLUEBERRY":
                     setRewardMultiplier(2);
                     break;
-                  case "FISH FOOD":
-                    setRewardMultiplier(8);
+                  case "CHICKEN FOOD":
+                    setRewardMultiplier(2);
                     break;
                 }
               }}
@@ -957,19 +957,19 @@ const Home: NextPage = () => {
 
               <button
                 className={`btn btn-xs${
-                  seedKind === "FISH FOOD" ? " btn-active" : ""
+                  seedKind === "CHICKEN FOOD" ? " btn-active" : ""
                 }`}
                 onClick={() => {
-                  setSeedKind("FISH FOOD");
+                  setSeedKind("CHICKEN FOOD");
                   switch (plantKind) {
                     case "SEED":
-                      setRewardMultiplier(8);
+                      setRewardMultiplier(2);
                       break;
                   
                   }
                 }}
               >
-                FISH FOOD
+                CHICKEN FOOD
               </button>
             </div>
           )}
