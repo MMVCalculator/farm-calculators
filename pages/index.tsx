@@ -412,14 +412,14 @@ const Home: NextPage = () => {
             seedKind === "CORN" ||
             seedKind === "CABBAGE" ||
             seedKind === "CARROT"
-              ? 17280 / 4 // 96 ชั่วโมง (4 วัน)
+              ? 17280 // 96 ชั่วโมง (4 วัน)
               : seedKind === "COFFEE" ||
                 seedKind === "FISH FOOD" ||
                 seedKind === "BLUEBERRY" ||
                 seedKind === "CHICKEN FOOD" ||
                 seedKind === "GRASSHOPPER" ||
                 seedKind === "VENGEANCE SPIRIT"
-              ? 17280 / 2 // 48 ชั่วโมง (2 วัน)
+              ? 17280 // 48 ชั่วโมง (2 วัน)
               : 17280) * // 24 ชั่วโมง (1 วัน)
             0.1 *
             rewardMultiplier *
@@ -455,14 +455,14 @@ const Home: NextPage = () => {
                 seedKind === "CORN" ||
                 seedKind === "CABBAGE" ||
                 seedKind === "CARROT"
-                  ? 17280 / 4 // 96 ชั่วโมง (4 วัน)
+                  ? 17280 // 96 ชั่วโมง (4 วัน)
                   : seedKind === "COFFEE" ||
                     seedKind === "FISH FOOD" ||
                     seedKind === "BLUEBERRY" ||
                     seedKind === "CHICKEN FOOD" ||
                     seedKind === "GRASSHOPPER" ||
                     seedKind === "VENGEANCE SPIRIT"
-                  ? 17280 / 2 // 48 ชั่วโมง (2 วัน)
+                  ? 17280 // 48 ชั่วโมง (2 วัน)
                   : 17280) * // 24 ชั่วโมง (1 วัน)
                 0.1 *
                 rewardMultiplier *
@@ -496,14 +496,14 @@ const Home: NextPage = () => {
                 seedKind === "CORN" ||
                 seedKind === "CABBAGE" ||
                 seedKind === "CARROT"
-                  ? 17280 / 4 // 96 ชั่วโมง (4 วัน)
+                  ? 17280 // 96 ชั่วโมง (4 วัน)
                   : seedKind === "COFFEE" ||
                     seedKind === "FISH FOOD" ||
                     seedKind === "BLUEBERRY" ||
                     seedKind === "CHICKEN FOOD" ||
                     seedKind === "GRASSHOPPER" ||
                     seedKind === "VENGEANCE SPIRIT"
-                  ? 17280 / 2 // 48 ชั่วโมง (2 วัน)
+                  ? 17280 // 48 ชั่วโมง (2 วัน)
                   : 17280) * // 24 ชั่วโมง (1 วัน)
                 0.1 *
                 rewardMultiplier *
@@ -532,7 +532,7 @@ const Home: NextPage = () => {
             (plantAmount || 0));
 
         const yieldPerDayLumi = parseFloat(
-          (17280 * 2 * 0.1 * rewardMultiplier * rewardsLumiPercentage) // LUMI ใช้ 48 ชั่วโมง
+          (17280 * 0.1 * rewardMultiplier * rewardsLumiPercentage) // LUMI ใช้ 48 ชั่วโมง
             .toFixed(2)
         );
 
@@ -1389,7 +1389,16 @@ const Home: NextPage = () => {
                 </div>
                 <div className="stat-value text-lg">
                   {typeof yieldPerDay === "number"
-                    ? `≈ ${(yieldPerDay * 2).toLocaleString("th-TH")}`
+                    ? `≈ ${(
+                        yieldPerDay *
+                        (seedKind === "TOMATO" ||
+                        seedKind === "CORN" ||
+                        seedKind === "CABBAGE" ||
+                        seedKind === "CARROT"
+                          ? 4 // 4 วัน
+                          : 2)
+                      ) // 2 วัน
+                        .toLocaleString("th-TH")}`
                     : "-"}
                 </div>
                 <div className="stat-title flex items-start text-xs">
@@ -1443,7 +1452,14 @@ const Home: NextPage = () => {
                 {typeof yieldPerDay === "number"
                   ? `≈ ${(
                       yieldPerDay *
-                      (plantKind === "STEM" ? 1 : 2) *
+                      (plantKind === "STEM"
+                        ? 1
+                        : seedKind === "TOMATO" ||
+                          seedKind === "CORN" ||
+                          seedKind === "CABBAGE" ||
+                          seedKind === "CARROT"
+                        ? 4 // 4 วัน
+                        : 2) * // 2 วัน
                       0.095
                     ).toLocaleString("th-TH")}`
                   : "-"}
@@ -1460,7 +1476,14 @@ const Home: NextPage = () => {
                   ? `≈ ${parseFloat(
                       (
                         yieldPerDay *
-                        (plantKind === "STEM" ? 1 : 2) *
+                        (plantKind === "STEM"
+                          ? 1
+                          : seedKind === "TOMATO" ||
+                            seedKind === "CORN" ||
+                            seedKind === "CABBAGE" ||
+                            seedKind === "CARROT"
+                          ? 4 // 4 วัน
+                          : 2) * // 2 วัน
                         0.095 *
                         (thbLumi || 0)
                       ).toFixed(2)
