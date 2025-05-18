@@ -264,7 +264,7 @@ const Home: NextPage = () => {
           address: "95013dcb6a561e6c003aed9c43fb8b64008aa361",
         },
       ];
-0x95013dcb6a561e6c003aed9c43fb8b64008aa361
+
       const totalLiquiditiesResponse = await Promise.all(
         tokens.map((token) => {
           return axios.post<{
