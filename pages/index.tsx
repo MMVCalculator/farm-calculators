@@ -26,7 +26,12 @@ type SeedKind =
   | "CHICKEN FOOD"
   | "GRASSHOPPER"
   | "VENGEANCE SPIRIT"
-  | "Lumber";
+  | "Lumber"
+  | "Marble"
+  | "FineLeather"
+  | "MetalPlate"
+  | "GrasshopperVIP"
+  | "AutometaFactory";
 type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8 | 14 | 18;
 
 const Home: NextPage = () => {
@@ -263,6 +268,26 @@ const Home: NextPage = () => {
           name: "seedFarmLumber",
           address: "1cdc2742503e14ccbb7ccafc9e3827797aad5624",
         },
+        {
+          name: "seedFarmMarble",
+          address: "39ed31efb1b3bb70c69691259ebe9738a9669194",
+        },
+        {
+          name: "seedFarmFineLeather",
+          address: "bf1749d0a82a6e1282c7f9d103a62241b6803c84",
+        },
+        {
+          name: "seedFarmMetalPlate",
+          address: "8b3f75634a98e26769c6c56a97fd905c1a25f8fb",
+        },
+        {
+          name: "seedFarmGrasshopperVIP",
+          address: "085fffe988f7958d84622c59775ca614ea5cf902",
+        },
+        {
+          name: "seedFarmAutometaFactory",
+          address: "38Ab0899aD985bfAb105cac29ABF4DCd85256234",
+        },
         
       ];
 
@@ -411,6 +436,16 @@ const Home: NextPage = () => {
             ? totalLiquidities[10]?.totalLiquidity
             : seedKind === "Lumber"
             ? totalLiquidities[11]?.totalLiquidity
+            : seedKind === "Marble"
+            ? totalLiquidities[12]?.totalLiquidity
+            : seedKind === "FineLeather"
+            ? totalLiquidities[13]?.totalLiquidity
+            : seedKind === "MetalPlate"
+            ? totalLiquidities[14]?.totalLiquidity
+            : seedKind === "GrasshopperVIP"
+            ? totalLiquidities[15]?.totalLiquidity
+            : seedKind === "AutometaFactory"
+            ? totalLiquidities[16]?.totalLiquidity
             : Infinity) +
             (plantAmount || 0));
 
@@ -427,7 +462,12 @@ const Home: NextPage = () => {
                 seedKind === "CHICKEN FOOD" ||
                 seedKind === "GRASSHOPPER" ||
                 seedKind === "VENGEANCE SPIRIT" ||
-                seedKind === "Lumber"
+                seedKind === "Lumber" ||
+                seedKind === "Marble" ||
+                seedKind === "FineLeather" ||
+                seedKind === "MetalPlate" ||
+                seedKind === "GrasshopperVIP" ||
+                seedKind === "AutometaFactory"
                
               ? 17280 // 48 ชั่วโมง (2 วัน)
               : 17280) * // 24 ชั่วโมง (1 วัน)
@@ -472,7 +512,12 @@ const Home: NextPage = () => {
                     seedKind === "CHICKEN FOOD" ||
                     seedKind === "GRASSHOPPER" ||
                     seedKind === "VENGEANCE SPIRIT" ||
-                    seedKind === "Lumber"
+                    seedKind === "Lumber" ||
+                    seedKind === "Marble" ||
+                    seedKind === "FineLeather" ||
+                    seedKind === "MetalPlate" ||
+                    seedKind === "GrasshopperVIP" ||
+                    seedKind === "AutometaFactory"
                     
                   ? 17280 // 48 ชั่วโมง (2 วัน)
                   : 17280) * // 24 ชั่วโมง (1 วัน)
@@ -515,7 +560,12 @@ const Home: NextPage = () => {
                     seedKind === "CHICKEN FOOD" ||
                     seedKind === "GRASSHOPPER" ||
                     seedKind === "VENGEANCE SPIRIT" ||
-                    seedKind === "Lumber"
+                   seedKind === "Lumber" ||
+                   seedKind === "Marble" ||
+                   seedKind === "FineLeather" ||
+                   seedKind === "MetalPlate" ||
+                   seedKind === "GrasshopperVIP" ||
+                   seedKind === "AutometaFactory"
                     
                   ? 17280 // 48 ชั่วโมง (2 วัน)
                   : 17280) * // 24 ชั่วโมง (1 วัน)
@@ -779,6 +829,21 @@ const Home: NextPage = () => {
                     break;
                   case "Lumber":
                     setRewardMultiplier(1);
+                    break;
+                  case "Marble":
+                    setRewardMultiplier(1);
+                    break;  
+                  case "FineLeather":
+                    setRewardMultiplier(1);
+                    break;  
+                  case "MetalPlate":
+                    setRewardMultiplier(1);
+                    break;  
+                  case "GrasshopperVIP":
+                    setRewardMultiplier(4);
+                    break;  
+                  case "AutometaFactory":
+                    setRewardMultiplier(2);
                     break;  
                   
                 }
@@ -1142,6 +1207,86 @@ const Home: NextPage = () => {
                 Lumber
               </button>
 
+              <button
+                className={`btn btn-xs${
+                  seedKind === "Marble" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("Marble");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(1);
+                      break;
+                  }
+                }}
+              >
+                Marble
+              </button>
+
+              <button
+                className={`btn btn-xs${
+                  seedKind === "FineLeather" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("FineLeather");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(1);
+                      break;
+                  }
+                }}
+              >
+                FineLeather
+              </button>
+
+              <button
+                className={`btn btn-xs${
+                  seedKind === "MetalPlate" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("MetalPlate");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(1);
+                      break;
+                  }
+                }}
+              >
+                MetalPlate
+              </button>
+
+              <button
+                className={`btn btn-xs${
+                  seedKind === "GrasshopperVIP" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("GrasshopperVIP");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(4);
+                      break;
+                  }
+                }}
+              >
+                GrasshopperVIP
+              </button>
+
+              <button
+                className={`btn btn-xs${
+                  seedKind === "AutometaFactory" ? " btn-active" : ""
+                }`}
+                onClick={() => {
+                  setSeedKind("AutometaFactory");
+                  switch (plantKind) {
+                    case "SEED":
+                      setRewardMultiplier(2);
+                      break;
+                  }
+                }}
+              >
+                AutometaFactory
+              </button>
+
             </div>
           )}
 
@@ -1326,6 +1471,36 @@ const Home: NextPage = () => {
                             totalLiquidities[11].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
+                      : seedKind === "Marble"
+                      ? (totalLiquidities[12] &&
+                          parseFloat(
+                            totalLiquidities[12].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
+                      : seedKind === "FineLeather"
+                      ? (totalLiquidities[13] &&
+                          parseFloat(
+                            totalLiquidities[13].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
+                  : seedKind === "MetalPlate"
+                      ? (totalLiquidities[14] &&
+                          parseFloat(
+                            totalLiquidities[14].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
+                  : seedKind === "GrasshopperVIP"
+                      ? (totalLiquidities[15] &&
+                          parseFloat(
+                            totalLiquidities[15].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
+                  : seedKind === "AutometaFactory"
+                      ? (totalLiquidities[16] &&
+                          parseFloat(
+                            totalLiquidities[16].totalLiquidity.toFixed(2)
+                          ).toLocaleString("th-TH")) ||
+                        "-"
                       : "-"
                     : plantKind === "LUMI"
                     ? (totalLiquidities[4] &&
@@ -1401,7 +1576,12 @@ const Home: NextPage = () => {
                             seedKind === "CHICKEN FOOD" || 
                             seedKind === "GRASSHOPPER" ||
                             seedKind === "VENGEANCE SPIRIT" ||
-                            seedKind === "Lumber"
+                            seedKind === "Lumber" ||
+                            seedKind === "Marble" ||
+                            seedKind === "FineLeather" ||
+                            seedKind === "MetalPlate" ||
+                            seedKind === "GrasshopperVIP" ||
+                            seedKind === "AutometaFactory"
                             
                           ? "48 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (คำนวณเป็นต่อวัน)"
                           : "24 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (คำนวณเป็นต่อวัน)"
@@ -1462,7 +1642,12 @@ const Home: NextPage = () => {
                               seedKind === "CHICKEN FOOD" ||
                               seedKind === "GRASSHOPPER" ||
                               seedKind === "VENGEANCE SPIRIT" ||
-                              seedKind === "Lumber"
+                              seedKind === "Lumber" ||
+                              seedKind === "Marble" ||
+                              seedKind === "FineLeather" ||
+                              seedKind === "MetalPlate" ||
+                              seedKind === "GrasshopperVIP" ||
+                              seedKind === "AutometaFactory"
                               
                             ? "48 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (ผลผลิตเมื่อครบเวลา)"
                             : "24 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (ผลผลิตเมื่อครบเวลา)"
