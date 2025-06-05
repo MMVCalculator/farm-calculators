@@ -25,8 +25,7 @@ type SeedKind =
   | "FISH FOOD"
   | "CHICKEN FOOD"
   | "GRASSHOPPER"
-  | "VENGEANCE SPIRIT"
-  | "ETHEREAL FACTORY LGILL";
+  | "VENGEANCE SPIRIT";
 type RewardMultiplier = 1 | 2 | 3 | 4 | 6 | 8 | 14 | 18;
 
 const Home: NextPage = () => {
@@ -259,10 +258,7 @@ const Home: NextPage = () => {
           name: "seedFarmVENGEANCE SPIRIT",
           address: "f28BD01f921F8415Ca94812724D8562A21ACB96F",
         },
-        {
-          name: "seedFarmETHEREAL FACTORY LGILL",
-          address: "95013dcb6a561e6c003aed9c43fb8b64008aa361",
-        },
+        
       ];
 
       const totalLiquiditiesResponse = await Promise.all(
@@ -408,8 +404,6 @@ const Home: NextPage = () => {
             ? totalLiquidities[9]?.totalLiquidity
             : seedKind === "VENGEANCE SPIRIT"
             ? totalLiquidities[10]?.totalLiquidity
-            : seedKind === "ETHEREAL FACTORY LGILL"
-            ? totalLiquidities[11]?.totalLiquidity
             : Infinity) +
             (plantAmount || 0));
 
@@ -426,7 +420,7 @@ const Home: NextPage = () => {
                 seedKind === "CHICKEN FOOD" ||
                 seedKind === "GRASSHOPPER" ||
                 seedKind === "VENGEANCE SPIRIT"
-                seedKind === "ETHEREAL FACTORY LGILL"
+               
               ? 17280 // 48 ชั่วโมง (2 วัน)
               : 17280) * // 24 ชั่วโมง (1 วัน)
             0.1 *
@@ -470,7 +464,7 @@ const Home: NextPage = () => {
                     seedKind === "CHICKEN FOOD" ||
                     seedKind === "GRASSHOPPER" ||
                     seedKind === "VENGEANCE SPIRIT"
-                    seedKind === "ETHEREAL FACTORY LGILL"
+                    
                   ? 17280 // 48 ชั่วโมง (2 วัน)
                   : 17280) * // 24 ชั่วโมง (1 วัน)
                 0.1 *
@@ -512,7 +506,7 @@ const Home: NextPage = () => {
                     seedKind === "CHICKEN FOOD" ||
                     seedKind === "GRASSHOPPER" ||
                     seedKind === "VENGEANCE SPIRIT"
-                    seedKind === "ETHEREAL FACTORY LGILL"
+                    
                   ? 17280 // 48 ชั่วโมง (2 วัน)
                   : 17280) * // 24 ชั่วโมง (1 วัน)
                 0.1 *
@@ -773,9 +767,7 @@ const Home: NextPage = () => {
                   case "VENGEANCE SPIRIT":
                     setRewardMultiplier(3);
                     break;
-                  case "ETHEREAL FACTORY LGILL":
-                    setRewardMultiplier(8);
-                    break;
+                  
                 }
               }}
             >
@@ -1121,21 +1113,6 @@ const Home: NextPage = () => {
                 VENGEANCE SPIRIT
               </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "ETHEREAL FACTORY LGILL" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("ETHEREAL FACTORY LGILL");
-                  switch (plantKind) {
-                    case "SEED":
-                      setRewardMultiplier(8);
-                      break;
-                  }
-                }}
-              >
-                ETHEREAL FACTORY LGILL
-              </button>
             </div>
           )}
 
@@ -1314,12 +1291,6 @@ const Home: NextPage = () => {
                             totalLiquidities[10].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
                         "-"
-                      : seedKind === "ETHEREAL FACTORY LGILL"
-                      ? (totalLiquidities[11] &&
-                          parseFloat(
-                            totalLiquidities[11].totalLiquidity.toFixed(2)
-                          ).toLocaleString("th-TH")) ||
-                        "-"
                       : "-"
                     : plantKind === "LUMI"
                     ? (totalLiquidities[4] &&
@@ -1395,7 +1366,7 @@ const Home: NextPage = () => {
                             seedKind === "CHICKEN FOOD" || 
                             seedKind === "GRASSHOPPER" ||
                             seedKind === "VENGEANCE SPIRIT"
-                            seedKind === "ETHEREAL FACTORY LGILL"
+                            
                           ? "48 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (คำนวณเป็นต่อวัน)"
                           : "24 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (คำนวณเป็นต่อวัน)"
                       );
@@ -1455,7 +1426,7 @@ const Home: NextPage = () => {
                               seedKind === "CHICKEN FOOD" ||
                               seedKind === "GRASSHOPPER" ||
                               seedKind === "VENGEANCE SPIRIT"
-                              seedKind === "ETHEREAL FACTORY LGILL"
+                              
                             ? "48 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (ผลผลิตเมื่อครบเวลา)"
                             : "24 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (ผลผลิตเมื่อครบเวลา)"
                         );
