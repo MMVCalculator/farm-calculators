@@ -857,7 +857,7 @@ const Home: NextPage = () => {
                 className={`rounded-none btn${
                   plantKind === "STEM" ? " btn-active" : ""
                 }`}
-                
+                disabled
                 onClick={() => {
                   setPlantKind("STEM");
                   switch (stemLP) {
