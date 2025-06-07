@@ -219,119 +219,217 @@ const Home: NextPage = () => {
   useSWR(
     "totalLiquidities",
     async () => {
-      const tokens = [
-        {
-          name: "seedFarmTomato",
-          address: "ec85f017ea248c169c5ae32a782e380e0db3b10d",
-        },
-        {
-          name: "seedFarmCorn",
-          address: "eef084a9e4efb5436ed7115f271dd1f47789b81b",
-        },
-        {
-          name: "seedFarmCabage",
-          address: "e0c8e0d1e281deb31a305369b5527f45898e2fd8",
-        },
-        {
-          name: "seedFarmCarrot",
-          address: "b92cd3ab59d8fbb1156f07f9bc0deacc9bc4954d",
-        },
-        {
-          name: "lumiCowMilkFarm",
-          address: "d8356f78379afca40d2a966beb95e9c27ebc2915",
-        },
-        {
-          name: "seedFarmCoffee",
-          address: "91e6512a01ddfbe0027f191832cd9cc877d84f15",
-        },
-        {
-          name: "seedFarmBlueberry",
-          address: "018391166b47632b95fd50b3c37e8b25cc61ea29",
-        },
-        {
-          name: "seedFarmFISH FOOD",
-          address: "2ca957c560151148aa4ab677f4171e265e76806e",
-        },
-        {
-          name: "seedFarmCHICKEN FOOD",
-          address: "fb0d3b5Fa8C211B88Be2bb4F51399bfBAA28dd7c",
-        },
-        {
-          name: "seedFarmGRASSHOPPER",
-          address: "3aFe6bA743E39d220E6f8Be326E90768D9693BED",
-        },
-        {
-          name: "seedFarmVENGEANCE SPIRIT",
-          address: "f28BD01f921F8415Ca94812724D8562A21ACB96F",
-        },
-        {
-          name: "seedFarmLumber",
-          address: "1cdc2742503e14ccbb7ccafc9e3827797aad5624",
-        },
-        {
-          name: "seedFarmMarble",
-          address: "39ed31efb1b3bb70c69691259ebe9738a9669194",
-        },
-        {
-          name: "seedFarmFineLeather",
-          address: "bf1749d0a82a6e1282c7f9d103a62241b6803c84",
-        },
-        {
-          name: "seedFarmMetalPlate",
-          address: "8b3f75634a98e26769c6c56a97fd905c1a25f8fb",
-        },
-        {
-          name: "seedFarmGrasshopperVIP",
-          address: "085fffe988f7958d84622c59775ca614ea5cf902",
-        },
-        {
-          name: "seedFarmAutometaFactory",
-          address: "38Ab0899aD985bfAb105cac29ABF4DCd85256234",
-        },
-        
-      ];
+      try {
+        console.log("Fetching total liquidities...");
+        const tokens = [
+          {
+            name: "seedFarmTomato",
+            address: "ec85f017ea248c169c5ae32a782e380e0db3b10d",
+          },
+          {
+            name: "seedFarmCorn",
+            address: "eef084a9e4efb5436ed7115f271dd1f47789b81b",
+          },
+          {
+            name: "seedFarmCabage",
+            address: "e0c8e0d1e281deb31a305369b5527f45898e2fd8",
+          },
+          {
+            name: "seedFarmCarrot",
+            address: "b92cd3ab59d8fbb1156f07f9bc0deacc9bc4954d",
+          },
+          {
+            name: "lumiCowMilkFarm",
+            address: "d8356f78379afca40d2a966beb95e9c27ebc2915",
+          },
+          {
+            name: "seedFarmCoffee",
+            address: "91e6512a01ddfbe0027f191832cd9cc877d84f15",
+          },
+          {
+            name: "seedFarmBlueberry",
+            address: "018391166b47632b95fd50b3c37e8b25cc61ea29",
+          },
+          {
+            name: "seedFarmFISH FOOD",
+            address: "2ca957c560151148aa4ab677f4171e265e76806e",
+          },
+          {
+            name: "seedFarmCHICKEN FOOD",
+            address: "fb0d3b5Fa8C211B88Be2bb4F51399bfBAA28dd7c",
+          },
+          {
+            name: "seedFarmGRASSHOPPER",
+            address: "3aFe6bA743E39d220E6f8Be326E90768D9693BED",
+          },
+          {
+            name: "seedFarmVENGEANCE SPIRIT",
+            address: "f28BD01f921F8415Ca94812724D8562A21ACB96F",
+          },
+          {
+            name: "seedFarmLumber",
+            address: "1cdc2742503e14ccbb7ccafc9e3827797aad5624",
+          },
+          {
+            name: "seedFarmMarble",
+            address: "39ed31efb1b3bb70c69691259ebe9738a9669194",
+          },
+          {
+            name: "seedFarmFineLeather",
+            address: "bf1749d0a82a6e1282c7f9d103a62241b6803c84",
+          },
+          {
+            name: "seedFarmMetalPlate",
+            address: "8b3f75634a98e26769c6c56a97fd905c1a25f8fb",
+          },
+          {
+            name: "seedFarmGrasshopperVIP",
+            address: "085fffe988f7958d84622c59775ca614ea5cf902",
+          },
+          {
+            name: "seedFarmAutometaFactory",
+            address: "38Ab0899aD985bfAb105cac29ABF4DCd85256234",
+          },
+          {
+            name: "stemFarmTomatoLKKUB",
+            address: "2d22203f982e9f111d3c2293b6b1e7097c22b65a",
+          },
+          {
+            name: "stemFarmCornLKKUB",
+            address: "7e1f3eb796cf3cdc6514c308b614d9fe18d325d9",
+          },
+          {
+            name: "stemFarmCabbageLKKUB",
+            address: "4f25d96d63b5798e8caba3be297d389c0911a24c",
+          },
+          {
+            name: "stemFarmCarrotLKKUB",
+            address: "25d539b83424b4e2437333d09a91e9ed679de61c",
+          },
+          {
+            name: "stemFarmTomatoLKUSDT",
+            address: "bfb5c610caa22518ef3d19547b97c555f3b7a373",
+          },
+          {
+            name: "stemFarmCornLKUSDT",
+            address: "3eba4d0ea356f845695974847c5e8ee4d5c298fe",
+          },
+          {
+            name: "stemFarmCabbageLKUSDT",
+            address: "29708f4e04a188cdb6950e0436e2a3298739da99",
+          },
+          {
+            name: "stemFarmCarrotLKUSDT",
+            address: "863732532dfd8841e7e337a01915184fc93fec0d",
+          },
+        ];
 
-      const totalLiquiditiesResponse = await Promise.all(
-        tokens.map((token) => {
-          return axios.post<{
-            error: { code: number; message: string };
-            result: string;
-          }>("https://bitkub-chain-rpc.morningmoonvillage.com", {
-            jsonrpc: "2.0",
-            id: Date.now(),
-            method: "eth_call",
-            params: [
-              {
-                data:
-                  token.name === "lumiCowMilkFarm"
-                    ? "0x252dba42000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001a0000000000000000000000000000000000000000000000000000000000000024000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000449df8d3300000000000000000000000000000000000000000000000000000000000000000000000000000000d8356f78379afca40d2a966beb95e9c27ebc2915000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000241959a00200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa3610000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000002470a08231000000000000000000000000d8356f78379afca40d2a966beb95e9c27ebc291500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000024f40f0f52000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-                    : `0x252dba420000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000001c000000000000000000000000000000000000000000000000000000000000002e000000000000000000000000000000000000000000000000000000000000003800000000000000000000000000000000000000000000000000000000000000420000000000000000000000000${token.address}0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000449df8d3300000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000004921979af000000000000000000000000000000000000000000000000000000000000000000000000000000006e9e62018a013b20bcb7c573690fd1425ddd6b26000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4d06ca61f0000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000200000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa3610000000000000000000000007d984c24d2499d840eb3b7016077164e15e5faa600000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000241959a002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000024f40f0f52000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ec85f017ea248c169c5ae32a782e380e0db3b10d000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000042705e86500000000000000000000000000000000000000000000000000000000`,
-                to: "0xb2dd98bd8a916a9fef1ce0e35302a53ae23fd260",
-              },
-              "latest",
-            ],
-          });
-        })
-      );
+        const totalLiquiditiesResponse = await Promise.all(
+          tokens.map((token) => {
+            return axios.post<{
+              error: { code: number; message: string };
+              result: string;
+            }>("https://bitkub-chain-rpc.morningmoonvillage.com", {
+              jsonrpc: "2.0",
+              id: Date.now(),
+              method: "eth_call",
+              params: [
+                {
+                  data:
+                    token.name === "lumiCowMilkFarm"
+                      ? "0x252dba42000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001a0000000000000000000000000000000000000000000000000000000000000024000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000449df8d3300000000000000000000000000000000000000000000000000000000000000000000000000000000d8356f78379afca40d2a966beb95e9c27ebc2915000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000241959a00200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa3610000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000002470a08231000000000000000000000000d8356f78379afca40d2a966beb95e9c27ebc291500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000024f40f0f52000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                      : token.name.startsWith("stemFarm")
+                      ? `0x252dba420000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000${token.address}000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000048b7afe2e00000000000000000000000000000000000000000000000000000000`
+                      : `0x252dba420000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000001c000000000000000000000000000000000000000000000000000000000000002e000000000000000000000000000000000000000000000000000000000000003800000000000000000000000000000000000000000000000000000000000000420000000000000000000000000${token.address}0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000449df8d3300000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000004921979af000000000000000000000000000000000000000000000000000000000000000000000000000000006e9e62018a013b20bcb7c573690fd1425ddd6b26000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4d06ca61f0000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000200000000000000000000000095013dcb6a561e6c003aed9c43fb8b64008aa3610000000000000000000000007d984c24d2499d840eb3b7016077164e15e5faa600000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000241959a002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000${token.address}00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000024f40f0f52000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ec85f017ea248c169c5ae32a782e380e0db3b10d000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000042705e86500000000000000000000000000000000000000000000000000000000`,
+                  to: "0xb2dd98bd8a916a9fef1ce0e35302a53ae23fd260",
+                },
+                "latest",
+              ],
+            });
+          })
+        );
 
-      const totalLiquidities = totalLiquiditiesResponse.map(
-        (totalLiquidityResponse, index) => {
-          return {
-            name: tokens[index].name,
-            totalLiquidity:
-              parseInt(
-                (
-                  totalLiquidityResponse.data.result
-                    .replace("0x", "")
-                    .match(/.{64}/g) as string[]
-                )[12],
-                16
-              ) / Math.pow(10, 18),
-          };
-        }
-      );
+        const totalLiquidities = totalLiquiditiesResponse.map(
+          (totalLiquidityResponse, index) => {
+            try {
+              const result = totalLiquidityResponse.data.result;
+              if (!result || result === "0x") {
+                console.warn(`Empty result for ${tokens[index].name}`);
+                return {
+                  name: tokens[index].name,
+                  totalLiquidity: 0,
+                };
+              }
 
-      setTotalLiquidities([...totalLiquidities]);
+              let totalLiquidity = 0;
+
+              // All farms now use the same multicall structure
+              const hexArray = result.replace("0x", "").match(/.{64}/g);
+              if (!hexArray || hexArray.length < 2) {
+                console.warn(
+                  `Invalid hex array for ${tokens[index].name}`,
+                  hexArray
+                );
+                return {
+                  name: tokens[index].name,
+                  totalLiquidity: 0,
+                };
+              }
+
+              if (tokens[index].name.startsWith("stemFarm")) {
+                // STEM farms: totalStakePower should be in the response
+                // Try different positions to find the correct value
+                for (let i = hexArray.length - 1; i >= 0; i--) {
+                  const value = parseInt(hexArray[i], 16) / Math.pow(10, 18);
+                  if (value > 1000 && value < 10000000) {
+                    // Reasonable range for total stake power
+                    totalLiquidity = value;
+                    break;
+                  }
+                }
+                if (totalLiquidity === 0) {
+                  // Fallback to last chunk
+                  totalLiquidity =
+                    parseInt(hexArray[hexArray.length - 1], 16) /
+                    Math.pow(10, 18);
+                }
+              } else {
+                // SEED and LUMI farms use position 12
+                if (hexArray.length < 13) {
+                  console.warn(
+                    `Invalid hex array for ${tokens[index].name}`,
+                    hexArray
+                  );
+                  return {
+                    name: tokens[index].name,
+                    totalLiquidity: 0,
+                  };
+                }
+                totalLiquidity = parseInt(hexArray[12], 16) / Math.pow(10, 18);
+              }
+
+              console.log(`${tokens[index].name}: ${totalLiquidity}`);
+
+              return {
+                name: tokens[index].name,
+                totalLiquidity,
+              };
+            } catch (error) {
+              console.error(`Error processing ${tokens[index].name}:`, error);
+              return {
+                name: tokens[index].name,
+                totalLiquidity: 0,
+              };
+            }
+          }
+        );
+
+        console.log("Total Liquidities:", totalLiquidities);
+        setTotalLiquidities([...totalLiquidities]);
+      } catch (error) {
+        console.error("Error fetching total liquidities:", error);
+        setTotalLiquidities([]);
+      }
     },
     {
       refreshInterval: 10000,
@@ -468,7 +566,6 @@ const Home: NextPage = () => {
                 seedKind === "MetalPlate" ||
                 seedKind === "GrasshopperVIP" ||
                 seedKind === "AutometaFactory"
-               
               ? 17280 // 48 ชั่วโมง (2 วัน)
               : 17280) * // 24 ชั่วโมง (1 วัน)
             0.1 *
@@ -487,104 +584,54 @@ const Home: NextPage = () => {
         break;
 
       case "STEM":
-        switch (stemLP) {
-          case "LKKUB":
-            const stemLkKubAmountToUsd =
-              ((plantAmount || 0) * (stemLkkubPrice || 0) * (thbKub || 0)) /
-              (thbUsd || 0);
-            const rewardsLkkubPercentage =
-              stemLkKubAmountToUsd /
-              ((typeof totalLiquidity === "number" && totalLiquidity >= 0
-                ? totalLiquidity
-                : Infinity) +
-                stemLkKubAmountToUsd);
+        const rewardsStemPercentage =
+          (plantAmount || 0) /
+          ((typeof totalLiquidity === "number" && totalLiquidity >= 0
+            ? totalLiquidity
+            : stemLP === "LKKUB"
+            ? seedKind === "TOMATO"
+              ? totalLiquidities[17]?.totalLiquidity
+              : seedKind === "CORN"
+              ? totalLiquidities[18]?.totalLiquidity
+              : seedKind === "CABBAGE"
+              ? totalLiquidities[19]?.totalLiquidity
+              : seedKind === "CARROT"
+              ? totalLiquidities[20]?.totalLiquidity
+              : Infinity
+            : stemLP === "LKUSDT"
+            ? seedKind === "TOMATO"
+              ? totalLiquidities[21]?.totalLiquidity
+              : seedKind === "CORN"
+              ? totalLiquidities[22]?.totalLiquidity
+              : seedKind === "CABBAGE"
+              ? totalLiquidities[23]?.totalLiquidity
+              : seedKind === "CARROT"
+              ? totalLiquidities[24]?.totalLiquidity
+              : Infinity
+            : Infinity) +
+            (plantAmount || 0));
 
-            const yieldPerDayStemLkKub = parseFloat(
-              (
-                (seedKind === "TOMATO" ||
-                seedKind === "CORN" ||
-                seedKind === "CABBAGE" ||
-                seedKind === "CARROT"
-                  ? 17280 // 96 ชั่วโมง (4 วัน)
-                  : seedKind === "COFFEE" ||
-                    seedKind === "FISH FOOD" ||
-                    seedKind === "BLUEBERRY" ||
-                    seedKind === "CHICKEN FOOD" ||
-                    seedKind === "GRASSHOPPER" ||
-                    seedKind === "VENGEANCE SPIRIT" ||
-                    seedKind === "Lumber" ||
-                    seedKind === "Marble" ||
-                    seedKind === "FineLeather" ||
-                    seedKind === "MetalPlate" ||
-                    seedKind === "GrasshopperVIP" ||
-                    seedKind === "AutometaFactory"
-                    
-                  ? 17280 // 48 ชั่วโมง (2 วัน)
-                  : 17280) * // 24 ชั่วโมง (1 วัน)
-                0.1 *
-                rewardMultiplier *
-                rewardsLkkubPercentage
-              ).toFixed(2)
-            );
+        const yieldPerDayStem = parseFloat(
+          (
+            (seedKind === "TOMATO" ||
+            seedKind === "CORN" ||
+            seedKind === "CABBAGE" ||
+            seedKind === "CARROT"
+              ? 17280 // 96 ชั่วโมง (4 วัน)
+              : 17280) * // default
+            0.1 *
+            rewardMultiplier *
+            rewardsStemPercentage
+          ).toFixed(2)
+        );
 
-            setYieldPerDay(
-              yieldPerDayStemLkKub <= 0 ||
-                yieldPerDayStemLkKub === Infinity ||
-                isNaN(yieldPerDayStemLkKub)
-                ? "-"
-                : yieldPerDayStemLkKub
-            );
-            break;
-
-          case "LKUSDT":
-            const stemLkUsdtAmountToUsd =
-              ((plantAmount || 0) * (stemLkusdtPrice || 0) * (thbUsdt || 0)) /
-              (thbUsd || 0);
-            const rewardsLkUsdtPercentage =
-              stemLkUsdtAmountToUsd /
-              ((typeof totalLiquidity === "number" && totalLiquidity >= 0
-                ? totalLiquidity
-                : Infinity) +
-                stemLkUsdtAmountToUsd);
-
-            const yieldPerDayStemLkUsdt = parseFloat(
-              (
-                (seedKind === "TOMATO" ||
-                seedKind === "CORN" ||
-                seedKind === "CABBAGE" ||
-                seedKind === "CARROT"
-                  ? 17280 // 96 ชั่วโมง (4 วัน)
-                  : seedKind === "COFFEE" ||
-                    seedKind === "FISH FOOD" ||
-                    seedKind === "BLUEBERRY" ||
-                    seedKind === "CHICKEN FOOD" ||
-                    seedKind === "GRASSHOPPER" ||
-                    seedKind === "VENGEANCE SPIRIT" ||
-                   seedKind === "Lumber" ||
-                   seedKind === "Marble" ||
-                   seedKind === "FineLeather" ||
-                   seedKind === "MetalPlate" ||
-                   seedKind === "GrasshopperVIP" ||
-                   seedKind === "AutometaFactory"
-                    
-                  ? 17280 // 48 ชั่วโมง (2 วัน)
-                  : 17280) * // 24 ชั่วโมง (1 วัน)
-                0.1 *
-                rewardMultiplier *
-                rewardsLkUsdtPercentage
-              ).toFixed(2)
-            );
-
-            setYieldPerDay(
-              yieldPerDayStemLkUsdt <= 0 ||
-                yieldPerDayStemLkUsdt === Infinity ||
-                isNaN(yieldPerDayStemLkUsdt)
-                ? "-"
-                : yieldPerDayStemLkUsdt
-            );
-            break;
-        }
-
+        setYieldPerDay(
+          yieldPerDayStem <= 0 ||
+            yieldPerDayStem === Infinity ||
+            isNaN(yieldPerDayStem)
+            ? "-"
+            : yieldPerDayStem
+        );
         break;
 
       case "LUMI":
@@ -823,7 +870,7 @@ const Home: NextPage = () => {
                     break;
                   case "GRASSHOPPER":
                     setRewardMultiplier(1);
-                    break; 
+                    break;
                   case "VENGEANCE SPIRIT":
                     setRewardMultiplier(3);
                     break;
@@ -832,84 +879,86 @@ const Home: NextPage = () => {
                     break;
                   case "Marble":
                     setRewardMultiplier(1);
-                    break;  
+                    break;
                   case "FineLeather":
                     setRewardMultiplier(1);
-                    break;  
+                    break;
                   case "MetalPlate":
                     setRewardMultiplier(1);
-                    break;  
+                    break;
                   case "GrasshopperVIP":
                     setRewardMultiplier(4);
-                    break;  
+                    break;
                   case "AutometaFactory":
                     setRewardMultiplier(2);
-                    break;  
-                  
+                    break;
                 }
               }}
             >
               SEED
             </button>
 
-            <div className="flex items-center self-center">
-              <button
-                className={`rounded-none btn${
-                  plantKind === "STEM" ? " btn-active" : ""
-                }`}
-                
-                onClick={() => {
-                  setPlantKind("STEM");
-                  switch (stemLP) {
-                    case "LKKUB":
-                      switch (seedKind) {
-                        case "TOMATO":
-                          setRewardMultiplier(18);
-                          break;
-                        case "CORN":
-                          setRewardMultiplier(18);
-                          break;
-                        case "CABBAGE":
-                          setRewardMultiplier(18);
-                          break;
-                        case "CARROT":
-                          setRewardMultiplier(18);
-                          break;
-                      }
-                      break;
-                    case "LKUSDT":
-                      switch (seedKind) {
-                        case "TOMATO":
-                          setRewardMultiplier(14);
-                          break;
-                        case "CORN":
-                          setRewardMultiplier(14);
-                          break;
-                        case "CABBAGE":
-                          setRewardMultiplier(14);
-                          break;
-                        case "CARROT":
-                          setRewardMultiplier(14);
-                          break;
-                      }
-                      break;
-                  }
-                }}
-              >
-                STEM
-              </button>
-              <button
-                className="btn btn-circle btn-ghost btn-xs text-info ml-1"
-                onClick={() => {
-                  setModalContent(
-                    "ปิดการใช้งานการคำนวณ STEM ไว้ชั่วคราว เนื่องจากมีการคำนวณที่คาดเคลื่อนสูงเกินไป"
-                  );
-                  setShowModal(true);
-                }}
-              >
-                ⓘ
-              </button>
-            </div>
+            <button
+              className={`btn${plantKind === "STEM" ? " btn-active" : ""}`}
+              onClick={() => {
+                setPlantKind("STEM");
+                if (
+                  !["TOMATO", "CORN", "CABBAGE", "CARROT"].includes(seedKind)
+                ) {
+                  setSeedKind("TOMATO");
+                }
+                switch (stemLP) {
+                  case "LKKUB":
+                    switch (
+                      seedKind === "TOMATO" ||
+                      seedKind === "CORN" ||
+                      seedKind === "CABBAGE" ||
+                      seedKind === "CARROT"
+                        ? seedKind
+                        : "TOMATO"
+                    ) {
+                      case "TOMATO":
+                        setRewardMultiplier(18);
+                        break;
+                      case "CORN":
+                        setRewardMultiplier(18);
+                        break;
+                      case "CABBAGE":
+                        setRewardMultiplier(18);
+                        break;
+                      case "CARROT":
+                        setRewardMultiplier(18);
+                        break;
+                    }
+                    break;
+                  case "LKUSDT":
+                    switch (
+                      seedKind === "TOMATO" ||
+                      seedKind === "CORN" ||
+                      seedKind === "CABBAGE" ||
+                      seedKind === "CARROT"
+                        ? seedKind
+                        : "TOMATO"
+                    ) {
+                      case "TOMATO":
+                        setRewardMultiplier(14);
+                        break;
+                      case "CORN":
+                        setRewardMultiplier(14);
+                        break;
+                      case "CABBAGE":
+                        setRewardMultiplier(14);
+                        break;
+                      case "CARROT":
+                        setRewardMultiplier(14);
+                        break;
+                    }
+                    break;
+                }
+              }}
+            >
+              STEM
+            </button>
 
             <button
               className={`btn${plantKind === "LUMI" ? " btn-active" : ""}`}
@@ -1095,198 +1144,153 @@ const Home: NextPage = () => {
                 CARROT
               </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "COFFEE" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("COFFEE");
-                  switch (plantKind) {
-                    case "SEED":
+              {plantKind === "SEED" && (
+                <>
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "COFFEE" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("COFFEE");
                       setRewardMultiplier(2);
-                      break;
-                  }
-                }}
-              >
-                COFFEE
-              </button>
+                    }}
+                  >
+                    COFFEE
+                  </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "BLUEBERRY" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("BLUEBERRY");
-                  switch (plantKind) {
-                    case "SEED":
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "BLUEBERRY" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("BLUEBERRY");
                       setRewardMultiplier(2);
-                      break;
-                  }
-                }}
-              >
-                BLUEBERRY
-              </button>
+                    }}
+                  >
+                    BLUEBERRY
+                  </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "FISH FOOD" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("FISH FOOD");
-                  switch (plantKind) {
-                    case "SEED":
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "FISH FOOD" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("FISH FOOD");
                       setRewardMultiplier(8);
-                      break;
-                  }
-                }}
-              >
-                FISH FOOD
-              </button>
+                    }}
+                  >
+                    FISH FOOD
+                  </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "CHICKEN FOOD" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("CHICKEN FOOD");
-                  switch (plantKind) {
-                    case "SEED":
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "CHICKEN FOOD" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("CHICKEN FOOD");
                       setRewardMultiplier(2);
-                      break;
-                  }
-                }}
-              >
-                CHICKEN FOOD
-              </button>
+                    }}
+                  >
+                    CHICKEN FOOD
+                  </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "GRASSHOPPER" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("GRASSHOPPER");
-                  switch (plantKind) {
-                    case "SEED":
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "GRASSHOPPER" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("GRASSHOPPER");
                       setRewardMultiplier(1);
-                      break;
-                  }
-                }}
-              >
-                GRASSHOPPER
-              </button>
+                    }}
+                  >
+                    GRASSHOPPER
+                  </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "VENGEANCE SPIRIT" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("VENGEANCE SPIRIT");
-                  switch (plantKind) {
-                    case "SEED":
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "VENGEANCE SPIRIT" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("VENGEANCE SPIRIT");
                       setRewardMultiplier(3);
-                      break;
-                  }
-                }}
-              >
-                VENGEANCE SPIRIT
-              </button>
+                    }}
+                  >
+                    VENGEANCE SPIRIT
+                  </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "Lumber" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("Lumber");
-                  switch (plantKind) {
-                    case "SEED":
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "Lumber" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("Lumber");
                       setRewardMultiplier(1);
-                      break;
-                  }
-                }}
-              >
-                Lumber
-              </button>
+                    }}
+                  >
+                    Lumber
+                  </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "Marble" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("Marble");
-                  switch (plantKind) {
-                    case "SEED":
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "Marble" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("Marble");
                       setRewardMultiplier(1);
-                      break;
-                  }
-                }}
-              >
-                Marble
-              </button>
+                    }}
+                  >
+                    Marble
+                  </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "FineLeather" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("FineLeather");
-                  switch (plantKind) {
-                    case "SEED":
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "FineLeather" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("FineLeather");
                       setRewardMultiplier(1);
-                      break;
-                  }
-                }}
-              >
-                FineLeather
-              </button>
+                    }}
+                  >
+                    FineLeather
+                  </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "MetalPlate" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("MetalPlate");
-                  switch (plantKind) {
-                    case "SEED":
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "MetalPlate" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("MetalPlate");
                       setRewardMultiplier(1);
-                      break;
-                  }
-                }}
-              >
-                MetalPlate
-              </button>
+                    }}
+                  >
+                    MetalPlate
+                  </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "GrasshopperVIP" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("GrasshopperVIP");
-                  switch (plantKind) {
-                    case "SEED":
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "GrasshopperVIP" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("GrasshopperVIP");
                       setRewardMultiplier(4);
-                      break;
-                  }
-                }}
-              >
-                GrasshopperVIP
-              </button>
+                    }}
+                  >
+                    GrasshopperVIP
+                  </button>
 
-              <button
-                className={`btn btn-xs${
-                  seedKind === "AutometaFactory" ? " btn-active" : ""
-                }`}
-                onClick={() => {
-                  setSeedKind("AutometaFactory");
-                  switch (plantKind) {
-                    case "SEED":
+                  <button
+                    className={`btn btn-xs${
+                      seedKind === "AutometaFactory" ? " btn-active" : ""
+                    }`}
+                    onClick={() => {
+                      setSeedKind("AutometaFactory");
                       setRewardMultiplier(2);
-                      break;
-                  }
-                }}
-              >
-                AutometaFactory
-              </button>
-
+                    }}
+                  >
+                    AutometaFactory
+                  </button>
+                </>
+              )}
             </div>
           )}
 
@@ -1406,109 +1410,163 @@ const Home: NextPage = () => {
                 placeholder={
                   plantKind === "SEED"
                     ? seedKind === "TOMATO"
-                      ? (totalLiquidities[0] &&
+                      ? (totalLiquidities[0]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[0].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "CORN"
-                      ? (totalLiquidities[1] &&
+                      ? (totalLiquidities[1]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[1].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "CABBAGE"
-                      ? (totalLiquidities[2] &&
+                      ? (totalLiquidities[2]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[2].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "CARROT"
-                      ? (totalLiquidities[3] &&
+                      ? (totalLiquidities[3]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[3].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "COFFEE"
-                      ? (totalLiquidities[5] &&
+                      ? (totalLiquidities[5]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[5].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "BLUEBERRY"
-                      ? (totalLiquidities[6] &&
+                      ? (totalLiquidities[6]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[6].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "FISH FOOD"
-                      ? (totalLiquidities[7] &&
+                      ? (totalLiquidities[7]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[7].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "CHICKEN FOOD"
-                      ? (totalLiquidities[8] &&
+                      ? (totalLiquidities[8]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[8].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "GRASSHOPPER"
-                      ? (totalLiquidities[9] &&
+                      ? (totalLiquidities[9]?.totalLiquidity &&
                           parseFloat(
-                            totalLiquidities[9].totalLiquidity.toFixed(2) 
+                            totalLiquidities[9].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "VENGEANCE SPIRIT"
-                      ? (totalLiquidities[10] &&
+                      ? (totalLiquidities[10]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[10].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "Lumber"
-                      ? (totalLiquidities[11] &&
+                      ? (totalLiquidities[11]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[11].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "Marble"
-                      ? (totalLiquidities[12] &&
+                      ? (totalLiquidities[12]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[12].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
+                        "Loading..."
                       : seedKind === "FineLeather"
-                      ? (totalLiquidities[13] &&
+                      ? (totalLiquidities[13]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[13].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
-                  : seedKind === "MetalPlate"
-                      ? (totalLiquidities[14] &&
+                        "Loading..."
+                      : seedKind === "MetalPlate"
+                      ? (totalLiquidities[14]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[14].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
-                  : seedKind === "GrasshopperVIP"
-                      ? (totalLiquidities[15] &&
+                        "Loading..."
+                      : seedKind === "GrasshopperVIP"
+                      ? (totalLiquidities[15]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[15].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
-                  : seedKind === "AutometaFactory"
-                      ? (totalLiquidities[16] &&
+                        "Loading..."
+                      : seedKind === "AutometaFactory"
+                      ? (totalLiquidities[16]?.totalLiquidity &&
                           parseFloat(
                             totalLiquidities[16].totalLiquidity.toFixed(2)
                           ).toLocaleString("th-TH")) ||
-                        "-"
-                      : "-"
+                        "Loading..."
+                      : "Loading..."
+                    : plantKind === "STEM"
+                    ? stemLP === "LKKUB"
+                      ? seedKind === "TOMATO"
+                        ? (totalLiquidities[17]?.totalLiquidity &&
+                            parseFloat(
+                              totalLiquidities[17].totalLiquidity.toFixed(2)
+                            ).toLocaleString("th-TH")) ||
+                          "Loading..."
+                        : seedKind === "CORN"
+                        ? (totalLiquidities[18]?.totalLiquidity &&
+                            parseFloat(
+                              totalLiquidities[18].totalLiquidity.toFixed(2)
+                            ).toLocaleString("th-TH")) ||
+                          "Loading..."
+                        : seedKind === "CABBAGE"
+                        ? (totalLiquidities[19]?.totalLiquidity &&
+                            parseFloat(
+                              totalLiquidities[19].totalLiquidity.toFixed(2)
+                            ).toLocaleString("th-TH")) ||
+                          "Loading..."
+                        : seedKind === "CARROT"
+                        ? (totalLiquidities[20]?.totalLiquidity &&
+                            parseFloat(
+                              totalLiquidities[20].totalLiquidity.toFixed(2)
+                            ).toLocaleString("th-TH")) ||
+                          "Loading..."
+                        : "Loading..."
+                      : stemLP === "LKUSDT"
+                      ? seedKind === "TOMATO"
+                        ? (totalLiquidities[21]?.totalLiquidity &&
+                            parseFloat(
+                              totalLiquidities[21].totalLiquidity.toFixed(2)
+                            ).toLocaleString("th-TH")) ||
+                          "Loading..."
+                        : seedKind === "CORN"
+                        ? (totalLiquidities[22]?.totalLiquidity &&
+                            parseFloat(
+                              totalLiquidities[22].totalLiquidity.toFixed(2)
+                            ).toLocaleString("th-TH")) ||
+                          "Loading..."
+                        : seedKind === "CABBAGE"
+                        ? (totalLiquidities[23]?.totalLiquidity &&
+                            parseFloat(
+                              totalLiquidities[23].totalLiquidity.toFixed(2)
+                            ).toLocaleString("th-TH")) ||
+                          "Loading..."
+                        : seedKind === "CARROT"
+                        ? (totalLiquidities[24]?.totalLiquidity &&
+                            parseFloat(
+                              totalLiquidities[24].totalLiquidity.toFixed(2)
+                            ).toLocaleString("th-TH")) ||
+                          "Loading..."
+                        : "Loading..."
+                      : "Loading..."
                     : plantKind === "LUMI"
-                    ? (totalLiquidities[4] &&
+                    ? (totalLiquidities[4]?.totalLiquidity &&
                         parseFloat(
                           totalLiquidities[4].totalLiquidity.toFixed(2)
                         ).toLocaleString("th-TH")) ||
-                      "-"
-                    : "-"
+                      "Loading..."
+                    : "Loading..."
                 }
                 value={typeof totalLiquidity === "number" ? totalLiquidity : ""}
                 onChange={(e) => {
@@ -1520,7 +1578,9 @@ const Home: NextPage = () => {
                 {plantKind === "SEED"
                   ? "SEEDS"
                   : plantKind === "STEM"
-                  ? "$"
+                  ? stemLP === "LKKUB"
+                    ? "LKKUB"
+                    : "LKUSDT"
                   : plantKind === "LUMI"
                   ? "LUMI"
                   : ""}
@@ -1573,7 +1633,7 @@ const Home: NextPage = () => {
                           : seedKind === "COFFEE" ||
                             seedKind === "FISH FOOD" ||
                             seedKind === "BLUEBERRY" ||
-                            seedKind === "CHICKEN FOOD" || 
+                            seedKind === "CHICKEN FOOD" ||
                             seedKind === "GRASSHOPPER" ||
                             seedKind === "VENGEANCE SPIRIT" ||
                             seedKind === "Lumber" ||
@@ -1582,7 +1642,6 @@ const Home: NextPage = () => {
                             seedKind === "MetalPlate" ||
                             seedKind === "GrasshopperVIP" ||
                             seedKind === "AutometaFactory"
-                            
                           ? "48 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (คำนวณเป็นต่อวัน)"
                           : "24 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (คำนวณเป็นต่อวัน)"
                       );
@@ -1648,7 +1707,6 @@ const Home: NextPage = () => {
                               seedKind === "MetalPlate" ||
                               seedKind === "GrasshopperVIP" ||
                               seedKind === "AutometaFactory"
-                              
                             ? "48 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (ผลผลิตเมื่อครบเวลา)"
                             : "24 ชั่วโมงต่อการเก็บเกี่ยว 1 ครั้ง (ผลผลิตเมื่อครบเวลา)"
                         );
@@ -1682,21 +1740,17 @@ const Home: NextPage = () => {
                 {typeof yieldPerDay === "number"
                   ? `≈ ${(
                       yieldPerDay *
-                      (plantKind === "STEM"
-                        ? 1
-                        : seedKind === "TOMATO" ||
-                          seedKind === "CORN" ||
-                          seedKind === "CABBAGE" ||
-                          seedKind === "CARROT"
+                      (seedKind === "TOMATO" ||
+                      seedKind === "CORN" ||
+                      seedKind === "CABBAGE" ||
+                      seedKind === "CARROT"
                         ? 4 // 4 วัน
                         : 2) * // 2 วัน
                       0.095
                     ).toLocaleString("th-TH")}`
                   : "-"}
               </div>
-              <div className="stat-title text-xs">
-                {`LUMI${plantKind === "STEM" ? "/Day" : ""}`}
-              </div>
+              <div className="stat-title text-xs">LUMI</div>
             </div>
 
             <div className="stat p-2 border-none">
@@ -1706,12 +1760,10 @@ const Home: NextPage = () => {
                   ? `≈ ${parseFloat(
                       (
                         yieldPerDay *
-                        (plantKind === "STEM"
-                          ? 1
-                          : seedKind === "TOMATO" ||
-                            seedKind === "CORN" ||
-                            seedKind === "CABBAGE" ||
-                            seedKind === "CARROT"
+                        (seedKind === "TOMATO" ||
+                        seedKind === "CORN" ||
+                        seedKind === "CABBAGE" ||
+                        seedKind === "CARROT"
                           ? 4 // 4 วัน
                           : 2) * // 2 วัน
                         0.095 *
@@ -1720,9 +1772,7 @@ const Home: NextPage = () => {
                     ).toLocaleString("th-TH")}`
                   : "-"}
               </div>
-              <div className="stat-title text-xs">
-                THB{plantKind === "STEM" ? "/Day" : ""}
-              </div>
+              <div className="stat-title text-xs">THB</div>
             </div>
           </div>
         </div>
