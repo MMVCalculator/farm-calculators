@@ -240,7 +240,7 @@ const Home: NextPage = () => {
           },
           {
             name: "lumiCowMilkFarm",
-            address: "d8356f78379afca40d2a966beb95e9c27ebc2915",
+            address: "0bdC3F379ee247bf1822475473e373bdba530C53", 
           },
           {
             name: "seedFarmCoffee",
